@@ -1,8 +1,11 @@
 from datetime import datetime
 from unittest import TestCase
 
+from src.entities.album import Album
 from src.entities.birth_date import BirthDate
+from src.entities.markup import Markup
 from src.entities.organizer import Organizer
+from src.entities.photo import Photo
 from src.entities.place import Place
 from src.entities.quiz import Quiz
 from src.entities.quiz_participant import QuizParticipant
@@ -12,6 +15,47 @@ from src.enums import Category, PaidType, UserRole
 
 
 class TestSerialization(TestCase):
+    def test_markup_serialization(self) -> None:
+        markup = Markup(
+            markup_id=1,
+            photo_id=1,
+            username="user",
+            x=0.2,
+            y=0.1,
+            width=0.7,
+            height=0.05
+        )
+
+        markup_dict = markup.to_dict()
+        markup_from_dict = Markup.from_dict(markup_dict)
+        self.assertEqual(markup, markup_from_dict)
+
+    def test_photo_serialization(self) -> None:
+        photo = Photo(
+            photo_id=1,
+            album_id=1,
+            url="some photo url",
+            preview_url="some preview photo url",
+            markup_ids=[1, 2, 3, 89]
+        )
+
+        photo_dict = photo.to_dict()
+        photo_from_dict = Photo.from_dict(photo_dict)
+        self.assertEqual(photo, photo_from_dict)
+
+    def test_album_serialization(self) -> None:
+        album = Album(
+            album_id=1,
+            title="Album title",
+            photo_ids=[1, 5, 8],
+            date=datetime(2024, 9, 29, 15, 00),
+            preview_url="some preview url"
+        )
+
+        album_dict = album.to_dict()
+        album_from_dict = Album.from_dict(album_dict)
+        self.assertEqual(album, album_from_dict)
+
     def test_organizer_serialization(self) -> None:
         organizer = Organizer(
             organizer_id=1,
