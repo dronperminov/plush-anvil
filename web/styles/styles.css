@@ -1,0 +1,133 @@
+:root {
+    --background-color: #ffffff;
+    --text-font: Inter;
+    --text-color: #2e2836;
+    --subtext-color: #515856;
+    --main-color: #c238a2;
+
+    --icon-color: var(--main-color);
+    --link-color: var(--main-color);
+    --border-color: #d9d9d9;
+
+    /* status */
+    --error-color: #f44336;
+    --error-background: #f4d3d0;
+    --success-color: #4caf50;
+    --success-background: #d4e7d5;
+    --warning-color: #967132;
+    --warning-background: #f8f3d6;
+    --info-color: #4480ae;
+    --info-background: #cde8f5;
+
+    /* buttons */
+    --gradient-button-color: #fff;
+    --gradient-button-border: var(--main-color);
+    --gradient-button-background: linear-gradient(45deg, #e9273f 0%, #c239a3 100%);
+
+    --gradient-button-hover-color: #fafafa;
+    --gradient-button-hover-border: var(--main-color);
+    --gradient-button-hover-background: linear-gradient(45deg, #e9425c 0%, #cc50a9 100%);
+
+    /* icon-input  */
+    --icon-input-background: #f4f4f4;
+    --icon-input-border: var(--border-color);
+    --icon-input-icon-color: var(--icon-color);
+    --icon-input-input-color: var(--text-color);
+}
+
+@font-face {
+    font-family: Inter;
+    src: url("/fonts/Inter-Regular.ttf");
+}
+
+@font-face {
+    font-family: Montserrat;
+    src: url("/fonts/Montserrat-Regular.ttf");
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: var(--text-font);
+    color: var(--text-color);
+    background-color: var(--background-color);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.content {
+    padding: 10px;
+}
+
+.link {
+    color: var(--link-color);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--link-color);
+    cursor: pointer;
+}
+
+.link:hover {
+    border-bottom-style: solid;
+}
+
+/* notifications */
+#notifications {
+    position: fixed;
+    display: grid;
+    grid-gap: 0.5em;
+    bottom: 15px;
+    justify-items: center;
+    max-width: calc(var(--max-width) - 10px);
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-height: 25vh;
+    pointer-events: none;
+    user-select: none;
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.notification {
+    opacity: 0;
+    padding: 0.8em 1em;
+    background-color: var(--block-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.8em;
+    transition: opacity .2s ease-out;
+}
+
+.notification-open {
+    opacity: 1;
+    transition: opacity .2s ease-out;
+}
+
+.error-notification {
+    background-color: var(--error-background) !important;
+    border-color: var(--error-color) !important;
+    color: var(--error-color) !important;
+}
+
+.success-notification {
+    background-color: var(--success-background) !important;
+    border-color: var(--success-color) !important;
+    color: var(--success-color) !important;
+}
+
+.warning-notification {
+    background-color: var(--warning-background) !important;
+    border-color: var(--warning-color) !important;
+    color: var(--warning-color) !important;
+}
+
+.info-notification {
+    background-color: var(--info-background) !important;
+    border-color: var(--info-color) !important;
+    color: var(--info-color) !important;
+}

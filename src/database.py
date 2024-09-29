@@ -36,7 +36,8 @@ class Database:
             if self.identifiers.find_one({"_id": name}) is None:
                 self.identifiers.insert_one({"_id": name, "value": 0})
 
-        self.users = self.client["quiz"]["users"]
+        self.users = database["users"]
+        self.users.create_index([("username", ASCENDING)], unique=True)
 
         self.quizzes = database["quizzes"]
         self.quizzes.create_index([("quiz_id", ASCENDING)], unique=True)
@@ -77,6 +78,9 @@ class Database:
     def get_identifier(self, collection_name: str) -> int:
         identifier = self.identifiers.find_one_and_update({"_id": collection_name}, {"$inc": {"value": 1}}, return_document=True)
         return identifier["value"]
+
+    def sign_up(self, user: User) -> None:
+        self.users.insert_one(user.to_dict())  # TODO: add history action
 
     def drop(self) -> None:
         self.client.drop_database(self.database_name)

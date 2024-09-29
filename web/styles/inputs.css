@@ -1,0 +1,103 @@
+.basic-input {
+    width: 100%;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 0 1px 0;
+    background: transparent;
+    outline: none;
+    font-size: 1em;
+    font-family: Inter;
+    transition: border-color 150ms ease-in;
+}
+
+.basic-input:hover, .basic-input:focus {
+    transition: border-color .15s ease-in;
+    border-bottom-color: var(--main-color);
+}
+
+.basic-input:disabled, .basic-input:disabled:hover, .basic-input:disabled:focus {
+    color: var(--border-color);
+    border: none;
+}
+
+.basic-input::-webkit-outer-spin-button, .basic-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.basic-button {
+    background: var(--block-background);
+    color: var(--text-color);
+    text-decoration: none;
+    padding: 0.6em 0.8em;
+    border: 1px solid var(--text-color);
+    border-radius: 0.6em;
+    font-size: 1em;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.basic-button[disabled] {
+    background: var(--disabled-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--subtext-color) !important;
+    pointer-events: none;
+    user-select: none;
+}
+
+.gradient-button {
+    background: var(--gradient-button-background);
+    border-color: var(--gradient-button-border);
+    color: var(--gradient-button-color);
+    transition: all .1s ease-out;
+}
+
+.gradient-button:hover {
+    background: var(--gradient-button-hover-background);
+    border-color: var(--gradient-button-hover-border);
+    color: var(--gradient-button-hover-color);
+    transition: all .1s ease-in;
+}
+
+.icon-input {
+    display: grid;
+    grid-template-columns: 1.5em 1fr;
+    grid-gap: 0.2em;
+    align-items: center;
+    padding: 0.5em;
+    border-radius: 0.5em;
+
+    background: var(--icon-input-background);
+    border: 1px solid var(--icon-input-border);
+}
+
+.icon-input-icon {
+    cursor: pointer;
+}
+
+.icon-input-icon svg {
+    fill: var(--icon-input-icon-color);
+    vertical-align: middle;
+}
+
+.icon-input-input input {
+    color: var(--icon-input-input-color);
+}
+
+.icon-input-inputs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 0.5em;
+}
+
+.error-input, .error-input:hover, .error-input:focus {
+    border-color: var(--error-color) !important;
+}
+
+.error-icon svg {
+    fill: var(--error-color) !important;
+}
