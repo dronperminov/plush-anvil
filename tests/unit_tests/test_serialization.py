@@ -93,7 +93,7 @@ class TestSerialization(TestCase):
             full_name="user full name",
             role=UserRole.ADMIN,
             avatar_url="url to avatar",
-            birthdate=BirthDate(day=5, month=12)
+            birth_date=BirthDate(day=5, month=12)
         )
 
         user_dict = user.to_dict()

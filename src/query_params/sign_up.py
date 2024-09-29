@@ -21,5 +21,5 @@ class SignUp:
             full_name=self.full_name,
             role=UserRole.USER,
             avatar_url="/images/profiles/default.png",
-            birthdate=self.birth_date
+            birth_date=self.birth_date
         )

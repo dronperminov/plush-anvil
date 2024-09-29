@@ -12,7 +12,7 @@ class User:
     full_name: str
     role: UserRole
     avatar_url: str
-    birthdate: Optional[BirthDate]
+    birth_date: Optional[BirthDate]
 
     def to_dict(self) -> dict:
         return {
@@ -21,7 +21,7 @@ class User:
             "full_name": self.full_name,
             "role": self.role.value,
             "avatar_url": self.avatar_url,
-            "birth_date": self.birthdate.to_dict() if self.birthdate else None
+            "birth_date": self.birth_date.to_dict() if self.birth_date else None
         }
 
     @classmethod
@@ -32,5 +32,5 @@ class User:
             full_name=data["full_name"],
             role=UserRole(data["role"]),
             avatar_url=data["avatar_url"],
-            birthdate=BirthDate.from_dict(data["birth_date"]) if data["birth_date"] else None
+            birth_date=BirthDate.from_dict(data["birth_date"]) if data["birth_date"] else None
         )

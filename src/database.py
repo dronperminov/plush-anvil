@@ -1,7 +1,7 @@
 import logging
 import re
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from pymongo import ASCENDING, DESCENDING, MongoClient
 
@@ -84,6 +84,10 @@ class Database:
     def get_identifier(self, collection_name: str) -> int:
         identifier = self.identifiers.find_one_and_update({"_id": collection_name}, {"$inc": {"value": 1}}, return_document=True)
         return identifier["value"]
+
+    def get_birthday_users(self) -> List[User]:
+        users = [User.from_dict(user) for user in self.users.find({"birthdate": {"$ne": None}})]
+        return sorted(users, key=lambda user: user.birth_date.get_days())
 
     def sign_up(self, user: User) -> None:
         action = SignUpAction(username=user.username, timestamp=datetime.now())
