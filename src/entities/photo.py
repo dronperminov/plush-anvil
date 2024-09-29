@@ -28,3 +28,13 @@ class Photo:
             preview_url=data["preview_url"],
             markup_ids=data["markup_ids"]
         )
+
+    def get_diff(self, data: dict) -> dict:
+        photo_data = self.to_dict()
+        diff = {}
+
+        for field in ["album_id", "url", "preview_url", "markup_ids"]:
+            if field in data and photo_data[field] != data[field]:
+                diff[field] = {"prev": photo_data[field], "new": data[field]}
+
+        return diff

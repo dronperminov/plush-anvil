@@ -2,6 +2,7 @@ import os
 from unittest import TestCase
 
 from src import Database, logger
+from src.databases.album_database import AlbumDatabase
 from src.databases.organizer_database import OrganizerDatabase
 from src.databases.place_database import PlaceDatabase
 from src.databases.quiz_database import QuizDatabase
@@ -11,6 +12,7 @@ class AbstractDatabaseTest(TestCase):
     database: Database
     place_database: PlaceDatabase
     organizer_database: OrganizerDatabase
+    album_database: AlbumDatabase
     quiz_database: QuizDatabase
     data_path = os.path.join(os.path.dirname(__file__), "..", "data")
 
@@ -20,6 +22,7 @@ class AbstractDatabaseTest(TestCase):
         cls.database.connect()
         cls.place_database = PlaceDatabase(database=cls.database, logger=logger)
         cls.organizer_database = OrganizerDatabase(database=cls.database, logger=logger)
+        cls.album_database = AlbumDatabase(database=cls.database, logger=logger)
         cls.quiz_database = QuizDatabase(database=cls.database, logger=logger)
 
     @classmethod

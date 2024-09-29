@@ -48,6 +48,30 @@ class HistoryAction:
         if name == RemoveQuizAction.name:
             return RemoveQuizAction(username=username, timestamp=timestamp, quiz_id=data["quiz_id"])
 
+        if name == AddAlbumAction.name:
+            return AddAlbumAction(username=username, timestamp=timestamp, album_id=data["album_id"])
+
+        if name == EditAlbumAction.name:
+            return EditAlbumAction(username=username, timestamp=timestamp, album_id=data["album_id"], diff=data["diff"])
+
+        if name == RemoveAlbumAction.name:
+            return RemoveAlbumAction(username=username, timestamp=timestamp, album_id=data["album_id"])
+
+        if name == AddPhotoAction.name:
+            return AddPhotoAction(username=username, timestamp=timestamp, photo_id=data["photo_id"])
+
+        if name == EditPhotoAction.name:
+            return EditPhotoAction(username=username, timestamp=timestamp, photo_id=data["photo_id"], diff=data["diff"])
+
+        if name == RemovePhotoAction.name:
+            return RemovePhotoAction(username=username, timestamp=timestamp, photo_id=data["photo_id"])
+
+        if name == AddMarkupAction.name:
+            return AddMarkupAction(username=username, timestamp=timestamp, markup_id=data["markup_id"])
+
+        if name == RemoveMarkupAction.name:
+            return RemoveMarkupAction(username=username, timestamp=timestamp, markup_id=data["markup_id"])
+
         raise ValueError(f'Invalid HistoryAction name "{name}"')
 
 
@@ -120,3 +144,77 @@ class RemoveQuizAction(HistoryAction):
 
     def to_dict(self) -> dict:
         return {**super().to_dict(), "quiz_id": self.quiz_id}
+
+
+@dataclass
+class AddAlbumAction(HistoryAction):
+    name = "add_album"
+    album_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "album_id": self.album_id}
+
+
+@dataclass
+class EditAlbumAction(HistoryAction):
+    name = "edit_album"
+    album_id: int
+    diff: dict
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "album_id": self.album_id, "diff": self.diff}
+
+
+@dataclass
+class RemoveAlbumAction(HistoryAction):
+    name = "remove_album"
+    album_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "album_id": self.album_id}
+
+
+@dataclass
+class AddPhotoAction(HistoryAction):
+    name = "add_photo"
+    photo_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "photo_id": self.photo_id}
+
+
+@dataclass
+class EditPhotoAction(HistoryAction):
+    name = "edit_photo"
+    photo_id: int
+    diff: dict
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "photo_id": self.photo_id, "diff": self.diff}
+
+
+@dataclass
+class RemovePhotoAction(HistoryAction):
+    name = "remove_photo"
+    photo_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "photo_id": self.photo_id}
+
+
+@dataclass
+class AddMarkupAction(HistoryAction):
+    name = "add_markup"
+    markup_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "markup_id": self.markup_id}
+
+
+@dataclass
+class RemoveMarkupAction(HistoryAction):
+    name = "remove_markup"
+    markup_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "markup_id": self.markup_id}

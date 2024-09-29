@@ -3,7 +3,8 @@ from unittest import TestCase
 
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
-from src.entities.history_action import AddOrganizerAction, AddPlaceAction, AddQuizAction, EditQuizAction, HistoryAction, RemoveQuizAction, SignUpAction
+from src.entities.history_action import AddAlbumAction, AddOrganizerAction, AddPlaceAction, AddQuizAction, EditAlbumAction, EditOrganizerAction, EditPlaceAction, \
+    EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
 from src.entities.photo import Photo
@@ -147,11 +148,20 @@ class TestSerialization(TestCase):
     def test_history_action_serialization(self) -> None:
         history_actions = [
             SignUpAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51)),
+
             AddPlaceAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), place_id=1),
+            EditPlaceAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), place_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
+
             AddOrganizerAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), organizer_id=1),
+            EditOrganizerAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), organizer_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
+
             AddQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1),
             EditQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
-            RemoveQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1)
+            RemoveQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1),
+
+            AddAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1),
+            EditAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1, diff={"title": {"prev": "bla", "new": "some"}}),
+            RemoveAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1)
         ]
 
         for history_action in history_actions:

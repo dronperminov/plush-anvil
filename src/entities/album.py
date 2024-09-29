@@ -29,3 +29,13 @@ class Album:
             date=data["date"],
             preview_url=data["preview_url"]
         )
+
+    def get_diff(self, data: dict) -> dict:
+        album_data = self.to_dict()
+        diff = {}
+
+        for field in ["title", "photo_ids", "date", "preview_url"]:
+            if field in data and album_data[field] != data[field]:
+                diff[field] = {"prev": album_data[field], "new": data[field]}
+
+        return diff
