@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 
+from src.entities.paid_date import PaidDate
+
 
 @dataclass
 class HistoryAction:
@@ -71,6 +73,9 @@ class HistoryAction:
 
         if name == RemoveMarkupAction.name:
             return RemoveMarkupAction(username=username, timestamp=timestamp, markup_id=data["markup_id"])
+
+        if name == AddPaidDateAction.name:
+            return AddPaidDateAction(username=username, timestamp=timestamp, paid_date=PaidDate.from_dict(data["paid_date"]))
 
         raise ValueError(f'Invalid HistoryAction name "{name}"')
 
@@ -218,3 +223,12 @@ class RemoveMarkupAction(HistoryAction):
 
     def to_dict(self) -> dict:
         return {**super().to_dict(), "markup_id": self.markup_id}
+
+
+@dataclass
+class AddPaidDateAction(HistoryAction):
+    name = "add_paid_date"
+    paid_date: PaidDate
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "paid_date": self.paid_date.to_dict()}

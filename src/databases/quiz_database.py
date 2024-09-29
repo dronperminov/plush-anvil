@@ -3,7 +3,8 @@ from datetime import datetime
 from typing import Optional
 
 from src import Database
-from src.entities.history_action import AddQuizAction, EditQuizAction, RemoveQuizAction
+from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQuizAction, RemoveQuizAction
+from src.entities.paid_date import PaidDate
 from src.entities.quiz import Quiz
 
 
@@ -45,3 +46,9 @@ class QuizDatabase:
     def get_quiz(self, quiz_id: int) -> Optional[Quiz]:
         quiz = self.database.quizzes.find_one({"quiz_id": quiz_id})
         return Quiz.from_dict(quiz) if quiz else None
+
+    def add_paid_date(self, paid_date: PaidDate, username: str) -> None:
+        action = AddPaidDateAction(username=username, timestamp=datetime.now(), paid_date=paid_date)
+        self.database.paid_dates.insert_one(paid_date.to_dict())
+        self.database.history.insert_one(action.to_dict())
+        self.logger.info(f"Added paid date {paid_date.date} for {paid_date.username} by @{username}")

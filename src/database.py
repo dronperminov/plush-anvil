@@ -22,6 +22,7 @@ class Database:
     photos = None
     markup = None
 
+    paid_dates = None
     metro_stations = None
     history = None
 
@@ -66,6 +67,7 @@ class Database:
         self.markup.create_index([("markup_id", DESCENDING)], unique=True)
         self.markup.create_index([("photo_id", DESCENDING)])
 
+        self.paid_dates = database["paid_dates"]
         self.metro_stations = database["metro_stations"]
 
         self.history = database["history"]

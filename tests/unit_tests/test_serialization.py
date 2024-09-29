@@ -3,10 +3,12 @@ from unittest import TestCase
 
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
-from src.entities.history_action import AddAlbumAction, AddOrganizerAction, AddPlaceAction, AddQuizAction, EditAlbumAction, EditOrganizerAction, EditPlaceAction, \
-    EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveQuizAction, SignUpAction
+from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPaidDateAction, AddPhotoAction, AddPlaceAction, AddQuizAction, \
+    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveMarkupAction, RemovePhotoAction, \
+    RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
+from src.entities.paid_date import PaidDate
 from src.entities.photo import Photo
 from src.entities.place import Place
 from src.entities.quiz import Quiz
@@ -145,6 +147,12 @@ class TestSerialization(TestCase):
         quiz_from_dict = Quiz.from_dict(quiz_dict)
         self.assertEqual(quiz, quiz_from_dict)
 
+    def test_paid_date_serialization(self) -> None:
+        paid_date = PaidDate(username="user_1", date=datetime(2024, 9, 29))
+        paid_date_dict = paid_date.to_dict()
+        paid_date_from_dict = PaidDate.from_dict(paid_date_dict)
+        self.assertEqual(paid_date, paid_date_from_dict)
+
     def test_history_action_serialization(self) -> None:
         history_actions = [
             SignUpAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51)),
@@ -161,7 +169,16 @@ class TestSerialization(TestCase):
 
             AddAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1),
             EditAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1, diff={"title": {"prev": "bla", "new": "some"}}),
-            RemoveAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1)
+            RemoveAlbumAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), album_id=1),
+
+            AddPhotoAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), photo_id=1),
+            EditPhotoAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), photo_id=1, diff={"url": {"prev": "bla", "new": "some"}}),
+            RemovePhotoAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), photo_id=1),
+
+            AddMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
+            RemoveMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
+
+            AddPaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28)))
         ]
 
         for history_action in history_actions:
