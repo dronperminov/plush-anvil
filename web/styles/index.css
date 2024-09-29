@@ -1,0 +1,73 @@
+.content {
+    padding: 1em 3em 0 3em;
+}
+
+.first-screen {
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, rgba(255, 161, 166, 0.6) 0%, rgba(237, 157, 220, 0) 100%), rgba(238, 157, 220, 0.5);
+    backdrop-filter: blur(0.6em);
+    border-radius: 1.4em;
+    padding: 4em;
+    position: relative;
+}
+
+.first-screen .team {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+
+.first-screen .team-name {
+    font-size: 3.25em;
+    font-weight: bold;
+    max-width: 660px;
+}
+
+.first-screen .rating {
+    margin-top: 3em;
+}
+
+.first-screen .rating-curr {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-gap: 0.7em;
+    align-items: center;
+    margin-bottom: 0.8em;
+}
+
+.first-screen .rating-curr-value {
+    font-size: 2.2em;
+    font-weight: bold;
+    background-color: #fddc81;
+    border-radius: 0.5em;
+    padding: 0.25em 0.5em;
+}
+
+.first-screen .rating-curr-text {
+    font-size: 1.1em;
+}
+
+.first-screen .rating-next {
+    margin-bottom: 1em;
+}
+
+.first-screen .rating-next-date {
+    font-size: 0.9em;
+}
+
+@media (max-width: 767px) {
+    html {
+        font-size: 12px;
+    }
+
+    .content {
+        padding: 1em 10px 0 10px;
+    }
+
+    .first-screen {
+        padding: 2em;
+    }
+
+    .first-screen .team-name {
+        font-size: 2.8em;
+        max-width: 320px;
+    }
+}

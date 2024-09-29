@@ -6,7 +6,23 @@
     {% include "components/menu.html" %}
 
     <div class="content">
-        
+        <div class="first-screen">
+            <div class="team">КОМАНДА</div>
+            <div class="team-name">ПЛЮШЕВАЯ НАКОВАЛЬНЯ</div>
+
+            <div class="rating">
+                <div class="rating-curr">
+                    <div class="rating-curr-value">{{rating_info.rating}}</div>
+                    <div class="rating-curr-text">рейтинг смузи<br>{{rating_info.curr_level.level}} уровень, <b>{{rating_info.curr_level.name}}</b></div>
+                </div>
+                <div class="rating-mean"><b>{{rating_info.mean_rating|round(2)}}</b> в среднем за <b>{{get_word_form(rating_info.games, ["игру", "игры", "игр"])}}</b></div>
+                {% if rating_info.next_level %}
+                <div class="rating-next">До уровня "{{rating_info.next_level.level.name}}" <b>~{{get_word_form(rating_info.next_level.lost_games, ["игра", "игры", "игр"])}}</b> и <b>{{get_word_form(rating_info.next_level.lost_score, ["балл", "балла", "баллов"])}}</b></div>
+
+                <div class="rating-next-date">Примерная дата: {{rating_info.next_level.end_date.strftime("%d.%m.%Y")}} (через {{get_word_form(rating_info.next_level.lost_days, ["день", "дня", "дней"])}})</div>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>

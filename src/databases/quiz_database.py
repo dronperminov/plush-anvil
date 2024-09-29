@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from src import Database
 from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQuizAction, RemoveQuizAction
@@ -46,6 +46,16 @@ class QuizDatabase:
     def get_quiz(self, quiz_id: int) -> Optional[Quiz]:
         quiz = self.database.quizzes.find_one({"quiz_id": quiz_id})
         return Quiz.from_dict(quiz) if quiz else None
+
+    def get_rating_quizzes(self) -> List[Quiz]:
+        organizer = self.database.organizers.find_one({"name": "Смузи"})
+        query = {
+            "datetime": {"$gte": datetime(2024, 1, 1)},
+            "result": {"$ne": None},
+            "organizer_id": organizer["organizer_id"],
+            "ignore_rating": {"$ne": True}
+        }
+        return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(query).sort("datetime", 1)]
 
     def add_paid_date(self, paid_date: PaidDate, username: str) -> None:
         action = AddPaidDateAction(username=username, timestamp=datetime.now(), paid_date=paid_date)
