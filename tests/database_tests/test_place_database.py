@@ -23,3 +23,16 @@ class TestPlaceDatabaseReal(AbstractDatabaseTest):
         inserted_place = self.place_database.get_place(place_id=1)
         self.assertIsNotNone(inserted_place)
         self.assertEqual(place, inserted_place)
+
+    def test_2_update_place(self) -> None:
+        place = self.place_database.get_place(place_id=1)
+        self.place_database.update_place(place_id=1, diff=place.get_diff({"name": "Золберг 2.0", "color": "#fff"}), username="user")
+
+        updated_place = self.place_database.get_place(place_id=1)
+        self.assertIsNotNone(updated_place)
+
+        self.assertEqual(place.name, "Золберг")
+        self.assertEqual(updated_place.name, "Золберг 2.0")
+
+        self.assertEqual(place.color, "#ff00f0")
+        self.assertEqual(updated_place.color, "#fff")

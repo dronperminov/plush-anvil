@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from src import Database
-from src.entities.history_action import AddPlaceAction
+from src.entities.history_action import AddPlaceAction, EditPlaceAction
 from src.entities.place import Place
 
 
@@ -20,6 +20,18 @@ class PlaceDatabase:
         self.database.places.insert_one(place.to_dict())
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f'Added place "{place.name}" ({place.place_id}) by @{username}')
+
+    def update_place(self, place_id: int, diff: dict, username: str) -> None:
+        if not diff:
+            return
+
+        place = self.database.places.find_one({"place_id": place_id}, {"name": 1})
+        assert place is not None
+
+        action = EditPlaceAction(username=username, timestamp=datetime.now(), place_id=place_id, diff=diff)
+        self.database.places.update_one({"place_id": place_id}, {"$set": {key: key_diff["new"] for key, key_diff in diff.items()}})
+        self.database.history.insert_one(action.to_dict())
+        self.logger.info(f'Updated place "{place["name"]}" ({place_id}) by @{username} (keys: {[key for key in diff]})')
 
     def get_place(self, place_id: int) -> Optional[Place]:
         place = self.database.places.find_one({"place_id": place_id})

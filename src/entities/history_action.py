@@ -30,8 +30,14 @@ class HistoryAction:
         if name == AddPlaceAction.name:
             return AddPlaceAction(username=username, timestamp=timestamp, place_id=data["place_id"])
 
+        if name == EditPlaceAction.name:
+            return EditPlaceAction(username=username, timestamp=timestamp, place_id=data["place_id"], diff=data["diff"])
+
         if name == AddOrganizerAction.name:
             return AddOrganizerAction(username=username, timestamp=timestamp, organizer_id=data["organizer_id"])
+
+        if name == EditOrganizerAction.name:
+            return EditOrganizerAction(username=username, timestamp=timestamp, organizer_id=data["organizer_id"], diff=data["diff"])
 
         if name == AddQuizAction.name:
             return AddQuizAction(username=username, timestamp=timestamp, quiz_id=data["quiz_id"])
@@ -60,12 +66,32 @@ class AddPlaceAction(HistoryAction):
 
 
 @dataclass
+class EditPlaceAction(HistoryAction):
+    name = "edit_place"
+    place_id: int
+    diff: dict
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "place_id": self.place_id, "diff": self.diff}
+
+
+@dataclass
 class AddOrganizerAction(HistoryAction):
     name = "add_organizer"
     organizer_id: int
 
     def to_dict(self) -> dict:
         return {**super().to_dict(), "organizer_id": self.organizer_id}
+
+
+@dataclass
+class EditOrganizerAction(HistoryAction):
+    name = "edit_organizer"
+    organizer_id: int
+    diff: dict
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "organizer_id": self.organizer_id, "diff": self.diff}
 
 
 @dataclass

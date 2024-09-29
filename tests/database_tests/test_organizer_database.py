@@ -21,3 +21,13 @@ class TestOrganizerDatabaseReal(AbstractDatabaseTest):
         inserted_organizer = self.organizer_database.get_organizer(organizer_id=1)
         self.assertIsNotNone(inserted_organizer)
         self.assertEqual(organizer, inserted_organizer)
+
+    def test_2_update_organizer(self) -> None:
+        organizer = self.organizer_database.get_organizer(organizer_id=1)
+        self.organizer_database.update_organizer(organizer_id=1, diff=organizer.get_diff({"name": "Новые СМУЗИ"}), username="user")
+
+        updated_organizer = self.organizer_database.get_organizer(organizer_id=1)
+        self.assertIsNotNone(updated_organizer)
+
+        self.assertEqual(organizer.name, "Смузи")
+        self.assertEqual(updated_organizer.name, "Новые СМУЗИ")

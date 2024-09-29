@@ -31,3 +31,13 @@ class Place:
             metro_station=data["metro_station"],
             color=data["color"]
         )
+
+    def get_diff(self, data: dict) -> dict:
+        place_data = self.to_dict()
+        diff = {}
+
+        for field in ["name", "address", "yandex_map_link", "metro_station", "color"]:
+            if field in data and place_data[field] != data[field]:
+                diff[field] = {"prev": place_data[field], "new": data[field]}
+
+        return diff

@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from src import Database
-from src.entities.history_action import AddOrganizerAction
+from src.entities.history_action import AddOrganizerAction, EditOrganizerAction
 from src.entities.organizer import Organizer
 
 
@@ -20,6 +20,18 @@ class OrganizerDatabase:
         self.database.organizers.insert_one(organizer.to_dict())
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f'Added organizer "{organizer.name}" ({organizer.organizer_id}) by @{username}')
+
+    def update_organizer(self, organizer_id: int, diff: dict, username: str) -> None:
+        if not diff:
+            return
+
+        organizer = self.database.organizers.find_one({"organizer_id": organizer_id}, {"name": 1})
+        assert organizer is not None
+
+        action = EditOrganizerAction(username=username, timestamp=datetime.now(), organizer_id=organizer_id, diff=diff)
+        self.database.organizers.update_one({"organizer_id": organizer_id}, {"$set": {key: key_diff["new"] for key, key_diff in diff.items()}})
+        self.database.history.insert_one(action.to_dict())
+        self.logger.info(f'Updated organizer "{organizer["name"]}" ({organizer_id}) by @{username} (keys: {[key for key in diff]})')
 
     def get_organizer(self, organizer_id: int) -> Optional[Organizer]:
         organizer = self.database.organizers.find_one({"organizer_id": organizer_id})
