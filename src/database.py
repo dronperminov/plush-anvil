@@ -1,8 +1,11 @@
+import logging
 import re
+from datetime import datetime
 from typing import Optional
 
 from pymongo import ASCENDING, DESCENDING, MongoClient
 
+from src.entities.history_action import SignUpAction
 from src.entities.user import User
 
 
@@ -22,9 +25,10 @@ class Database:
     metro_stations = None
     history = None
 
-    def __init__(self, mongo_url: str, database_name: str) -> None:
+    def __init__(self, mongo_url: str, database_name: str, logger: logging.Logger) -> None:
         self.mongo_url = mongo_url
         self.database_name = database_name
+        self.logger = logger
 
     def connect(self) -> None:
         self.client = MongoClient(self.mongo_url)
@@ -80,7 +84,10 @@ class Database:
         return identifier["value"]
 
     def sign_up(self, user: User) -> None:
-        self.users.insert_one(user.to_dict())  # TODO: add history action
+        action = SignUpAction(username=user.username, timestamp=datetime.now())
+        self.users.insert_one(user.to_dict())
+        self.history.insert_one(action.to_dict())
+        self.logger.info(f'Sign up user "{user.username}" ({user.full_name})')
 
     def drop(self) -> None:
         self.client.drop_database(self.database_name)

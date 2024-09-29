@@ -3,6 +3,7 @@ from unittest import TestCase
 
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
+from src.entities.history_action import AddOrganizerAction, AddPlaceAction, AddQuizAction, EditQuizAction, HistoryAction, RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
 from src.entities.photo import Photo
@@ -142,3 +143,18 @@ class TestSerialization(TestCase):
         quiz_dict = quiz.to_dict()
         quiz_from_dict = Quiz.from_dict(quiz_dict)
         self.assertEqual(quiz, quiz_from_dict)
+
+    def test_history_action_serialization(self) -> None:
+        history_actions = [
+            SignUpAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51)),
+            AddPlaceAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), place_id=1),
+            AddOrganizerAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), organizer_id=1),
+            AddQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1),
+            EditQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
+            RemoveQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1)
+        ]
+
+        for history_action in history_actions:
+            history_action_dict = history_action.to_dict()
+            history_action_from_dict = HistoryAction.from_dict(history_action_dict)
+            self.assertEqual(history_action, history_action_from_dict)

@@ -58,3 +58,18 @@ class Quiz:
             participants=[QuizParticipant.from_dict(participant) for participant in data["participants"]],
             result=QuizResult.from_dict(data["result"]) if data["result"] else None
         )
+
+    def get_diff(self, data: dict) -> dict:
+        quiz_data = self.to_dict()
+        diff = {}
+
+        fields = [
+            "name", "short_name", "description", "datetime", "cost", "place_id", "organizer_id",
+            "category", "album_id", "ignore_rating", "participants", "result"
+        ]
+
+        for field in fields:
+            if field in data and quiz_data[field] != data[field]:
+                diff[field] = {"prev": quiz_data[field], "new": data[field]}
+
+        return diff

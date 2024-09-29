@@ -1,0 +1,29 @@
+import logging
+from datetime import datetime
+from typing import List, Optional
+
+from src import Database
+from src.entities.history_action import AddPlaceAction
+from src.entities.place import Place
+
+
+class PlaceDatabase:
+    def __init__(self, database: Database, logger: logging.Logger) -> None:
+        self.database = database
+        self.logger = logger
+
+    def get_count(self) -> int:
+        return self.database.places.count_documents({})
+
+    def add_place(self, place: Place, username: str) -> None:
+        action = AddPlaceAction(username=username, timestamp=datetime.now(), place_id=place.place_id)
+        self.database.places.insert_one(place.to_dict())
+        self.database.history.insert_one(action.to_dict())
+        self.logger.info(f'Added place "{place.name}" ({place.place_id}) by @{username}')
+
+    def get_place(self, place_id: int) -> Optional[Place]:
+        place = self.database.places.find_one({"place_id": place_id})
+        return Place.from_dict(place) if place else None
+
+    def get_places(self) -> List[Place]:
+        return [Place.from_dict(place) for place in self.database.places.find({})]
