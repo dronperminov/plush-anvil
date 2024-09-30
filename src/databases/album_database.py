@@ -151,3 +151,6 @@ class AlbumDatabase:
         album_ids = [quiz["album_id"] for quiz in self.database.quizzes.find({"album_id": {"$ne": None}}, {"album_id"})]
         query = {"photo_ids.2": {"$exists": True}, "album_id": {"$in": album_ids}}
         return [Album.from_dict(album) for album in self.database.albums.find(query).sort({"date": -1}).limit(top_count)]
+
+    def get_all_albums(self) -> List[Album]:
+        return [Album.from_dict(album) for album in self.database.albums.find({}).sort({"date": -1})]

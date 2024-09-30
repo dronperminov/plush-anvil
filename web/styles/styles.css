@@ -1,9 +1,10 @@
 :root {
-    --background-color: #ffffff;
+    --background-color: #f1f1f1;
     --text-font: Inter;
     --text-color: #2e2836;
     --subtext-color: #515856;
     --main-color: #c238a2;
+    --circle-color: #fddc81;
 
     --icon-color: var(--main-color);
     --link-color: var(--main-color);
@@ -60,6 +61,11 @@ html {
     background-color: var(--background-color);
 }
 
+h1 {
+    font-size: 3em;
+    margin-bottom: 1em;
+}
+
 h2 {
     font-size: 2em;
     margin-bottom: 1em;
@@ -74,9 +80,9 @@ ul {
 }
 
 .content {
-    padding: 10px;
     max-width: var(--max-width);
     margin: 0 auto;
+    padding: 1em 3em 0 3em;
 }
 
 .link {
@@ -116,12 +122,23 @@ ul {
     align-items: center;
     justify-items: center;
     border-radius: 100%;
-    background-color: #fddc81;
+    background-color: var(--circle-color);
     width: 2em;
     height: 2em;
 }
 
 .arrow-link .arrow img {
+    width: 100%;
+}
+
+.circle-link {
+    width: 2em;
+    height: 2em;
+    border-radius: 100%;
+    background-color: var(--circle-color);
+}
+
+.circle-link img {
     width: 100%;
 }
 
@@ -155,7 +172,7 @@ ul {
 }
 
 .faq-question .faq-circle {
-    background-color: #fddc81;
+    background-color: var(--circle-color);
     border-radius: 100%;
     width: 2.5em;
     height: 2.5em;
@@ -201,6 +218,27 @@ ul {
 
 .faq-answer li {
     margin-top: 0.4em;
+}
+
+/* bread crumbs */
+.bread-crumbs {
+    margin-bottom: 1em;
+    display: inline-grid;
+    grid-auto-flow: column;
+    align-items: center;
+}
+
+.bread-crumbs img {
+    width: 1.5em;
+}
+
+.bread-crumbs a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.bread-crumbs .bread-crumbs-current {
+    color: #ee9ddc;
 }
 
 /* notifications */
@@ -266,5 +304,9 @@ ul {
 
     ul {
         margin-left: 12px;
+    }
+
+    .content {
+        padding: 1em 10px 0 10px;
     }
 }

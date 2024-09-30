@@ -37,8 +37,8 @@
                 </div>
                 <div class="quiz-description">{{quiz.description[:200]}}{% if quiz.description|length > 200 %}...{% endif %}</div>
                 <div class="quiz-date-address">
-                    <div class="quiz-date"><img src="/images/icons/calendar.svg"> {{quiz.datetime.strftime("%d.%m.%Y %H:%M")}}</div>
-                    <div class="quiz-address"><img src="/images/icons/location.svg"> <a class="link" target="_blank" href="{{place.yandex_map_link}}">{{place.name}}</a></div>
+                    <div class="quiz-date"><img src="/images/icons/calendar.svg"> <span>{{quiz.datetime.strftime("%d.%m.%Y %H:%M")}}</span></div>
+                    <div class="quiz-address"><img src="/images/icons/location.svg"> <span><a class="link" target="_blank" href="{{place.yandex_map_link}}">{{place.name}}</a></span></div>
                 </div>
             </div>
             {% endfor %}
