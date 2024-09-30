@@ -57,6 +57,10 @@ class QuizDatabase:
         }
         return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(query).sort("datetime", 1)]
 
+    def get_nearest_quizzes(self) -> List[Quiz]:
+        quizzes = self.database.quizzes.find({"datetime": {"$gte": datetime.now()}}).sort({"datetime": 1}).limit(2)
+        return [Quiz.from_dict(quiz) for quiz in quizzes]
+
     def add_paid_date(self, paid_date: PaidDate, username: str) -> None:
         action = AddPaidDateAction(username=username, timestamp=datetime.now(), paid_date=paid_date)
         self.database.paid_dates.insert_one(paid_date.to_dict())

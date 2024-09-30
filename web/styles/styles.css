@@ -9,6 +9,8 @@
     --link-color: var(--main-color);
     --border-color: #d9d9d9;
 
+    --max-width: 1440px;
+
     /* status */
     --error-color: #f44336;
     --error-background: #f4d3d0;
@@ -52,9 +54,14 @@
 }
 
 html {
+    font-size: 16px;
     font-family: var(--text-font);
     color: var(--text-color);
     background-color: var(--background-color);
+}
+
+h2 {
+    margin-bottom: 1em;
 }
 
 .hidden {
@@ -63,6 +70,8 @@ html {
 
 .content {
     padding: 10px;
+    max-width: var(--max-width);
+    margin: 0 auto;
 }
 
 .link {
@@ -74,6 +83,45 @@ html {
 
 .link:hover {
     border-bottom-style: solid;
+}
+
+.arrow-link {
+    border-radius: 2em;
+    padding: 2px 2px 2px 1em;
+    background-color: rgba(238, 157, 220, 0.5);
+    display: inline-grid;
+    height: calc(2em + 4px);
+    align-items: center;
+    grid-template-columns: 1fr 2em;
+    grid-gap: 1em;
+}
+
+.arrow-link {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.arrow-link .text {
+    font-size: 1.1em;
+}
+
+.arrow-link .arrow {
+    display: inline-grid;
+    align-items: center;
+    justify-items: center;
+    border-radius: 100%;
+    background-color: #fddc81;
+    width: 2em;
+    height: 2em;
+}
+
+.arrow-link .arrow img {
+    width: 100%;
+}
+
+.link-header {
+    display: grid;
+    grid-template-columns: 1fr max-content;
 }
 
 /* notifications */
@@ -130,4 +178,10 @@ html {
     background-color: var(--info-background) !important;
     border-color: var(--info-color) !important;
     color: var(--info-color) !important;
+}
+
+@media (max-width: 767px) {
+    html {
+        font-size: 12px;
+    }
 }

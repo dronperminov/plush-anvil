@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from src import Database
 from src.entities.history_action import AddOrganizerAction, EditOrganizerAction
@@ -37,5 +37,5 @@ class OrganizerDatabase:
         organizer = self.database.organizers.find_one({"organizer_id": organizer_id})
         return Organizer.from_dict(organizer) if organizer else None
 
-    def get_organizers(self) -> List[Organizer]:
-        return [Organizer.from_dict(organizer) for organizer in self.database.organizers.find({})]
+    def get_organizers(self, organizer_ids: List[int]) -> Dict[int, Organizer]:
+        return {organizer["organizer_id"]: Organizer.from_dict(organizer) for organizer in self.database.organizers.find({"organizer_id": {"$in": organizer_ids}})}

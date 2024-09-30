@@ -23,6 +23,41 @@
                 {% endif %}
             </div>
         </div>
+
+        {% if nearest_quizzes %}
+        <div class="nearest-quizzes">
+            {% for quiz in nearest_quizzes %}
+            {% set place = place_id2place[quiz.place_id] %}
+            {% set organizer = organizer_id2organizer[quiz.organizer_id] %}
+            <div class="nearest-quiz">
+                <div class="quiz-header">БЛИЖАЙШИЙ КВИЗ</div>
+                <div class="quiz-name">
+                    <img src="{{organizer.image_url}}">
+                    <div>{{quiz.name.upper()}}</div>
+                </div>
+                <div class="quiz-description">{{quiz.description}}</div>
+                <div class="quiz-date-address">
+                    <div class="quiz-date"><img src="/images/icons/calendar.svg"> {{quiz.datetime.strftime("%d.%m.%Y %H:%M")}}</div>
+                    <div class="quiz-address"><img src="/images/icons/location.svg"> <a class="link" target="_blank" href="{{place.yandex_map_link}}">{{place.name}}</a> (м. {{place.metro_station}})</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <h2>РАСПИСАНИЕ</h2>
+
+        <div class="link-header">
+            <h2>О КОМАНДЕ</h2>
+            <a class="arrow-link" href="/analytics"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+        </div>
+
+        <div class="link-header">
+            <h2>BEST OF THE BEST</h2>
+            <a class="arrow-link" href="/albums"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+        </div>
+
+        <h2>FAQ</h2>
     </div>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>

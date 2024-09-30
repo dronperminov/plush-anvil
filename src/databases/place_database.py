@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from src import Database
 from src.entities.history_action import AddPlaceAction, EditPlaceAction
@@ -37,5 +37,5 @@ class PlaceDatabase:
         place = self.database.places.find_one({"place_id": place_id})
         return Place.from_dict(place) if place else None
 
-    def get_places(self) -> List[Place]:
-        return [Place.from_dict(place) for place in self.database.places.find({})]
+    def get_places(self, place_ids: List[int]) -> Dict[int, Place]:
+        return {place["place_id"]: Place.from_dict(place) for place in self.database.places.find({"place_id": {"$in": place_ids}})}
