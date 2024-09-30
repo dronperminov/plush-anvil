@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from src import Database
+from src.entities.analytics.team_analytics import TeamAnalytics
 from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQuizAction, RemoveQuizAction
 from src.entities.paid_date import PaidDate
 from src.entities.quiz import Quiz
@@ -66,3 +67,7 @@ class QuizDatabase:
         self.database.paid_dates.insert_one(paid_date.to_dict())
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f"Added paid date {paid_date.date} for {paid_date.username} by @{username}")
+
+    def get_team_analytics(self) -> TeamAnalytics:
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}})]
+        return TeamAnalytics.evaluate(quizzes=quizzes)
