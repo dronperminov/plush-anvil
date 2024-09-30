@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 
 @dataclass
@@ -9,7 +9,7 @@ class Album:
     title: str
     photo_ids: List[int]
     date: datetime
-    preview_url: str
+    cover_id: Optional[int]
 
     def to_dict(self) -> dict:
         return {
@@ -17,7 +17,7 @@ class Album:
             "title": self.title,
             "photo_ids": self.photo_ids,
             "date": self.date,
-            "preview_url": self.preview_url
+            "cover_id": self.cover_id
         }
 
     @classmethod
@@ -27,14 +27,14 @@ class Album:
             title=data["title"],
             photo_ids=data["photo_ids"],
             date=data["date"],
-            preview_url=data["preview_url"]
+            cover_id=data["cover_id"]
         )
 
     def get_diff(self, data: dict) -> dict:
         album_data = self.to_dict()
         diff = {}
 
-        for field in ["title", "photo_ids", "date", "preview_url"]:
+        for field in ["title", "photo_ids", "date", "cover_id"]:
             if field in data and album_data[field] != data[field]:
                 diff[field] = {"prev": album_data[field], "new": data[field]}
 

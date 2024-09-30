@@ -55,7 +55,7 @@
         <div class="about-team">
             <div class="about-team-block">
                 <div class="about-team-value">{{team_analytics.games}}</div>
-                <div class="about-team-name">{{get_word_form(team_analytics.games, ["игра", "игры", "игр"], True)}} сыграли</div>
+                <div class="about-team-name">{{get_word_form(team_analytics.games, ["игру", "игры", "игр"], True)}} сыграли</div>
             </div>
 
             <div class="about-team-block">
@@ -82,6 +82,16 @@
         <div class="link-header">
             <h2>BEST OF THE BEST</h2>
             <a class="arrow-link" href="/albums"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+        </div>
+
+        <div class="top-albums">
+            {% for album in last_albums %}
+            <div class="top-album">
+                <a href="/albums/{{album.album_id}}">
+                    <img src="https://plush-anvil.ru{{photo_id2photo[album.cover_id].url}}">
+                </a>
+            </div>
+            {% endfor %}
         </div>
 
         <h2>FAQ</h2>

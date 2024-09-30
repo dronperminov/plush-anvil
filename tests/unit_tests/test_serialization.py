@@ -53,7 +53,7 @@ class TestSerialization(TestCase):
             title="Album title",
             photo_ids=[1, 5, 8],
             date=datetime(2024, 9, 29, 15, 00),
-            preview_url="some preview url"
+            cover_id=1
         )
 
         album_dict = album.to_dict()

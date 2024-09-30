@@ -17,7 +17,7 @@ class TestPlaceDatabaseReal(AbstractDatabaseTest):
             title="Album title",
             photo_ids=[],
             date=datetime(2024, 9, 29, 15, 34, 7),
-            preview_url="some url"
+            cover_id=None
         )
 
         self.album_database.add_album(album=album, username="user")
@@ -26,6 +26,7 @@ class TestPlaceDatabaseReal(AbstractDatabaseTest):
         inserted_album = self.album_database.get_album(album_id=1)
         self.assertIsNotNone(inserted_album)
         self.assertEqual(album, inserted_album)
+        self.assertIsNone(inserted_album.cover_id)
 
     def test_2_insert_photos(self) -> None:
         photos_count = 5
@@ -45,6 +46,7 @@ class TestPlaceDatabaseReal(AbstractDatabaseTest):
         self.assertEqual(len(album.photo_ids), photos_count)
         self.assertEqual(album.photo_ids[0], 1)
         self.assertEqual(album.photo_ids[-1], photos_count)
+        self.assertEqual(album.cover_id, 1)
 
     def test_3_insert_markups(self) -> None:
         markups_count = 3

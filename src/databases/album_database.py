@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Optional
+from typing import Dict, List, Optional
 
 from src import Database
 from src.entities.album import Album
@@ -63,7 +63,8 @@ class AlbumDatabase:
         self.database.photos.insert_one(photo.to_dict())
 
         album = self.get_album(album_id=photo.album_id)
-        self.update_album(album_id=photo.album_id, diff=album.get_diff({"photo_ids": album.photo_ids + [photo.photo_id]}), username=username)
+        album_data = {"photo_ids": album.photo_ids + [photo.photo_id], "cover_id": photo.photo_id if album.cover_id is None else album.cover_id}
+        self.update_album(album_id=photo.album_id, diff=album.get_diff(album_data), username=username)
 
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f"Added photo {photo.photo_id} by @{username}")
@@ -101,6 +102,9 @@ class AlbumDatabase:
     def get_photo(self, photo_id: int) -> Optional[Photo]:
         photo = self.database.photos.find_one({"photo_id": photo_id})
         return Photo.from_dict(photo) if photo else None
+
+    def get_photos(self, photo_ids: List[int]) -> Dict[int, Photo]:
+        return {photo["photo_id"]: Photo.from_dict(photo) for photo in self.database.photos.find({"photo_id": {"$in": photo_ids}})}
 
     def add_markup(self, markup: Markup, username: str) -> None:
         action = AddMarkupAction(username=username, timestamp=datetime.now(), markup_id=markup.markup_id)
@@ -142,3 +146,8 @@ class AlbumDatabase:
         self.database.quizzes.update_one({"quiz_id": quiz_id}, {"$set": {key: key_diff["new"] for key, key_diff in diff.items()}})
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f'Updated quiz "{quiz["name"]}" ({quiz_id}) by @{username} (keys: {[key for key in diff]})')
+
+    def get_last_albums(self, top_count: int = 13) -> List[Album]:
+        album_ids = [quiz["album_id"] for quiz in self.database.quizzes.find({"album_id": {"$ne": None}}, {"album_id"})]
+        query = {"photo_ids.2": {"$exists": True}, "album_id": {"$in": album_ids}}
+        return [Album.from_dict(album) for album in self.database.albums.find(query).sort({"date": -1}).limit(top_count)]
