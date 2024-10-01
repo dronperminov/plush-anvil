@@ -38,7 +38,8 @@ class TestPlaceDatabaseReal(AbstractDatabaseTest):
                 album_id=1,
                 url=f"url {i}",
                 preview_url=f"preview url {i}",
-                markup_ids=[]
+                markup_ids=[],
+                timestamp=datetime.now()
             )
             self.album_database.add_photo(photo=photo, username="user")
 

@@ -6,6 +6,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 
 from src import album_database
 from src.api import send_error, templates
+from src.entities.album import Album
 from src.entities.user import User
 from src.query_params.album_photos import AlbumPhotos
 from src.query_params.album_search import AlbumSearch, AlbumSearchQuery
@@ -27,13 +28,7 @@ def get_albums(user: Optional[User] = Depends(get_user), params: AlbumSearchQuer
     return HTMLResponse(content=content)
 
 
-@router.get("/albums/{album_id}")
-def get_album(album_id: int, user: Optional[User] = Depends(get_user)) -> HTMLResponse:
-    album = album_database.get_album(album_id=album_id)
-
-    if not album:
-        return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
-
+def album_response(album: Album, user: User) -> HTMLResponse:
     template = templates.get_template("photos/album.html")
     content = template.render(
         version=get_static_hash(),
@@ -42,6 +37,22 @@ def get_album(album_id: int, user: Optional[User] = Depends(get_user)) -> HTMLRe
     )
 
     return HTMLResponse(content=content)
+
+
+@router.get("/albums/{album_id}")
+def get_album(album_id: int, user: Optional[User] = Depends(get_user)) -> HTMLResponse:
+    album = album_database.get_album(album_id=album_id)
+
+    if not album:
+        return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
+
+    return album_response(album=album, user=user)
+
+
+@router.get("/photos")
+def get_photos(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
+    album = album_database.get_album(album_id="all_photos")
+    return album_response(album=album, user=user)
 
 
 @router.post("/search-albums")

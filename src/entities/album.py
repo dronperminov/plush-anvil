@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
 
 @dataclass
 class Album:
-    album_id: int
+    album_id: Union[int, str]
     title: str
     photo_ids: List[int]
     date: datetime

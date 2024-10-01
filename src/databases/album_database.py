@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from src import Database
 from src.entities.album import Album
@@ -56,7 +56,13 @@ class AlbumDatabase:
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f'Removed album "{album.title}" ({album_id}) by @{username}')
 
-    def get_album(self, album_id: int) -> Optional[Album]:
+    def get_album(self, album_id: Union[int, str]) -> Optional[Album]:
+        if album_id == "all_photos":
+            photo_ids = [photo_id for album in self.database.albums.find({}).sort({"date": -1}) for photo_id in album["photo_ids"]]
+            photo_id2photo = self.get_photos(photo_ids=photo_ids)
+            photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp, reverse=True)
+            return Album(album_id="all_photos", title="Все фото", photo_ids=photo_ids, date=datetime.now(), cover_id=None)
+
         album = self.database.albums.find_one({"album_id": album_id})
         return Album.from_dict(album) if album else None
 
@@ -116,7 +122,7 @@ class AlbumDatabase:
         skip = params.page * params.page_size
         photo_ids = album.photo_ids[skip:skip + params.page_size]
         photo_id2photo = self.get_photos(photo_ids=photo_ids)
-        return len(album.photo_ids), list(photo_id2photo.values())
+        return len(album.photo_ids), [photo_id2photo[photo_id] for photo_id in photo_ids]
 
     def add_markup(self, markup: Markup, username: str) -> None:
         action = AddMarkupAction(username=username, timestamp=datetime.now(), markup_id=markup.markup_id)

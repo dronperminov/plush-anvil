@@ -40,7 +40,8 @@ class TestSerialization(TestCase):
             album_id=1,
             url="some photo url",
             preview_url="some preview photo url",
-            markup_ids=[1, 2, 3, 89]
+            markup_ids=[1, 2, 3, 89],
+            timestamp=datetime(2024, 9, 20, 6, 8)
         )
 
         photo_dict = photo.to_dict()

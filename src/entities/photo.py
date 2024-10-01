@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import List
 
 
@@ -9,6 +10,7 @@ class Photo:
     url: str
     preview_url: str
     markup_ids: List[int]
+    timestamp: datetime
 
     def to_dict(self) -> dict:
         return {
@@ -16,7 +18,8 @@ class Photo:
             "album_id": self.album_id,
             "url": self.url,
             "preview_url": self.preview_url,
-            "markup_ids": self.markup_ids
+            "markup_ids": self.markup_ids,
+            "timestamp": self.timestamp
         }
 
     @classmethod
@@ -26,14 +29,15 @@ class Photo:
             album_id=data["album_id"],
             url=data["url"],
             preview_url=data["preview_url"],
-            markup_ids=data["markup_ids"]
+            markup_ids=data["markup_ids"],
+            timestamp=data["timestamp"]
         )
 
     def get_diff(self, data: dict) -> dict:
         photo_data = self.to_dict()
         diff = {}
 
-        for field in ["album_id", "url", "preview_url", "markup_ids"]:
+        for field in ["album_id", "url", "preview_url", "markup_ids", "timestamp"]:
             if field in data and photo_data[field] != data[field]:
                 diff[field] = {"prev": photo_data[field], "new": data[field]}
 
