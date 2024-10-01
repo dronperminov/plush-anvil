@@ -2,7 +2,7 @@
     position: sticky;
     top: 0;
     width: 100%;
-    background: var(--background-color);
+    background: var(--menu-background);
     padding: 0 3em;
     display: grid;
     grid-auto-flow: column;
@@ -75,7 +75,7 @@
     align-items: center;
 
     width: max-content;
-    background-color: var(--background-color);
+    background-color: var(--menu-background);
     border-radius: 0 0 1em 1em;
 }
 
@@ -83,9 +83,19 @@
     padding: 1em 10px;
 }
 
+@media (min-width: 1440px) {
+    .header {
+        padding: 0 calc(50vw - 720px + 3em);
+    }
+}
+
 @media (min-width: 768px) {
     .menu {
         text-align: right;
+    }
+
+    .menu-item {
+        text-align: left;
     }
 
     .menu-subitem {
@@ -167,7 +177,7 @@
         position: fixed;
         top: 55px;
         z-index: 9999;
-        background: var(--background-color);
+        background-color: var(--menu-background);
 
         max-height: 0;
         overflow: hidden;
@@ -214,14 +224,14 @@
 
     .subnav-checkbox:checked ~ label {
         font-weight: bold;
-        background-color: #ececec;
+        background-color: var(--submenu-background);
     }
 
     .subnav-checkbox:checked ~ .menu-subitem {
         max-height: 100dvh;
         transition: 0.2s max-height;
         margin-top: -0.5em;
-        background-color: #ececec;
+        background-color: var(--submenu-background);
     }
 
     .menu-item .profile img {

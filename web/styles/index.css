@@ -2,6 +2,11 @@ html {
     background-color: #ffffff;
 }
 
+:root {
+    --menu-background: #ffffff;
+    --submenu-background: #fafafa;
+}
+
 .first-screen {
     background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, rgba(255, 161, 166, 0.6) 0%, rgba(237, 157, 220, 0) 100%), rgba(238, 157, 220, 0.5);
     backdrop-filter: blur(0.6em);

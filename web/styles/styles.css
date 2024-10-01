@@ -7,12 +7,15 @@
     --circle-color: #fddc81;
     --block-background: #ffffff;
 
+    --menu-background: #f1f1f1;
+    --submenu-background: #ececec;
+
     --icon-color: var(--main-color);
     --link-color: var(--main-color);
     --border-color: #d9d9d9;
 
     --max-width: 1440px;
-    --menu-height: 55px;
+    --menu-height: 65px;
 
     /* status */
     --error-color: #f44336;
