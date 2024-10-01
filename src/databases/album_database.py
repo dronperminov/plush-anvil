@@ -1,4 +1,6 @@
+import json
 import logging
+from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -57,14 +59,41 @@ class AlbumDatabase:
         self.logger.info(f'Removed album "{album.title}" ({album_id}) by @{username}')
 
     def get_album(self, album_id: Union[int, str]) -> Optional[Album]:
-        if album_id == "all_photos":
-            photo_ids = [photo_id for album in self.database.albums.find({}).sort({"date": -1}) for photo_id in album["photo_ids"]]
-            photo_id2photo = self.get_photos(photo_ids=photo_ids)
-            photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp, reverse=True)
-            return Album(album_id="all_photos", title="Все фото", photo_ids=photo_ids, date=datetime.now(), cover_id=None)
+        if isinstance(album_id, int):
+            album = self.database.albums.find_one({"album_id": album_id})
+            return Album.from_dict(album) if album else None
 
-        album = self.database.albums.find_one({"album_id": album_id})
-        return Album.from_dict(album) if album else None
+        album_id = json.loads(album_id)
+        if album_id["type"] == "all_photos":
+            return self.__get_all_photos_album()
+
+        if album_id["type"] == "user_photos":
+            return self.__get_users_photos_album(usernames=album_id["usernames"], only=album_id["only"])
+
+        return None
+
+    def __get_all_photos_album(self) -> Album:
+        photo_ids = [photo_id for album in self.database.albums.find({}).sort({"date": -1}) for photo_id in album["photo_ids"]]
+        photo_id2photo = self.get_photos(photo_ids=photo_ids)
+        photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp, reverse=True)
+        return Album(album_id=json.dumps({"type": "all_photos"}), title="Все фото", photo_ids=photo_ids, date=datetime.now(), cover_id=None)
+
+    def __get_users_photos_album(self, usernames: List[str], only: bool) -> Album:
+        photo_ids = {markup["photo_id"] for markup in self.database.markup.find({"username": {"$in": usernames}})}
+        photo_id2users: Dict[int, set] = defaultdict(set)
+
+        for markup in self.database.markup.find({"photo_id": {"$in": list(photo_ids)}}):
+            photo_id2users[markup["photo_id"]].add(markup["username"])
+
+        if only:
+            photo_ids = [photo_id for photo_id, photo_usernames in photo_id2users.items() if photo_usernames == set(usernames)]
+        else:
+            photo_ids = [photo_id for photo_id, photo_usernames in photo_id2users.items() if set(usernames).issubset(photo_usernames)]
+
+        photo_id2photo = self.get_photos(photo_ids=photo_ids)
+        photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp, reverse=True)
+        album_id = json.dumps({"type": "user_photos", "usernames": usernames, "only": only})
+        return Album(album_id=album_id, title=f'Фото c {", ".join(usernames)}', photo_ids=photo_ids, date=datetime.now(), cover_id=None)
 
     def add_photo(self, photo: Photo, username: str) -> None:
         action = AddPhotoAction(username=username, timestamp=datetime.now(), photo_id=photo.photo_id)

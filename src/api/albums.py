@@ -1,11 +1,12 @@
-from typing import Optional
+import json
+from typing import List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 
 from src import album_database
-from src.api import send_error, templates
+from src.api import login_redirect, send_error, templates
 from src.entities.album import Album
 from src.entities.user import User
 from src.query_params.album_photos import AlbumPhotos
@@ -29,6 +30,9 @@ def get_albums(user: Optional[User] = Depends(get_user), params: AlbumSearchQuer
 
 
 def album_response(album: Album, user: User) -> HTMLResponse:
+    if not album:
+        return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
+
     template = templates.get_template("photos/album.html")
     content = template.render(
         version=get_static_hash(),
@@ -42,16 +46,27 @@ def album_response(album: Album, user: User) -> HTMLResponse:
 @router.get("/albums/{album_id}")
 def get_album(album_id: int, user: Optional[User] = Depends(get_user)) -> HTMLResponse:
     album = album_database.get_album(album_id=album_id)
-
-    if not album:
-        return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
-
     return album_response(album=album, user=user)
 
 
 @router.get("/photos")
 def get_photos(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
-    album = album_database.get_album(album_id="all_photos")
+    album = album_database.get_album(album_id=json.dumps({"type": "all_photos"}))
+    return album_response(album=album, user=user)
+
+
+@router.get("/photos-with-me")
+def get_photos_with_me(user: Optional[User] = Depends(get_user), only: bool = Query(False)) -> Response:
+    if not user:
+        return login_redirect(back_url="/photos-with-me")
+
+    album = album_database.get_album(album_id=json.dumps({"type": "user_photos", "usernames": [user.username], "only": only}))
+    return album_response(album=album, user=user)
+
+
+@router.get("/photos-with-users")
+def get_photos_with_users(user: Optional[User] = Depends(get_user), usernames: List[str] = Query([]), only: bool = Query(False)) -> Response:
+    album = album_database.get_album(album_id=json.dumps({"type": "user_photos", "usernames": usernames, "only": only}))
     return album_response(album=album, user=user)
 
 

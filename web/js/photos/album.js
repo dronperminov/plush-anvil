@@ -9,6 +9,10 @@ function LoadAlbumPhotos(response, block) {
     return response.photos.length
 }
 
+function GetResultMessage(total) {
+    return `${total} фото`
+}
+
 function GetAlbumPhotos() {
     let params = GetAlbumPhotosParams()
     if (params === null)
