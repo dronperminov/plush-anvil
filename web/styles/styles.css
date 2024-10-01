@@ -15,7 +15,7 @@
     --border-color: #d9d9d9;
 
     --max-width: 1440px;
-    --menu-height: 65px;
+    --menu-height: 70px;
 
     /* status */
     --error-color: #f44336;
@@ -93,6 +93,10 @@ ul {
 
 .hidden {
     display: none !important;
+}
+
+.no-overflow {
+    overflow: hidden;
 }
 
 .content {
@@ -362,6 +366,10 @@ ul {
 }
 
 @media (max-width: 767px) {
+    :root {
+        --menu-height: 55px;
+    }
+
     html {
         font-size: 12px;
     }
