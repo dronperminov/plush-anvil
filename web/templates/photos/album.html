@@ -11,7 +11,7 @@
             <img src="/images/icons/bread-crumbs-arrow.svg">
             <span><a href="/albums">Альбомы</a></span>
             <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">{{album.title}}</span>
+            <span class="bread-crumbs-current">{{album.title[:50]}}{% if album.title|length > 50 %}...{%endif %}</span>
         </div>
 
         <h1>{{album.title}}</h1>
