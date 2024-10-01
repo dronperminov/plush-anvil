@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 from src import Database
 from src.entities.album import Album
@@ -9,6 +9,7 @@ from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddPhot
 from src.entities.markup import Markup
 from src.entities.photo import Photo
 from src.entities.quiz import Quiz
+from src.query_params.album_search import AlbumSearch
 
 
 class AlbumDatabase:
@@ -152,5 +153,8 @@ class AlbumDatabase:
         query = {"photo_ids.2": {"$exists": True}, "album_id": {"$in": album_ids}}
         return [Album.from_dict(album) for album in self.database.albums.find(query).sort({"date": -1}).limit(top_count)]
 
-    def get_all_albums(self) -> List[Album]:
-        return [Album.from_dict(album) for album in self.database.albums.find({}).sort({"date": -1})]
+    def search_albums(self, params: AlbumSearch) -> Tuple[int, List[Album]]:
+        skip = params.page * params.page_size
+        total = self.database.albums.count_documents(params.to_query())
+        albums = self.database.albums.find(params.to_query()).sort({params.order: params.order_type, "_id": 1}).skip(skip).limit(params.page_size)
+        return total, [Album.from_dict(album) for album in albums]

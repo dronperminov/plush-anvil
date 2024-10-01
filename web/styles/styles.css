@@ -5,12 +5,14 @@
     --subtext-color: #515856;
     --main-color: #c238a2;
     --circle-color: #fddc81;
+    --block-background: #ffffff;
 
     --icon-color: var(--main-color);
     --link-color: var(--main-color);
     --border-color: #d9d9d9;
 
     --max-width: 1440px;
+    --menu-height: 55px;
 
     /* status */
     --error-color: #f44336;
@@ -36,6 +38,17 @@
     --icon-input-border: var(--border-color);
     --icon-input-icon-color: var(--icon-color);
     --icon-input-input-color: var(--text-color);
+
+    /* search */
+    --search-color: var(--subtext-color);
+    --search-icon-color: var(--subtext-color);
+    --search-background: #f4f4f4;
+    --search-border: var(--border-color);
+
+    --search-focus-color: var(--text-color);
+    --search-focus-icon-color: var(--text-color);
+    --search-focus-background: #eddce9;
+    --search-focus-border: var(--main-color);
 }
 
 @font-face {
@@ -147,6 +160,11 @@ ul {
     grid-template-columns: 1fr max-content;
 }
 
+.loader {
+    padding: 10px 0;
+    text-align: center;
+}
+
 /* faq */
 .faq {
     padding: 1.2em;
@@ -240,6 +258,42 @@ ul {
 .bread-crumbs .bread-crumbs-current {
     color: #ee9ddc;
 }
+
+/* close icon */
+.close-icon {
+    position: absolute;
+    right: 0.5em;
+    top: 0;
+
+    display: block;
+    height: 1.5em;
+    width: 1.5em;
+    cursor: pointer;
+}
+
+.close-icon:before, .close-icon:after {
+    background: var(--subtext-color);
+    content: "";
+    display: block;
+    height: 2px;
+    top: 12px;
+    position: absolute;
+    transition: all .2s ease-out;
+    width: 100%;
+}
+
+.close-icon:before {
+    transform: rotate(-45deg);
+}
+
+.close-icon:after {
+    transform: rotate(45deg);
+}
+
+.close-icon:hover:before, .close-icon:hover:after {
+    background: var(--main-color);
+}
+
 
 /* notifications */
 #notifications {

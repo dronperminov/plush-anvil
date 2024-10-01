@@ -26,6 +26,32 @@
     -webkit-appearance: none;
 }
 
+.basic-select {
+    border: 1px solid var(--border-color);
+    border-radius: 0.8em;
+    padding: 0.4em 0.7em;
+    background: transparent;
+    font-size: 1em;
+    font-family: Inter;
+    transition: border-color 150ms ease-in;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.basic-select:hover, .basic-select:focus {
+    border-color: var(--main-color);
+    transition: border-color .15s ease-in;
+}
+
+.basic-select:disabled, .basic-select:disabled:hover, .basic-select:disabled:focus {
+    color: var(--input-disabled-color);
+    border: none;
+}
+
 .basic-button {
     background: var(--block-background);
     color: var(--text-color);
