@@ -63,12 +63,18 @@ class AlbumDatabase:
             album = self.database.albums.find_one({"album_id": album_id})
             return Album.from_dict(album) if album else None
 
-        album_id = json.loads(album_id)
-        if album_id["type"] == "all_photos":
+        album_data = json.loads(album_id)
+        if album_data["type"] == "all_photos":
             return self.__get_all_photos_album()
 
-        if album_id["type"] == "user_photos":
-            return self.__get_users_photos_album(usernames=album_id["usernames"], only=album_id["only"])
+        if album_data["type"] == "user_photos":
+            return self.__get_users_photos_album(usernames=album_data["usernames"], only=album_data["only"])
+
+        if album_data["type"] == "photos_with_me":
+            album = self.__get_users_photos_album(usernames=[album_data["username"]], only=album_data["only"])
+            album.title = "Фото со мной"
+            album.album_id = album_id
+            return album
 
         return None
 

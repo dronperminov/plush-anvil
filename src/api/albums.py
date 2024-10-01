@@ -60,7 +60,7 @@ def get_photos_with_me(user: Optional[User] = Depends(get_user), only: bool = Qu
     if not user:
         return login_redirect(back_url="/photos-with-me")
 
-    album = album_database.get_album(album_id=json.dumps({"type": "user_photos", "usernames": [user.username], "only": only}))
+    album = album_database.get_album(album_id=json.dumps({"type": "photos_with_me", "username": user.username, "only": only}))
     return album_response(album=album, user=user)
 
 
