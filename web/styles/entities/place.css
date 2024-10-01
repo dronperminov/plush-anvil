@@ -1,0 +1,38 @@
+.place {
+    display: grid;
+    grid-template-columns: 20px 1fr 1.5em;
+    grid-gap: 0.5em;
+    align-items: center;
+    border-radius: 1em;
+    padding: 1em 0.7em;
+    border: 1px solid;
+}
+
+.place-color {
+    height: 20px;
+    width: 20px;
+    border-radius: 100%;
+}
+
+.place-name {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 0.3em;
+}
+
+.place-address {
+    font-size: 0.9em;
+}
+
+.place-inputs {
+    margin-top: 1em;
+    display: grid;
+    grid-auto-flow: row;
+    grid-gap: 0.5em;
+}
+
+.place-buttons {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 0.5em;
+}

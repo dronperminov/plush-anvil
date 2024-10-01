@@ -108,13 +108,11 @@ ul {
 .link {
     color: var(--link-color);
     text-decoration: none;
-    border-bottom: 1px dashed var(--link-color);
     cursor: pointer;
-    display: inline-block;
 }
 
 .link:hover {
-    border-bottom-style: solid;
+    text-decoration: underline solid;
 }
 
 .arrow-link {
@@ -309,6 +307,37 @@ ul {
     margin-bottom: 1em;
 }
 
+/* vertical ham */
+.vertical-ham {
+    cursor: pointer;
+    padding: 0.15em;
+}
+
+.vertical-ham div {
+    width: 0.3em;
+    height: 0.3em;
+    border-radius: 100%;
+    background: var(--subtext-color);
+    margin: 0 auto 0.2em auto;
+}
+
+.vertical-ham div:last-child {
+    margin-bottom: 0;
+}
+
+.vertical-ham:hover div {
+    background: var(--main-color);
+}
+
+.vertical-ham[disabled] {
+    pointer-events: none;
+    user-select: none;
+}
+
+.vertical-ham[disabled] div {
+    background-color: var(--border-color);
+}
+
 /* notifications */
 #notifications {
     position: fixed;
@@ -368,10 +397,6 @@ ul {
 @media (max-width: 767px) {
     :root {
         --menu-height: 55px;
-    }
-
-    html {
-        font-size: 12px;
     }
 
     ul {

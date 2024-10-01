@@ -99,6 +99,17 @@ function MakeElement(className, parent = null, attributes = null, tagName = "div
     return element
 }
 
+function MakeIconInput(parent = null, icon, inputId, inputClass, inputAttributes = null) {
+    let block = MakeElement("icon-input", parent)
+    MakeElement("icon-input-icon", block, {id: `${inputId}-icon`, for: inputId, innerHTML: icon}, "label")
+    let inputBlock = MakeElement("icon-input-input", block)
+
+    let input = MakeElement(inputClass, inputBlock, inputAttributes, "input")
+    input.setAttribute("id", inputId)
+
+    return input
+}
+
 function GetWordForm(count, forms, onlyForm = false) {
     let index = 0
 
@@ -108,4 +119,14 @@ function GetWordForm(count, forms, onlyForm = false) {
         index = 1
 
     return onlyForm ? forms[index] : `${count} ${forms[index]}`
+}
+
+function Disable(elements) {
+    for (let element of elements)
+        element.setAttribute("disabled", "")
+}
+
+function Enable(elements) {
+    for (let element of elements)
+        element.removeAttribute("disabled")
 }

@@ -15,7 +15,7 @@ function InfiniteScroll(blockId, config) {
     this.offset = config.offset || 100
 
     this.url = config.url
-    this.getParams = config.getParams
+    this.getParams = config.getParams || null
     this.onLoad = config.onLoad
     this.resultMessage = config.resultMessage
 
@@ -34,7 +34,7 @@ InfiniteScroll.prototype.Reset = function() {
 }
 
 InfiniteScroll.prototype.LoadContent = function() {
-    let params = this.getParams()
+    let params = this.getParams === null ? {} : this.getParams()
 
     if (params === null)
         return

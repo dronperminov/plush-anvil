@@ -4,8 +4,8 @@ from unittest import TestCase
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
 from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPaidDateAction, AddPhotoAction, AddPlaceAction, AddQuizAction, \
-    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveMarkupAction, RemovePhotoAction, \
-    RemoveQuizAction, SignUpAction
+    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveMarkupAction, RemoveOrganizerAction, \
+    RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
 from src.entities.paid_date import PaidDate
@@ -160,9 +160,11 @@ class TestSerialization(TestCase):
 
             AddPlaceAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), place_id=1),
             EditPlaceAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), place_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
+            RemovePlaceAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), place_id=1),
 
             AddOrganizerAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), organizer_id=1),
             EditOrganizerAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), organizer_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
+            RemoveOrganizerAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), organizer_id=1),
 
             AddQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1),
             EditQuizAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), quiz_id=1, diff={"name": {"prev": "bla", "new": "some"}}),
