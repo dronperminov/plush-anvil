@@ -6,7 +6,13 @@
 }
 
 .birthdays .user {
-    background-color: #9cc2ff80;
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+}
+
+.birthdays .user .user-name a {
+    color: var(--text-color);
+    border-color: var(--text-color);
+    font-weight: bold;
 }
 
 @media (max-width: 1023px) {
