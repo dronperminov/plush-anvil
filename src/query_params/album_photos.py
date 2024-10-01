@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 from typing import Union
 
+from src.query_params.page_query import PageQuery
+
 
 @dataclass
-class AlbumPhotos:
+class AlbumPhotos(PageQuery):
     album_id: Union[int, str]
-    page: int = 0
-    page_size: int = 20

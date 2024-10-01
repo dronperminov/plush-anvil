@@ -36,7 +36,12 @@
 
             {% if user and user.role.value == "owner" %}
             <div class="menu-item">
-                <label>УПРАВЛЕНИЕ</label>
+                <input class="subnav-checkbox" type="checkbox" id="admin-subnav">
+                <label for="admin-subnav">УПРАВЛЕНИЕ</label>
+
+                <div class="menu-subitem">
+                    <a href="/birthdays"><label>ДНИ РОЖДЕНИЯ</label></a>
+                </div>
             </div>
             {% endif %}
 

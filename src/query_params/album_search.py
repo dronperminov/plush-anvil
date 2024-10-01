@@ -4,14 +4,14 @@ from typing import Optional
 
 from fastapi import Query
 
+from src.query_params.page_query import PageQuery
+
 
 @dataclass
-class AlbumSearch:
+class AlbumSearch(PageQuery):
     query: str = ""
     order: str = "date"
     order_type: int = -1
-    page: int = 0
-    page_size: int = 20
 
     def to_query(self) -> dict:
         query = {}
@@ -45,4 +45,6 @@ class AlbumSearchQuery:
             query=self.query if self.query is not None else "",
             order=self.order if self.order is not None else "date",
             order_type=self.order_type if self.order_type is not None else -1,
+            page_size=12,
+            page=0
         )

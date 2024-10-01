@@ -1,0 +1,25 @@
+.user {
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    background: var(--block-background);
+    padding: 8px;
+    border-radius: 1em;
+    border: 1px solid var(--border-color);
+}
+
+.user .user-avatar img {
+    border: 2px solid var(--text-color);
+    border-radius: 100%;
+    width: 100%;
+}
+
+.user .user-name {
+    margin-bottom: 5px;
+    font-size: 0.95em;
+}
+
+.user .user-birthday {
+    font-size: 0.9em;
+}

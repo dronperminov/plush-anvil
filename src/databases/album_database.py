@@ -154,8 +154,7 @@ class AlbumDatabase:
         if not album:
             return 0, []
 
-        skip = params.page * params.page_size
-        photo_ids = album.photo_ids[skip:skip + params.page_size]
+        photo_ids = album.photo_ids[params.skip:params.skip + params.page_size]
         photo_id2photo = self.get_photos(photo_ids=photo_ids)
         return len(album.photo_ids), [photo_id2photo[photo_id] for photo_id in photo_ids]
 
@@ -206,7 +205,6 @@ class AlbumDatabase:
         return [Album.from_dict(album) for album in self.database.albums.find(query).sort({"date": -1}).limit(top_count)]
 
     def search_albums(self, params: AlbumSearch) -> Tuple[int, List[Album]]:
-        skip = params.page * params.page_size
         total = self.database.albums.count_documents(params.to_query())
-        albums = self.database.albums.find(params.to_query()).sort({params.order: params.order_type, "_id": 1}).skip(skip).limit(params.page_size)
+        albums = self.database.albums.find(params.to_query()).sort({params.order: params.order_type, "_id": 1}).skip(params.skip).limit(params.page_size)
         return total, [Album.from_dict(album) for album in albums]

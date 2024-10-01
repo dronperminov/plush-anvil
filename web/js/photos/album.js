@@ -12,12 +12,3 @@ function LoadAlbumPhotos(response, block) {
 function GetResultMessage(total) {
     return `${total} фото`
 }
-
-function GetAlbumPhotos() {
-    let params = GetAlbumPhotosParams()
-    if (params === null)
-        return
-
-    infiniteScroll.Reset()
-    infiniteScroll.LoadContent()
-}

@@ -1,11 +1,14 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 
-from src import album_database, organizer_database, place_database, quiz_database, smuzi_rating
-from src.api import templates
+from src import album_database, database, organizer_database, place_database, quiz_database, smuzi_rating
+from src.api import login_redirect, send_error, templates
 from src.entities.user import User
+from src.enums import UserRole
+from src.query_params.page_query import PageQuery
 from src.utils.auth import get_user
 from src.utils.common import get_static_hash, get_word_form
 
@@ -38,3 +41,27 @@ def index(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
     )
 
     return HTMLResponse(content=content)
+
+
+@router.get("/birthdays")
+def get_birthdays(user: Optional[User] = Depends(get_user)) -> Response:
+    if not user:
+        return login_redirect(back_url="/birthdays")
+
+    if user.role == UserRole.USER:
+        return send_error(title="Доступ запрещён", text="Эта страница доступна только администраторам.", user=user)
+
+    template = templates.get_template("admin/birthdays.html")
+    content = template.render(
+        version=get_static_hash(),
+        user=user
+    )
+
+    return HTMLResponse(content=content)
+
+
+@router.post("/birthdays")
+def get_birthday_users(params: PageQuery) -> JSONResponse:
+    total, users = database.get_birthday_users(params=params)
+    username2days = {user.username: user.birth_date.get_days() for user in users}
+    return JSONResponse({"status": "success", "total": total, "users": jsonable_encoder(users), "username2days": username2days})

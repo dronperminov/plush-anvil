@@ -1,12 +1,13 @@
 import logging
 import re
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from pymongo import ASCENDING, DESCENDING, MongoClient
 
 from src.entities.history_action import SignUpAction
 from src.entities.user import User
+from src.query_params.page_query import PageQuery
 
 
 class Database:
@@ -85,9 +86,10 @@ class Database:
         identifier = self.identifiers.find_one_and_update({"_id": collection_name}, {"$inc": {"value": 1}}, return_document=True)
         return identifier["value"]
 
-    def get_birthday_users(self) -> List[User]:
-        users = [User.from_dict(user) for user in self.users.find({"birthdate": {"$ne": None}})]
-        return sorted(users, key=lambda user: user.birth_date.get_days())
+    def get_birthday_users(self, params: PageQuery) -> Tuple[int, List[User]]:
+        users = [User.from_dict(user) for user in self.users.find({"birth_date": {"$ne": None}})]
+        users = sorted(users, key=lambda user: user.birth_date.get_days())
+        return len(users), users[params.skip:params.skip + params.page_size]
 
     def sign_up(self, user: User) -> None:
         action = SignUpAction(username=user.username, timestamp=datetime.now())

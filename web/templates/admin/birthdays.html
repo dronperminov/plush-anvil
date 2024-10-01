@@ -1,0 +1,47 @@
+{% set title = "Дни рождения | Плюшевая наковальня" %}
+{% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/admin/birthdays.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/entities/user.css?v={{version}}">
+</head>
+<body ondragstart="return false">
+    {% include "components/menu.html" %}
+
+    <div class="content">
+        <div class="bread-crumbs">
+            <span><a href="/">Главная</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span class="bread-crumbs-current">Дни рождения</span>
+        </div>
+
+        <h1>Дни рождения</h1>
+
+        <div id="birthdays">
+            <div class="search-results"></div>
+            <div class="birthdays"></div>
+            <div class="loader hidden"><img src="/images/loader.svg"></div>
+        </div>
+    </div>
+
+    <script src="/js/utils/utils.js?v={{version}}"></script>
+    <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
+
+    <script src="/js/entities/user.js?v={{version}}"></script>
+    <script src="/js/admin/birthdays.js?v={{version}}"></script>
+    <script>
+        let config = {
+            pageSize: 6,
+            url: "/birthdays",
+
+            getParams: GetParams,
+            onLoad: LoadBirthdays,
+            resultMessage: null
+        }
+
+        let infiniteScroll = new InfiniteScroll("birthdays", config)
+        infiniteScroll.LoadContent()
+    </script>
+
+    {% include "components/footer.html" %}
+</body>
+</html>
