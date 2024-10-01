@@ -1,3 +1,52 @@
 <header class="header">
-    
+    <div class="logo"><a href="/"><img src="/images/logo.svg"></a></div>
+
+    <input class="side-menu" type="checkbox" id="side-menu">
+    <label class="hamb" for="side-menu"><span class="hamb-line"></span></label>
+
+    <nav class="menu">
+        <div class="menu-items">
+            <div class="menu-item">
+                <input class="subnav-checkbox" type="checkbox" id="photo-subnav">
+                <label for="photo-subnav">ФОТО</label>
+
+                <div class="menu-subitem">
+                    <a href="/albums"><label>АЛЬБОМЫ</label></a>
+                    <a href="/photos"><label>ВСЕ ФОТО</label></a>
+                    {% if user %}
+                    <a href="/photos-with-me"><label>ФОТО СО МНОЙ</label></a>
+                    {% endif %}
+                    <a href="/photos-with-users"><label>ФОТО С ЛЮДЬМИ</label></a>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                <label>О НАС</label>
+            </div>
+
+            <div class="menu-item">
+                <input class="subnav-checkbox" type="checkbox" id="trainings-subnav">
+                <label for="trainings-subnav">ТРЕНИРОВКИ</label>
+
+                <div class="menu-subitem">
+                    <a href="https://music-quiz.plush-anvil.ru" target="_blank"><label>УМ КВИЗ</label></a>
+                    <a href="https://movie-quiz.plush-anvil.ru" target="_blank"><label>КМС КВИЗ</label></a>
+                </div>
+            </div>
+
+            {% if user and user.role.value == "owner" %}
+            <div class="menu-item">
+                <label>УПРАВЛЕНИЕ</label>
+            </div>
+            {% endif %}
+
+            <div class="menu-item">
+                {% if user %}
+                <a href="/profile"><label class="profile"><img src="{{user.avatar_url}}"><span class="mobile-item"> МОЙ ПРОФИЛЬ</span></label></a>
+                {% else %}
+                <a href="/login"><label><img src="/images/icons/login.svg"> ВХОД</label></a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 </header>
