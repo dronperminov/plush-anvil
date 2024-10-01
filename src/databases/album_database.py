@@ -9,6 +9,7 @@ from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddPhot
 from src.entities.markup import Markup
 from src.entities.photo import Photo
 from src.entities.quiz import Quiz
+from src.query_params.album_photos import AlbumPhotos
 from src.query_params.album_search import AlbumSearch
 
 
@@ -106,6 +107,16 @@ class AlbumDatabase:
 
     def get_photos(self, photo_ids: List[int]) -> Dict[int, Photo]:
         return {photo["photo_id"]: Photo.from_dict(photo) for photo in self.database.photos.find({"photo_id": {"$in": photo_ids}})}
+
+    def get_album_photos(self, params: AlbumPhotos) -> Tuple[int, List[Photo]]:
+        album = self.get_album(album_id=params.album_id)
+        if not album:
+            return 0, []
+
+        skip = params.page * params.page_size
+        photo_ids = album.photo_ids[skip:skip + params.page_size]
+        photo_id2photo = self.get_photos(photo_ids=photo_ids)
+        return len(album.photo_ids), list(photo_id2photo.values())
 
     def add_markup(self, markup: Markup, username: str) -> None:
         action = AddMarkupAction(username=username, timestamp=datetime.now(), markup_id=markup.markup_id)

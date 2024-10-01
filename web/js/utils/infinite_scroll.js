@@ -55,15 +55,22 @@ InfiniteScroll.prototype.LoadContent = function() {
 
         this.loader.classList.add("hidden")
 
-        if (response.total > 0)
-            this.results.innerText = this.resultMessage(response.total)
-        else
-            this.results.innerText = "К сожалению, по запросу ничего не нашлось"
+        this.ShowResults(response.total)
 
         let count = this.onLoad(response, this.block)
         this.status = count == this.pageSize ? INfINITE_SCROLL_LOADED_STATUS : INfINITE_SCROLL_OUT_DATA_STATUS
         this.page += 1
     })
+}
+
+InfiniteScroll.prototype.ShowResults = function(total) {
+    if (this.resultMessage === null)
+        return
+
+    if (total > 0)
+        this.results.innerText = this.resultMessage(total)
+    else
+        this.results.innerText = "К сожалению, по запросу ничего не нашлось"
 }
 
 InfiniteScroll.prototype.Scroll = function() {

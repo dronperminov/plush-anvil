@@ -1,0 +1,49 @@
+{% set title = "Альбомы | Плюшевая наковальня" %}
+{% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/photos/album.css?v={{version}}">
+</head>
+<body ondragstart="return false">
+    {% include "components/menu.html" %}
+
+    <div class="content">
+        <div class="bread-crumbs">
+            <span><a href="/">Главная</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span><a href="/albums">Альбомы</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span class="bread-crumbs-current">{{album.title}}</span>
+        </div>
+
+        <h1>{{album.title}}</h1>
+
+        <div id="photos">
+            <div class="search-results"></div>
+            <div class="photos"></div>
+            <div class="loader hidden"><img src="/images/loader.svg"></div>
+        </div>
+    </div>
+
+    <script src="/js/utils/utils.js?v={{version}}"></script>
+    <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
+
+    <script src="/js/entities/album.js?v={{version}}"></script>
+    <script src="/js/photos/album.js?v={{version}}"></script>
+    <script>
+        let config = {
+            pageSize: 16,
+            url: "/album-photos",
+
+            getParams: GetAlbumPhotosParams,
+            onLoad: LoadAlbumPhotos,
+            resultMessage: null
+        }
+
+        let album = new Album({{album|tojson}}, {})
+        let infiniteScroll = new InfiniteScroll("photos", config)
+        GetAlbumPhotos()
+    </script>
+
+    {% include "components/footer.html" %}
+</body>
+</html>
