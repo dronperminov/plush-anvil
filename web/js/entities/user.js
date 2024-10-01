@@ -15,14 +15,21 @@ User.prototype.BuildBirthday = function(days) {
     let userInfo = MakeElement("user-info", user)
     let userName = MakeElement("user-name", userInfo)
     MakeElement("link", userName, {href: `/profile?username=${this.username}`, innerText: this.fullname}, "a")
-
-    let text = `${this.GetBirthDateText()} (через ${GetWordForm(days, ["день", "дня", "дней"])})`
-    MakeElement("user-birthday", userInfo, {innerText: text})
+    MakeElement("user-birthday", userInfo, {innerText: this.GetBirthDateText(days)})
 
     return user
 }
 
-User.prototype.GetBirthDateText = function() {
+User.prototype.GetBirthDateText = function(days) {
     let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
-    return `${this.birthDate.day} ${months[this.birthDate.month - 1]}`
+    let date = `${this.birthDate.day} ${months[this.birthDate.month - 1]}`
+
+    if (days > 1)
+        date += ` (через ${GetWordForm(days, ["день", "дня", "дней"])})`
+    else if (days == 1)
+        date += " (завтра)"
+    else if (days == 0)
+        date += " (сегодня)"
+
+    return date
 }
