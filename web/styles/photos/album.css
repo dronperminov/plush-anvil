@@ -21,13 +21,13 @@
 @media (max-width: 679px) {
     .photos {
         grid-template-columns: 1fr 1fr;
-        grid-gap: 1.5em;
+        grid-gap: 1em;
     }
 }
 
 @media (max-width: 359px) {
     .photos {
         grid-template-columns: 1fr;
-        grid-gap: 1em;
+        grid-gap: 0.5em;
     }
 }

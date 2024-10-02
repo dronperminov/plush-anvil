@@ -423,4 +423,12 @@ ul {
     .arrow-link {
         font-size: 12px;
     }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1em;
+    }
 }
