@@ -24,6 +24,10 @@
             <div class="places"></div>
             <div class="loader hidden"><img src="/images/loader.svg"></div>
         </div>
+
+        <datalist id="metro-stations">
+            {% for metro_station in metro_stations %}<option value="{{metro_station}}">{{metro_station}}</option>{% endfor %}
+        </datalist>
     </div>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>

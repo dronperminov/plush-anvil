@@ -40,7 +40,7 @@ Place.prototype.Build = function() {
     this.placeColor = MakeElement("place-color", this.place, {style: `background-color: ${this.color}`})
 
     let placeMain = MakeElement("place-main", this.place)
-    this.placeName = MakeElement("place-name", placeMain, {innerText: `${this.name} (м. ${this.metroStation})`})
+    this.placeName = MakeElement("place-name", placeMain, {innerText: this.GetNameText()})
     let placeAddress = MakeElement("place-address", placeMain)
     this.placeLink = MakeElement("link", placeAddress, {href: this.yandexMapLink, innerText: this.address}, "a")
 
@@ -62,7 +62,7 @@ Place.prototype.BuildInfo = function() {
 
     let nameInput = MakeIconInput(placeInputs, PLACE_NAME_ICON, `place-${this.placeId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
     let addressInput = MakeIconInput(placeInputs, PLACE_ADDRESS_ICON, `place-${this.placeId}-address`, "basic-input", {placeholder: "адрес", type: "text", value: this.address})
-    let metroStationInput = MakeIconInput(placeInputs, PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation})
+    let metroStationInput = MakeIconInput(placeInputs, PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation, list: "metro-stations"})
     let yandexMapLinkInput = MakeIconInput(placeInputs, PLACE_YANDEX_MAP_ICON, `place-${this.placeId}-yandex-map-link`, "basic-input", {placeholder: "ссылка на я.карты", type: "text", value: this.yandexMapLink})
     let colorInput = MakeIconInput(placeInputs, "", `place-${this.placeId}-color`, "basic-input", {placeholder: "цвет", type: "text", value: this.color})
 
@@ -93,7 +93,7 @@ Place.prototype.GetUpdateParams = function() {
     if (address === null)
         return null
 
-    let metroStation = GetTextInput(`place-${this.placeId}-metro-station`, "Станция метро не заполнена")
+    let metroStation = GetTextInput(`place-${this.placeId}-metro-station`)
     if (metroStation === null)
         return null
 
@@ -169,7 +169,7 @@ Place.prototype.UpdateParams = function(place) {
     this.place.setAttribute("style", `background-color: ${this.color}35; border-color: ${this.color}60;`)
 
     this.placeColor.setAttribute("style", `background-color: ${this.color}`)
-    this.placeName.innerText = `${this.name} (м. ${this.metroStation})`
+    this.placeName.innerText = this.GetNameText()
     this.placeLink.setAttribute("href", this.yandexMapLink)
     this.placeLink.innerText = this.address
 }
@@ -190,4 +190,13 @@ Place.prototype.Remove = function(buttons) {
         infos.Close()
         this.place.parentNode.removeChild(this.place)
     })
+}
+
+Place.prototype.GetNameText = function() {
+    let text = this.name
+
+    if (this.metroStation !== "")
+        text += ` (м. ${this.metroStation})`
+
+    return text
 }

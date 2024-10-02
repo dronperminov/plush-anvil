@@ -91,6 +91,9 @@ class Database:
         users = sorted(users, key=lambda user: user.birth_date.get_days())
         return len(users), users[params.skip:params.skip + params.page_size]
 
+    def get_metro_stations(self) -> List[str]:
+        return [metro_station["name"] for metro_station in self.metro_stations.find({}).sort({"name": 1})]
+
     def sign_up(self, user: User) -> None:
         action = SignUpAction(username=user.username, timestamp=datetime.now())
         self.users.insert_one(user.to_dict())

@@ -21,13 +21,11 @@ def get_places(user: Optional[User] = Depends(get_user)) -> Response:
     if response := admin_redirect(back_url="/places", user=user):
         return response
 
-    places = place_database.get_all_places()
-
     template = templates.get_template("admin/places.html")
     content = template.render(
         version=get_static_hash(),
         user=user,
-        places=places
+        metro_stations=database.get_metro_stations()
     )
 
     return HTMLResponse(content=content)
