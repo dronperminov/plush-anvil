@@ -22,6 +22,9 @@ function InfiniteScroll(blockId, config) {
     this.Reset()
 
     window.addEventListener("scroll", e => this.Scroll())
+
+    if (config.resize === true)
+        window.addEventListener("resize", e => this.Resize())
 }
 
 InfiniteScroll.prototype.Reset = function() {
@@ -88,4 +91,11 @@ InfiniteScroll.prototype.Scroll = function() {
 
     if (this.ScrollDifference() <= this.offset)
         this.LoadContent()
+}
+
+InfiniteScroll.prototype.Resize = function() {
+     if (this.status == INfINITE_SCROLL_OUT_DATA_STATUS || this.ScrollDifference() >= 0)
+        return
+
+    this.LoadContent()
 }
