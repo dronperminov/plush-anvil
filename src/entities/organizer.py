@@ -5,14 +5,12 @@ from dataclasses import dataclass
 class Organizer:
     organizer_id: int
     name: str
-    description: str
     image_url: str
 
     def to_dict(self) -> dict:
         return {
             "organizer_id": self.organizer_id,
             "name": self.name,
-            "description": self.description,
             "image_url": self.image_url
         }
 
@@ -21,7 +19,6 @@ class Organizer:
         return cls(
             organizer_id=data["organizer_id"],
             name=data["name"],
-            description=data["description"],
             image_url=data["image_url"]
         )
 
@@ -29,7 +26,7 @@ class Organizer:
         place_data = self.to_dict()
         diff = {}
 
-        for field in ["name", "description", "image_url"]:
+        for field in ["name", "image_url"]:
             if field in data and place_data[field] != data[field]:
                 diff[field] = {"prev": place_data[field], "new": data[field]}
 

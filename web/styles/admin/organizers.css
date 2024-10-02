@@ -1,0 +1,24 @@
+.organizers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-rows: 1fr;
+    grid-gap: 1em;
+    font-size: 16px;
+}
+
+.organizers .organizer {
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+}
+
+@media (max-width: 1023px) {
+    .organizers {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 679px) {
+    .organizers {
+        grid-template-columns: 1fr;
+        grid-gap: 0.5em;
+    }
+}

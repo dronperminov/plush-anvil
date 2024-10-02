@@ -161,6 +161,12 @@ ul {
     width: 100%;
 }
 
+.add-link {
+    text-align: right;
+    margin-top: -2em;
+    margin-bottom: 2em;
+}
+
 .link-header {
     display: grid;
     grid-template-columns: 1fr max-content;

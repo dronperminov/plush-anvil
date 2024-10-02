@@ -94,7 +94,7 @@ InfiniteScroll.prototype.Scroll = function() {
 }
 
 InfiniteScroll.prototype.Resize = function() {
-     if (this.status == INfINITE_SCROLL_OUT_DATA_STATUS || this.ScrollDifference() >= 0)
+    if (this.status != INfINITE_SCROLL_LOADED_STATUS || this.ScrollDifference() >= this.offset / 2)
         return
 
     this.LoadContent()

@@ -104,7 +104,7 @@ function MakeIconInput(parent = null, icon, inputId, inputClass, inputAttributes
     MakeElement("icon-input-icon", block, {id: `${inputId}-icon`, for: inputId, innerHTML: icon}, "label")
     let inputBlock = MakeElement("icon-input-input", block)
 
-    let input = MakeElement(inputClass, inputBlock, inputAttributes, "input")
+    let input = MakeElement(inputClass, inputBlock, inputAttributes, inputClass == "basic-textarea" ? "textarea" : "input")
     input.setAttribute("id", inputId)
 
     return input

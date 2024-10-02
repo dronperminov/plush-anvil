@@ -11,7 +11,6 @@ class TestOrganizerDatabaseReal(AbstractDatabaseTest):
         organizer = Organizer(
             organizer_id=organizer_id,
             name="Смузи",
-            description="Делаем тематические викторины по вашим любимым вселенным и не только!",
             image_url="/images/organizers/1.png"
         )
 

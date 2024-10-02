@@ -26,6 +26,32 @@
     -webkit-appearance: none;
 }
 
+.basic-textarea {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--border-color);
+    border-radius: 0.4em;
+    padding: 0.3em;
+    background: transparent;
+    outline: none;
+    font-family: Inter;
+    font-size: 0.9em;
+    line-height: 1.25em;
+    transition: border-color 150ms ease-in;
+    min-height: 5.8em;
+    resize: vertical;
+}
+
+.basic-textarea:hover, .basic-textarea:focus {
+    transition: border-color .15s ease-in;
+    border-color: var(--main-color);
+}
+
+.basic-textarea:disabled, .basic-textarea:disabled:hover, .basic-textarea:disabled:focus {
+    color: var(--border-color);
+    border-color: var(--border-color);
+}
+
 .basic-select {
     border: 1px solid var(--border-color);
     border-radius: 0.8em;

@@ -65,7 +65,6 @@ class TestSerialization(TestCase):
         organizer = Organizer(
             organizer_id=1,
             name="Organizer 1",
-            description="Some organizer description",
             image_url="some image url"
         )
 

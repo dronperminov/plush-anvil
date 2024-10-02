@@ -1,8 +1,8 @@
-{% set title = "Места | Плюшевая наковальня" %}
+{% set title = "Организаторы | Плюшевая наковальня" %}
 {% include "components/header.html" %}
     <link rel="stylesheet" type="text/css" href="/styles/utils/info_panels.css?v={{version}}">
-    <link rel="stylesheet" type="text/css" href="/styles/admin/places.css?v={{version}}">
-    <link rel="stylesheet" type="text/css" href="/styles/entities/place.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/admin/organizers.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/entities/organizer.css?v={{version}}">
 </head>
 <body ondragstart="return false">
     {% include "components/menu.html" %}
@@ -11,23 +11,19 @@
         <div class="bread-crumbs">
             <span><a href="/">Главная</a></span>
             <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Места</span>
+            <span class="bread-crumbs-current">Организаторы</span>
         </div>
 
-        <h1>Места</h1>
+        <h1>Организаторы</h1>
         <div class="add-link">
-            <span class="arrow-link" onclick="infos.Show('place-add-info')"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+            <span class="arrow-link" onclick="infos.Show('organizer-add-info')"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
         </div>
 
-        <div id="places">
+        <div id="organizers">
             <div class="search-results"></div>
-            <div class="places"></div>
+            <div class="organizers"></div>
             <div class="loader hidden"><img src="/images/loader.svg"></div>
         </div>
-
-        <datalist id="metro-stations">
-            {% for metro_station in metro_stations %}<option value="{{metro_station}}">{{metro_station}}</option>{% endfor %}
-        </datalist>
     </div>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
@@ -38,25 +34,25 @@
 
     <script src="/js/inputs/color_input.js?v={{version}}"></script>
 
-    <script src="/js/entities/place.js?v={{version}}"></script>
+    <script src="/js/entities/organizer.js?v={{version}}"></script>
 
-    <script src="/js/admin/places.js?v={{version}}"></script>
+    <script src="/js/admin/organizers.js?v={{version}}"></script>
     <script>
         let config = {
             pageSize: 5,
-            url: "/places",
+            url: "/organizers",
 
-            onLoad: LoadPlaces,
+            onLoad: LoadOrganizers,
             resultMessage: GetResultMessage,
             resize: true
         }
 
         let infos = new InfoPanels()
 
-        let addPlace = new Place({place_id: "add", name: "", address: "", metro_station: "", yandex_map_link: "", color: ""})
-        infos.Add(addPlace.BuildInfo())
+        let addOrganizer = new Organizer({organizer_id: "add", name: "", description: "", image_url: "/images/organizers/default.png"})
+        infos.Add(addOrganizer.BuildInfo())
 
-        let infiniteScroll = new InfiniteScroll("places", config)
+        let infiniteScroll = new InfiniteScroll("organizers", config)
         infiniteScroll.LoadContent()
     </script>
 

@@ -1,9 +1,10 @@
 import logging
+from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List, Optional
 
 from src import Database
-from src.entities.history_action import AddOrganizerAction, EditOrganizerAction
+from src.entities.history_action import AddOrganizerAction, EditOrganizerAction, RemoveOrganizerAction
 from src.entities.organizer import Organizer
 
 
@@ -33,9 +34,29 @@ class OrganizerDatabase:
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f'Updated organizer "{organizer["name"]}" ({organizer_id}) by @{username} (keys: {[key for key in diff]})')
 
+    def remove_organizer(self, organizer_id: int, username: str) -> None:
+        organizer = self.get_organizer(organizer_id=organizer_id)
+        assert organizer is not None
+
+        action = RemoveOrganizerAction(username=username, timestamp=datetime.now(), organizer_id=organizer_id)
+        self.database.organizers.delete_one({"organizer_id": organizer_id})
+
+        self.database.history.insert_one(action.to_dict())
+        self.logger.info(f"Removed organizer {organizer_id} by @{username}")
+
     def get_organizer(self, organizer_id: int) -> Optional[Organizer]:
         organizer = self.database.organizers.find_one({"organizer_id": organizer_id})
         return Organizer.from_dict(organizer) if organizer else None
 
     def get_organizers(self, organizer_ids: List[int]) -> Dict[int, Organizer]:
         return {organizer["organizer_id"]: Organizer.from_dict(organizer) for organizer in self.database.organizers.find({"organizer_id": {"$in": organizer_ids}})}
+
+    def get_all_organizers(self) -> List[Organizer]:
+        today = datetime.now()
+        organizer_id2score = defaultdict(float)
+
+        for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}}):
+            organizer_id2score[quiz["organizer_id"]] += 0.98 ** (today - quiz["datetime"]).days
+
+        organizers = [Organizer.from_dict(organizer) for organizer in self.database.organizers.find({})]
+        return sorted(organizers, key=lambda organizer: -organizer_id2score.get(organizer.organizer_id, 0))
