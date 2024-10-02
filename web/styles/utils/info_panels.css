@@ -48,6 +48,10 @@
     top: 0;
 }
 
+.info-header {
+    text-align: center;
+}
+
 @media (orientation: landscape) and (max-width: 767px) {
     .info {
         max-height: calc(100dvh + 12px);

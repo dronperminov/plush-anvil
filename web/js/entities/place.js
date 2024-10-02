@@ -54,20 +54,32 @@ Place.prototype.Build = function() {
 Place.prototype.BuildInfo = function() {
     let info = MakeElement("info", null, {id: `place-${this.placeId}-info`})
 
+    if (this.placeId === "add") {
+        MakeElement("info-header", info, {innerText: "Добавление места"}, "h2")
+    }
+
     let placeInputs = MakeElement("place-inputs", info)
 
-    MakeIconInput(placeInputs, PLACE_NAME_ICON, `place-${this.placeId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
-    MakeIconInput(placeInputs, PLACE_ADDRESS_ICON, `place-${this.placeId}-address`, "basic-input", {placeholder: "адрес", type: "text", value: this.address})
-    MakeIconInput(placeInputs, PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation})
-    MakeIconInput(placeInputs, PLACE_YANDEX_MAP_ICON, `place-${this.placeId}-yandex-map-link`, "basic-input", {placeholder: "ссылка на я.карты", type: "text", value: this.yandexMapLink})
-    MakeIconInput(placeInputs, "", `place-${this.placeId}-color`, "basic-input", {placeholder: "цвет", type: "text", value: this.color})
+    let nameInput = MakeIconInput(placeInputs, PLACE_NAME_ICON, `place-${this.placeId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
+    let addressInput = MakeIconInput(placeInputs, PLACE_ADDRESS_ICON, `place-${this.placeId}-address`, "basic-input", {placeholder: "адрес", type: "text", value: this.address})
+    let metroStationInput = MakeIconInput(placeInputs, PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation})
+    let yandexMapLinkInput = MakeIconInput(placeInputs, PLACE_YANDEX_MAP_ICON, `place-${this.placeId}-yandex-map-link`, "basic-input", {placeholder: "ссылка на я.карты", type: "text", value: this.yandexMapLink})
+    let colorInput = MakeIconInput(placeInputs, "", `place-${this.placeId}-color`, "basic-input", {placeholder: "цвет", type: "text", value: this.color})
 
     let buttons = MakeElement("place-buttons", placeInputs)
-    let saveButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Сохранить"}, "button")
-    let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
 
-    saveButton.addEventListener("click", () => this.Update([saveButton, removeButton]))
-    removeButton.addEventListener("click", () => this.Remove([saveButton, removeButton]))
+    if (this.placeId === "add") {
+        let addButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Добавить"}, "button")
+        addButton.addEventListener("click", () => this.Add([addButton]))
+    }
+    else {
+        let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
+
+        for (let input of [nameInput, addressInput, metroStationInput, yandexMapLinkInput, colorInput])
+            input.addEventListener("change", () => this.Update([removeButton]))
+
+        removeButton.addEventListener("click", () => this.Remove([removeButton]))
+    }
 
     return info
 }
@@ -125,6 +137,25 @@ Place.prototype.Update = function(buttons) {
 
         ShowNotification("Место успешно обновлено", "success-notification")
         this.UpdateParams(response.place)
+    })
+}
+
+Place.prototype.Add = function(buttons) {
+    let params = this.GetUpdateParams()
+    if (params === null)
+        return
+
+    params.place_id = 0
+    Disable(buttons)
+
+    SendRequest("/add-place", params).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось добавить место "${params.name}".<br><b>Причина</b>: ${response.message}`, "error-notification")
+            Enable(buttons)
+            return
+        }
+
+        location.reload()
     })
 }
 

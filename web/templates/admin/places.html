@@ -14,7 +14,10 @@
             <span class="bread-crumbs-current">Места</span>
         </div>
 
-        <h1>Места</h1>
+        <div class="link-header">
+            <h1>Места</h1>
+            <span class="arrow-link" onclick="infos.Show('place-add-info')"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+        </div>
 
         <div id="places">
             <div class="search-results"></div>
@@ -42,6 +45,10 @@
         }
 
         let infos = new InfoPanels()
+
+        let addPlace = new Place({place_id: "add", name: "", address: "", metro_station: "", yandex_map_link: "", color: ""})
+        infos.Add(addPlace.BuildInfo())
+
         let infiniteScroll = new InfiniteScroll("places", config)
         infiniteScroll.LoadContent()
     </script>

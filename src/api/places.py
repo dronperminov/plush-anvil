@@ -66,3 +66,13 @@ def remove_place(params: PlaceRemove, user: Optional[User] = Depends(get_user)) 
 
     place_database.remove_place(place_id=params.place_id, username=user.username)
     return JSONResponse({"status": "success"})
+
+
+@router.post("/add-place")
+def add_place(place: Place, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    place.place_id = database.get_identifier("places")
+    place_database.add_place(place=place, username=user.username)
+    return JSONResponse({"status": "success", "place": jsonable_encoder(place_database.get_place(place_id=place.place_id))})

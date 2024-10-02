@@ -124,6 +124,7 @@ ul {
     align-items: center;
     grid-template-columns: 1fr 2em;
     grid-gap: 1em;
+    cursor: pointer;
 }
 
 .arrow-link {
@@ -163,6 +164,12 @@ ul {
 .link-header {
     display: grid;
     grid-template-columns: 1fr max-content;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+
+.link-header h1, .link-header h2 {
+    margin-bottom: 0;
 }
 
 .loader {
@@ -405,5 +412,9 @@ ul {
 
     .content {
         padding: 1em 10px 10px 10px;
+    }
+
+    .arrow-link {
+        font-size: 12px;
     }
 }
