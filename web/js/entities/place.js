@@ -35,7 +35,7 @@ function Place(place) {
 }
 
 Place.prototype.Build = function() {
-    this.place = MakeElement("place", null, {style: `background-color: ${this.color}35; border-color: ${this.color}60;`, id: `place-${this.placeId}`})
+    this.place = MakeElement("place", null, {style: `background-color: ${this.color}60; border-color: ${this.color}bb;`, id: `place-${this.placeId}`})
 
     this.placeColor = MakeElement("place-color", this.place, {style: `background-color: ${this.color}`})
 
@@ -64,21 +64,22 @@ Place.prototype.BuildInfo = function() {
     let addressInput = MakeIconInput(placeInputs, PLACE_ADDRESS_ICON, `place-${this.placeId}-address`, "basic-input", {placeholder: "адрес", type: "text", value: this.address})
     let metroStationInput = MakeIconInput(placeInputs, PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation, list: "metro-stations"})
     let yandexMapLinkInput = MakeIconInput(placeInputs, PLACE_YANDEX_MAP_ICON, `place-${this.placeId}-yandex-map-link`, "basic-input", {placeholder: "ссылка на я.карты", type: "text", value: this.yandexMapLink})
-    let colorInput = MakeIconInput(placeInputs, "", `place-${this.placeId}-color`, "basic-input", {placeholder: "цвет", type: "text", value: this.color})
+    this.colorInput = new ColorInput(placeInputs, this.color)
 
     let buttons = MakeElement("place-buttons", placeInputs)
 
     if (this.placeId === "add") {
         let addButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Добавить"}, "button")
-        addButton.addEventListener("click", () => this.Add([addButton]))
+        addButton.addEventListener("click", () => this.Add(info))
     }
     else {
+        this.colorInput.onchange = () => this.Update(info)
         let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
 
-        for (let input of [nameInput, addressInput, metroStationInput, yandexMapLinkInput, colorInput])
-            input.addEventListener("change", () => this.Update([removeButton]))
+        for (let input of [nameInput, addressInput, metroStationInput, yandexMapLinkInput])
+            input.addEventListener("change", () => this.Update(info))
 
-        removeButton.addEventListener("click", () => this.Remove([removeButton]))
+        removeButton.addEventListener("click", () => this.Remove(info))
     }
 
     return info
@@ -101,12 +102,12 @@ Place.prototype.GetUpdateParams = function() {
     if (yandexMapLink === null)
         return null
 
-    if (yandexMapLink.match(/^https:\/\/yandex.ru\/maps\/org\/.+\/\d+\/?$/) === null) {
+    if (yandexMapLink.match(/^https:\/\/yandex.ru\/maps\/org(\/.+)?\/\d+\/?/) === null) {
         InputError(`place-${this.placeId}-yandex-map-link`, "Ссылка на я.карты введена некорректно")
         return null
     }
 
-    let color = GetTextInput(`place-${this.placeId}-color`, "Цвет места не заполнен")
+    let color = this.colorInput.GetColor()
     if (color === null)
         return null
 
@@ -120,11 +121,12 @@ Place.prototype.GetUpdateParams = function() {
     }
 }
 
-Place.prototype.Update = function(buttons) {
+Place.prototype.Update = function(info) {
     let params = this.GetUpdateParams()
     if (params === null)
         return
 
+    let buttons = info.getElementsByTagName("button")
     Disable(buttons)
 
     SendRequest("/update-place", params).then(response => {
@@ -140,12 +142,14 @@ Place.prototype.Update = function(buttons) {
     })
 }
 
-Place.prototype.Add = function(buttons) {
+Place.prototype.Add = function(info) {
     let params = this.GetUpdateParams()
     if (params === null)
         return
 
     params.place_id = 0
+
+    let buttons = info.getElementsByTagName("button")
     Disable(buttons)
 
     SendRequest("/add-place", params).then(response => {
@@ -166,7 +170,7 @@ Place.prototype.UpdateParams = function(place) {
     this.metroStation = place.metro_station
     this.color = place.color
 
-    this.place.setAttribute("style", `background-color: ${this.color}35; border-color: ${this.color}60;`)
+    this.place.setAttribute("style", `background-color: ${this.color}60; border-color: ${this.color}bb;`)
 
     this.placeColor.setAttribute("style", `background-color: ${this.color}`)
     this.placeName.innerText = this.GetNameText()
@@ -174,10 +178,11 @@ Place.prototype.UpdateParams = function(place) {
     this.placeLink.innerText = this.address
 }
 
-Place.prototype.Remove = function(buttons) {
+Place.prototype.Remove = function(info) {
     if (!confirm(`Вы уверены, что хотите удалить место "${this.name}"`))
         return
 
+    let buttons = info.getElementsByTagName("button")
     Disable(buttons)
 
     SendRequest("/remove-place", {place_id: this.placeId}).then(response => {

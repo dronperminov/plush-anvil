@@ -127,3 +127,49 @@
 .error-icon svg {
     fill: var(--error-color) !important;
 }
+
+.color-input {
+    padding: 0.5em;
+    border-radius: 0.5em;
+
+    background: var(--icon-input-background);
+    border: 1px solid var(--icon-input-border);
+}
+
+.color-input-value {
+    display: grid;
+    grid-template-columns: 1.5em 1fr;
+    grid-gap: 0.2em;
+    align-items: center;
+}
+
+.color-input .color-value {
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.color-input .color-input-inputs {
+    border-top: 1px solid var(--border-color);
+    margin-top: 0.5em;
+    padding-top: 0.5em;
+}
+
+.color-input .color-input-colors {
+    display: inline-grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-gap: 0.5em;
+}
+
+.color-input .color-input-color {
+    width: 1.2em;
+    height: 1.2em;
+    border-radius: 100%;
+    cursor: pointer;
+    border: 1px solid var(--border-color);
+}
+
+.color-input .color-input-selected-color {
+    border: 1px solid var(--text-color);
+}
