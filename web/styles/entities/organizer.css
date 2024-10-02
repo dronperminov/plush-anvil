@@ -10,6 +10,7 @@
 
 .organizer-image img {
     width: 100%;
+    border-radius: 20%;
 }
 
 .organizer-name {
@@ -35,6 +36,10 @@
     display: grid;
     grid-auto-flow: column;
     grid-gap: 0.5em;
+}
+
+.organizer-file-input {
+    display: none;
 }
 
 .info .organizer-image {

@@ -60,7 +60,7 @@ Organizer.prototype.BuildInfo = function() {
     }
 
     let organizerImage = MakeElement("organizer-image", info)
-    this.organizerImageInfo = MakeElement("", organizerImage, {src: this.imageUrl}, "img")
+    this.infoImage = MakeElement("", organizerImage, {src: this.imageUrl}, "img")
 
     let organizerInputs = MakeElement("organizer-inputs", info)
 
@@ -73,6 +73,10 @@ Organizer.prototype.BuildInfo = function() {
         addButton.addEventListener("click", () => this.Add(info))
     }
     else {
+        this.imageInput = MakeElement("organizer-file-input", info, {type: "file", "accept": "image/*"}, "input")
+        this.imageInput.addEventListener("change", (e) => this.UpdateImage())
+        this.infoImage.addEventListener("click", () => this.imageInput.click())
+
         for (let input of [nameInput])
             input.addEventListener("change", () => this.Update(info))
 
@@ -143,6 +147,7 @@ Organizer.prototype.UpdateParams = function(organizer) {
 
     this.organizerImage.src = this.imageUrl
     this.organizerName.innerText = this.name
+    this.infoImage.src = this.imageUrl
 }
 
 Organizer.prototype.Remove = function(info) {
@@ -161,5 +166,26 @@ Organizer.prototype.Remove = function(info) {
 
         infos.Close()
         this.organizer.parentNode.removeChild(this.organizer)
+    })
+}
+
+Organizer.prototype.UpdateImage = function() {
+    if (this.imageInput.files.length != 1)
+        return
+
+    let data = new FormData()
+    data.append("organizer_id", this.organizerId)
+    data.append("image", this.imageInput.files[0])
+
+    SendRequest("/update-organizer-image", data).then(response => {
+        this.imageInput.value = null
+
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось обновить фото организатора "${this.name}".<br><b>Причина</b>: ${response.message}`, "error-notification")
+            return
+        }
+
+        ShowNotification("Фото организатора успешно обновлено", "success-notification")
+        this.UpdateParams(response.organizer)
     })
 }

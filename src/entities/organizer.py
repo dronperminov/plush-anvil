@@ -1,4 +1,10 @@
 from dataclasses import dataclass
+from datetime import datetime
+
+from fastapi import UploadFile
+
+from src.utils.common import save_file, transliterate
+from src.utils.image import crop_image_square
 
 
 @dataclass
@@ -31,3 +37,11 @@ class Organizer:
                 diff[field] = {"prev": place_data[field], "new": data[field]}
 
         return diff
+
+    def save_image(self, image: UploadFile) -> str:
+        image_name = f"{transliterate(self.name)}.png"
+        image_path = f"web/images/organizers/{image_name}"
+        save_file(file=image, output_path=image_path)
+        crop_image_square(path=image_path, size=144)
+
+        return f"/images/organizers/{image_name}?v={int(datetime.now().timestamp())}"

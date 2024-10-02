@@ -1,6 +1,10 @@
 import hashlib
 import os
+import re
+import shutil
 from typing import List
+
+from fastapi import UploadFile
 
 
 def __get_hash(filename: str) -> str:
@@ -36,3 +40,20 @@ def get_word_form(count: int, word_forms: List[str], only_form: bool = False) ->
         index = 1
 
     return word_forms[index] if only_form else f"{count} {word_forms[index]}"
+
+
+def transliterate(name: str) -> str:
+    lower_case_letters = {
+        "а": "a", "б": "b", "в": "v", "г": "g", "д": "d", "е": "e", "ё": "e", "ж": "zh", "з": "z", "и": "i", "й": "j",
+        "к": "k", "л": "l", "м": "m", "н": "n", "о": "o", "п": "p", "р": "r", "с": "s", "т": "t", "у": "u", "ф": "f",
+        "х": "h", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "y", "я": "ya",
+    }
+
+    name = "".join(lower_case_letters.get(c, c) for c in name.lower())
+    name = re.sub(r"[^a-z]+", "_", name)
+    return re.sub(r"_+", "_", name).strip("_")
+
+
+def save_file(file: UploadFile, output_path: str) -> None:
+    with open(output_path, "wb") as f:
+        shutil.copyfileobj(file.file, f)

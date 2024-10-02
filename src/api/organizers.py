@@ -8,6 +8,7 @@ from src import database, organizer_database
 from src.api import admin_action, admin_redirect, templates
 from src.entities.organizer import Organizer
 from src.entities.user import User
+from src.query_params.organizer_image_update import OrganizerImageUpdate
 from src.query_params.organizer_remove import OrganizerRemove
 from src.query_params.page_query import PageQuery
 from src.utils.auth import get_user
@@ -47,6 +48,20 @@ def update_organizer(organizer: Organizer, user: Optional[User] = Depends(get_us
         return JSONResponse({"status": "error", "message": "не удалось найти организатора, возможно он уже удалён"})
 
     organizer_database.update_organizer(organizer_id=organizer.organizer_id, diff=original_organizer.get_diff(organizer.to_dict()), username=user.username)
+    return JSONResponse({"status": "success", "organizer": jsonable_encoder(organizer_database.get_organizer(organizer_id=organizer.organizer_id))})
+
+
+@router.post("/update-organizer-image")
+def update_organizer_image(params: OrganizerImageUpdate = Depends(), user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    organizer = organizer_database.get_organizer(organizer_id=params.organizer_id)
+    if not organizer:
+        return JSONResponse({"status": "error", "message": "не удалось найти организатора, возможно он удалён"})
+
+    image_url = organizer.save_image(image=params.image)
+    organizer_database.update_organizer(organizer_id=params.organizer_id, diff=organizer.get_diff({"image_url": image_url}), username=user.username)
     return JSONResponse({"status": "success", "organizer": jsonable_encoder(organizer_database.get_organizer(organizer_id=organizer.organizer_id))})
 
 

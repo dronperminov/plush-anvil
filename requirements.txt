@@ -1,5 +1,6 @@
 fastapi
 Jinja2
+opencv-python
 passlib[bcrypt]
 pymongo
 pyjwt
