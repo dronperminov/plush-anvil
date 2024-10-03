@@ -1,5 +1,5 @@
 import json
-from typing import List, Optional
+from typing import List, Optional, TypedDict
 
 from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
@@ -29,7 +29,7 @@ def get_albums(user: Optional[User] = Depends(get_user), params: AlbumSearchQuer
     return HTMLResponse(content=content)
 
 
-def album_response(album: Album, user: User) -> HTMLResponse:
+def album_response(album: Album, user: User, album_type: str = "", **kwargs: TypedDict) -> HTMLResponse:
     if not album:
         return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
 
@@ -37,7 +37,9 @@ def album_response(album: Album, user: User) -> HTMLResponse:
     content = template.render(
         version=get_static_hash(),
         user=user,
-        album=jsonable_encoder(album)
+        album=jsonable_encoder(album),
+        album_type=album_type,
+        **kwargs
     )
 
     return HTMLResponse(content=content)
@@ -52,7 +54,7 @@ def get_album(album_id: int, user: Optional[User] = Depends(get_user)) -> HTMLRe
 @router.get("/photos")
 def get_photos(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
     album = album_database.get_album(album_id=json.dumps({"type": "all_photos"}))
-    return album_response(album=album, user=user)
+    return album_response(album=album, user=user, album_type="all_photos")
 
 
 @router.get("/photos-with-me")
@@ -61,13 +63,13 @@ def get_photos_with_me(user: Optional[User] = Depends(get_user), only: bool = Qu
         return login_redirect(back_url="/photos-with-me")
 
     album = album_database.get_album(album_id=json.dumps({"type": "photos_with_me", "username": user.username, "only": only}))
-    return album_response(album=album, user=user)
+    return album_response(album=album, user=user, album_type="photos_with_me", only=only)
 
 
 @router.get("/photos-with-users")
 def get_photos_with_users(user: Optional[User] = Depends(get_user), usernames: List[str] = Query([]), only: bool = Query(False)) -> Response:
     album = album_database.get_album(album_id=json.dumps({"type": "user_photos", "usernames": usernames, "only": only}))
-    return album_response(album=album, user=user)
+    return album_response(album=album, user=user, album_type="user_photos", usernames=usernames, only=only)
 
 
 @router.post("/search-albums")
@@ -79,5 +81,14 @@ def search_albums(params: AlbumSearch) -> JSONResponse:
 
 @router.post("/album-photos")
 def album_photos(params: AlbumPhotos) -> JSONResponse:
-    total, photos = album_database.get_album_photos(params=params)
-    return JSONResponse({"status": "success", "total": total, "photos": jsonable_encoder(photos)})
+    album = album_database.get_album(album_id=params.album_id)
+    if not album:
+        return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемый альбом, возможно он был удалён"})
+
+    total, photos = album_database.get_album_photos(album=album, params=params)
+    return JSONResponse({
+        "status": "success",
+        "total": total,
+        "photos": jsonable_encoder(photos),
+        "album": jsonable_encoder(album)
+    })

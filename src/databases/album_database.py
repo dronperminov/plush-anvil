@@ -81,10 +81,13 @@ class AlbumDatabase:
     def __get_all_photos_album(self) -> Album:
         photo_ids = [photo_id for album in self.database.albums.find({}).sort({"date": -1}) for photo_id in album["photo_ids"]]
         photo_id2photo = self.get_photos(photo_ids=photo_ids)
-        photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp, reverse=True)
+        photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp)
         return Album(album_id=json.dumps({"type": "all_photos"}), title="Все фото", photo_ids=photo_ids, date=datetime.now(), cover_id=None)
 
     def __get_users_photos_album(self, usernames: List[str], only: bool) -> Album:
+        if not usernames:
+            return self.__get_no_users_photos_album()
+
         photo_ids = {markup["photo_id"] for markup in self.database.markup.find({"username": {"$in": usernames}})}
         photo_id2users: Dict[int, set] = defaultdict(set)
 
@@ -97,9 +100,15 @@ class AlbumDatabase:
             photo_ids = [photo_id for photo_id, photo_usernames in photo_id2users.items() if set(usernames).issubset(photo_usernames)]
 
         photo_id2photo = self.get_photos(photo_ids=photo_ids)
-        photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp, reverse=True)
+        photo_ids = sorted(photo_ids, key=lambda photo_id: photo_id2photo[photo_id].timestamp)
         album_id = json.dumps({"type": "user_photos", "usernames": usernames, "only": only})
         return Album(album_id=album_id, title=f'Фото c {", ".join(usernames)}', photo_ids=photo_ids, date=datetime.now(), cover_id=None)
+
+    def __get_no_users_photos_album(self) -> Album:
+        photo_ids = {markup["photo_id"] for markup in self.database.markup.find({})}
+        photo_ids = [photo["photo_id"] for photo in self.database.photos.find({"photo_id": {"$nin": list(photo_ids)}}).sort({"timestamp": 1})]
+        album_id = json.dumps({"type": "user_photos", "usernames": [], "only": False})
+        return Album(album_id=album_id, title="Фото без отметок", photo_ids=photo_ids, date=datetime.now(), cover_id=None)
 
     def add_photo(self, photo: Photo, username: str) -> None:
         action = AddPhotoAction(username=username, timestamp=datetime.now(), photo_id=photo.photo_id)
@@ -149,12 +158,8 @@ class AlbumDatabase:
     def get_photos(self, photo_ids: List[int]) -> Dict[int, Photo]:
         return {photo["photo_id"]: Photo.from_dict(photo) for photo in self.database.photos.find({"photo_id": {"$in": photo_ids}})}
 
-    def get_album_photos(self, params: AlbumPhotos) -> Tuple[int, List[Photo]]:
-        album = self.get_album(album_id=params.album_id)
-        if not album:
-            return 0, []
-
-        photo_ids = album.photo_ids[params.skip:params.skip + params.page_size]
+    def get_album_photos(self, album: Album, params: AlbumPhotos) -> Tuple[int, List[Photo]]:
+        photo_ids = album.photo_ids[::-1][params.skip:params.skip + params.page_size]
         photo_id2photo = self.get_photos(photo_ids=photo_ids)
         return len(album.photo_ids), [photo_id2photo[photo_id] for photo_id in photo_ids]
 

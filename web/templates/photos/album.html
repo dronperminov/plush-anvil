@@ -14,7 +14,25 @@
             <span class="bread-crumbs-current">{{album.title[:50]}}{% if album.title|length > 50 %}...{%endif %}</span>
         </div>
 
-        <h1>{{album.title}}</h1>
+        <h1 id="album-title">{{album.title}}</h1>
+
+        {% if album_type == "photos_with_me" %}
+        <div class="album-controls">
+            <label class="switch-checkbox">
+                <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
+                <span class="switch-checkbox-slider"></span>
+            </label>
+            <label for="only">Только со мной</label>
+        </div>
+        {% elif album_type == "user_photos" %}
+        <div class="album-controls">
+            <label class="switch-checkbox">
+                <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
+                <span class="switch-checkbox-slider"></span>
+            </label>
+            <label for="only">Только выбранные пользователи</label>
+        </div>
+        {% endif %}
 
         <div id="photos">
             <div class="search-results"></div>
@@ -31,7 +49,7 @@
     <script src="/js/photos/album.js?v={{version}}"></script>
     <script>
         let config = {
-            pageSize: 12,
+            pageSize: 20,
             url: "/album-photos",
 
             getParams: GetAlbumPhotosParams,
@@ -42,7 +60,7 @@
 
         let album = new Album({{album|tojson}}, {})
         let infiniteScroll = new InfiniteScroll("photos", config)
-        infiniteScroll.LoadContent()
+        GetAlbumPhotos()
     </script>
 
     {% include "components/footer.html" %}

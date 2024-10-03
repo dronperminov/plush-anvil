@@ -12,6 +12,18 @@
     aspect-ratio: 1.1;
 }
 
+.album-controls {
+    padding: 1em;
+    border-radius: 0.7em;
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+    margin-bottom: 1em;
+}
+
+.album-controls label {
+    cursor: pointer;
+    font-weight: bold;
+}
+
 @media (max-width: 1023px) {
     .photos {
         grid-template-columns: 1fr 1fr 1fr;
