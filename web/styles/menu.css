@@ -3,7 +3,7 @@
     top: 0;
     width: 100%;
     background: var(--menu-background);
-    padding: 0 3em;
+    padding: 0 75px;
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 1fr max-content;
@@ -32,7 +32,7 @@
     display: inline-grid;
     grid-auto-flow: column;
     grid-auto-columns: max-content;
-    grid-gap: 2.5em;
+    grid-gap: 3em;
     align-items: center;
     height: 100%;
 }
@@ -85,7 +85,13 @@
 
 @media (min-width: 1440px) {
     .header {
-        padding: 0 calc(50vw - 720px + 3em);
+        padding: 0 calc(50vw - var(--max-width) / 2 + 75px);
+    }
+}
+
+@media (max-width: 1023px) {
+    .menu-items {
+        grid-gap: 3vw;
     }
 }
 

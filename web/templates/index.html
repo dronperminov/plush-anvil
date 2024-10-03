@@ -22,6 +22,10 @@
                 <div class="rating-next-date">Примерная дата: {{rating_info.next_level.end_date.strftime("%d.%m.%Y")}} (через {{get_word_form(rating_info.next_level.lost_days, ["день", "дня", "дней"])}})</div>
                 {% endif %}
             </div>
+
+            <div class="anvil">
+                <img src="/images/anvil.png">
+            </div>
         </div>
 
         {% if nearest_quizzes %}

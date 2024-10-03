@@ -59,6 +59,17 @@ html {
     font-size: 0.9em;
 }
 
+.first-screen .anvil {
+    position: absolute;
+    right: -3em;
+    top: -3em;
+    z-index: -1;
+}
+
+.first-screen .anvil img {
+    max-width: 600px;
+}
+
 .nearest-quizzes {
     display: inline-grid;
     margin: 0 auto;
@@ -219,6 +230,10 @@ html {
 }
 
 @media (max-width: 1023px) {
+    .first-screen .anvil img {
+        max-width: 58vw;
+    }
+
     .about-team {
         grid-template-areas: "area1 area2 area3" ". area4 area5";
     }
@@ -249,6 +264,15 @@ html {
     .first-screen .team-name {
         font-size: 2.8em;
         max-width: 320px;
+    }
+
+    .first-screen .anvil {
+        top: 0;
+        right: -10px;
+    }
+
+    .first-screen .anvil img {
+        max-width: 50vw;
     }
 
     .nearest-quizzes {
