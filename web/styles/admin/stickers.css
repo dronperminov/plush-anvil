@@ -1,22 +1,28 @@
-.birthdays {
+.stickers {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 1em;
     font-size: 16px;
 }
 
-.birthdays .user {
+.stickers .user {
     background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
 }
 
+.stickers .user .user-name a {
+    color: var(--text-color);
+    border-color: var(--text-color);
+    font-weight: bold;
+}
+
 @media (max-width: 1023px) {
-    .birthdays {
+    .stickers {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (max-width: 679px) {
-    .birthdays {
+    .stickers {
         grid-template-columns: 1fr;
         grid-gap: 0.5em;
     }

@@ -1,12 +1,14 @@
 import logging
 import re
 from datetime import datetime
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from pymongo import ASCENDING, DESCENDING, MongoClient
 
 from src.entities.history_action import SignUpAction
+from src.entities.paid_info import PaidInfo
 from src.entities.user import User
+from src.enums import PaidType
 from src.query_params.page_query import PageQuery
 
 
@@ -69,6 +71,8 @@ class Database:
         self.markup.create_index([("photo_id", DESCENDING)])
 
         self.paid_dates = database["paid_dates"]
+        self.paid_dates.create_index([("username", ASCENDING)])
+
         self.metro_stations = database["metro_stations"]
 
         self.history = database["history"]
@@ -81,6 +85,14 @@ class Database:
 
         user: dict = self.users.find_one({"username": {"$regex": f"^{re.escape(username)}$", "$options": "i"}})
         return User.from_dict(user) if user else None
+
+    def get_users_paid_info(self, usernames: List[str]) -> Dict[str, List[PaidInfo]]:
+        username2paid_info = {username: [] for username in usernames}
+
+        for paid_date in self.paid_dates.find({"username": {"$in": usernames}}):
+            username2paid_info[paid_date["username"]].append(PaidInfo(date=paid_date["date"], paid_type=PaidType.PAID, extra=True))
+
+        return username2paid_info
 
     def get_identifier(self, collection_name: str) -> int:
         identifier = self.identifiers.find_one_and_update({"_id": collection_name}, {"$inc": {"value": 1}}, return_document=True)

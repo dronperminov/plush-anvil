@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
 from src.entities.birth_date import BirthDate
@@ -13,6 +14,7 @@ class User:
     role: UserRole
     avatar_url: str
     birth_date: Optional[BirthDate]
+    stickers_start_date: Optional[datetime]
 
     def to_dict(self) -> dict:
         return {
@@ -21,7 +23,8 @@ class User:
             "full_name": self.full_name,
             "role": self.role.value,
             "avatar_url": self.avatar_url,
-            "birth_date": self.birth_date.to_dict() if self.birth_date else None
+            "birth_date": self.birth_date.to_dict() if self.birth_date else None,
+            "stickers_start_date": self.stickers_start_date
         }
 
     @classmethod
@@ -32,5 +35,9 @@ class User:
             full_name=data["full_name"],
             role=UserRole(data["role"]),
             avatar_url=data["avatar_url"],
-            birth_date=BirthDate.from_dict(data["birth_date"]) if data["birth_date"] else None
+            birth_date=BirthDate.from_dict(data["birth_date"]) if data["birth_date"] else None,
+            stickers_start_date=data["stickers_start_date"]
         )
+
+    def is_valid_sticker_date(self, date: datetime) -> bool:
+        return self.stickers_start_date is not None and self.stickers_start_date <= date

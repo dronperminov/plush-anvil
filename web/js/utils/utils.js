@@ -121,6 +121,20 @@ function GetWordForm(count, forms, onlyForm = false) {
     return onlyForm ? forms[index] : `${count} ${forms[index]}`
 }
 
+function FormatDatetime(datetime) {
+    let day = `${datetime.getDate()}`.padStart(2, "0")
+    let month = `${datetime.getMonth() + 1}`.padStart(2, "0")
+    let year = datetime.getFullYear()
+
+    let hours = `${datetime.getHours()}`.padStart(2, "0")
+    let minutes = `${datetime.getMinutes()}`.padStart(2, "0")
+
+    if (hours === "00")
+        return `${day}.${month}.${year}`
+
+    return `${day}.${month}.${year} ${hours}:${minutes}`
+}
+
 function Disable(elements) {
     for (let element of elements)
         element.setAttribute("disabled", "")

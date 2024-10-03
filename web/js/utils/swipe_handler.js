@@ -31,6 +31,10 @@ SwipeHandler.prototype.GetPoint = function(e) {
     if (this.block.scrollTop > 10)
         return null
 
+    for (let element = e.target; element != this.block; element = element.parentNode)
+        if (element.scrollHeight != element.clientHeight && element.scrollTop != 0)
+            return null
+
     if (e.touches)
         return {x: e.touches[0].clientX, y: e.touches[0].clientY, e: e}
 

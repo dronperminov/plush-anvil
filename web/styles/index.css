@@ -257,6 +257,10 @@ html {
         font-size: 12px;
     }
 
+    h2 {
+        font-size: 2em;
+    }
+
     .first-screen {
         padding: 2em;
     }
