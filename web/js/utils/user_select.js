@@ -26,25 +26,25 @@ UserSelect.prototype.Build = function(parent) {
     let queryBlock = MakeElement("user-select-query", filter)
     let query = MakeElement("basic-input", queryBlock, {type: "text", placeholder: "начните писать"}, "input")
 
-    let users = MakeElement("user-select-users", block)
+    this.usersBlock = MakeElement("user-select-users", block)
 
     for (let user of this.users)
-        this.username2block[user.username] = this.BuildUser(user, users)
+        this.username2block[user.username] = this.BuildUser(user)
 
     query.addEventListener("input", () => this.QueryInput(query, clearIcon))
     clearIcon.addEventListener("click", () => this.ClearQuery(query, clearIcon))
 }
 
-UserSelect.prototype.BuildUser = function(user, parent) {
-    let block = MakeElement("user-select-user", parent)
+UserSelect.prototype.BuildUser = function(user) {
+    let block = MakeElement("user-select-user", this.usersBlock)
     let avatar = MakeElement("user-select-avatar", block)
     MakeElement("", avatar, {src: user.avatarUrl}, "img")
     MakeElement("user-select-selected-count", avatar, {innerText: 0})
 
     let name = MakeElement("user-select-username", block, {innerText: `${user.fullname} (@${user.username})`})
 
-    name.addEventListener("click", () => this.SelectUser(user.username, parent))
-    avatar.addEventListener("click", () => this.UnselectUser(user.username, parent))
+    name.addEventListener("click", () => this.SelectUser(user.username))
+    avatar.addEventListener("click", () => this.UnselectUser(user.username))
 
     return block
 }
@@ -70,8 +70,11 @@ UserSelect.prototype.ClearQuery = function(query, clearIcon) {
     this.QueryInput(query, clearIcon)
 }
 
-UserSelect.prototype.SelectUser = function(username, users) {
-    if (username in this.username2selected && this.config.multiple) {
+UserSelect.prototype.SelectUser = function(username) {
+    if (username in this.username2selected) {
+        if (!this.config.multiple)
+            return
+
         this.username2selected[username] += 1
     }
     else {
@@ -79,10 +82,10 @@ UserSelect.prototype.SelectUser = function(username, users) {
         this.selected.push(username)
     }
 
-    this.UpdateSelectUser(username, users)
+    this.UpdateSelectUser(username)
 }
 
-UserSelect.prototype.UnselectUser = function(username, users) {
+UserSelect.prototype.UnselectUser = function(username) {
     if (!(username in this.username2selected))
         return
 
@@ -93,10 +96,10 @@ UserSelect.prototype.UnselectUser = function(username, users) {
         this.selected.splice(this.selected.indexOf(username), 1)
     }
 
-    this.UpdateSelectUser(username, users)
+    this.UpdateSelectUser(username)
 }
 
-UserSelect.prototype.UpdateSelectUser = function(username, users) {
+UserSelect.prototype.UpdateSelectUser = function(username) {
     let count = username in this.username2selected ? this.username2selected[username] : 0
     let block = this.username2block[username]
 
@@ -108,22 +111,22 @@ UserSelect.prototype.UpdateSelectUser = function(username, users) {
     let countBlock = block.querySelector(".user-select-selected-count")
     countBlock.innerText = this.config.multiple ? count : ""
 
-    this.SortUsers(users)
+    this.SortUsers()
 
     if (this.onchange !== null)
         this.onchange()
 }
 
-UserSelect.prototype.SortUsers = function(users) {
-    while (users.children.length > 0)
-        users.removeChild(users.children[0])
+UserSelect.prototype.SortUsers = function() {
+    while (this.usersBlock.children.length > 0)
+        this.usersBlock.removeChild(this.usersBlock.children[0])
 
     for (let username of this.selected)
-        users.appendChild(this.username2block[username])
+        this.usersBlock.appendChild(this.username2block[username])
 
     for (let user of this.users)
         if (!(user.username in this.username2selected))
-            users.appendChild(this.username2block[user.username])
+            this.usersBlock.appendChild(this.username2block[user.username])
 }
 
 UserSelect.prototype.IsMatch = function(query, user) {

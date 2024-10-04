@@ -9,6 +9,7 @@ function GetAlbumPhotosParams() {
     }
     else if (albumData.type == "user_photos") {
         albumData.only = document.getElementById("only").checked
+        albumData.usernames = userSelect.GetSelected()
     }
 
     PushUrlParams(albumData)

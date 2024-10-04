@@ -22,7 +22,7 @@ def get_stickers(user: Optional[User] = Depends(get_user)) -> Response:
 
     users = quiz_database.get_users()
     template = templates.get_template("admin/stickers.html")
-    content = template.render(version=get_static_hash(), user=user, users=jsonable_encoder(users))
+    content = template.render(version=get_static_hash(), user=user, users=users)
     return HTMLResponse(content=content)
 
 

@@ -11,6 +11,7 @@ from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddPhot
 from src.entities.markup import Markup
 from src.entities.photo import Photo
 from src.entities.quiz import Quiz
+from src.entities.user import User
 from src.query_params.album_photos import AlbumPhotos
 from src.query_params.album_search import AlbumSearch
 
@@ -19,6 +20,7 @@ class AlbumDatabase:
     def __init__(self, database: Database, logger: logging.Logger) -> None:
         self.database = database
         self.logger = logger
+        self.markup_score_alpha = 0.98
 
     def get_albums_count(self) -> int:
         return self.database.albums.count_documents({})
@@ -212,3 +214,19 @@ class AlbumDatabase:
         total = self.database.albums.count_documents(params.to_query())
         albums = self.database.albums.find(params.to_query()).sort({params.order: params.order_type, "_id": 1}).skip(params.skip).limit(params.page_size)
         return total, [Album.from_dict(album) for album in albums]
+
+    def get_users(self) -> List[User]:
+        username2score = defaultdict(float)
+
+        quizzes = list(self.database.quizzes.find({"album_id": {"$ne": None}}))
+        end_date = max([quiz["datetime"] for quiz in quizzes], default=datetime.now())
+
+        album_id2quiz = {quiz["album_id"]: quiz for quiz in quizzes}
+        photo_id2album_id = {photo_id: album["album_id"] for album in self.database.albums.find({"album_id": {"$in": list(album_id2quiz)}}) for photo_id in album["photo_ids"]}
+
+        for markup in self.database.markup.find({"photo_id": {"$in": list(photo_id2album_id)}}):
+            quiz = album_id2quiz[photo_id2album_id[markup["photo_id"]]]
+            username2score[markup["username"]] += self.markup_score_alpha ** (end_date - quiz["datetime"]).days
+
+        users = sorted([User.from_dict(user) for user in self.database.users.find({})], key=lambda user: -username2score[user.username])
+        return users

@@ -1,5 +1,6 @@
 {% set title = "Альбомы | Плюшевая наковальня" %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/utils/user_select.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/photos/album.css?v={{version}}">
 </head>
 <body ondragstart="return false">
@@ -18,19 +19,25 @@
 
         {% if album_type == "photos_with_me" %}
         <div class="album-controls">
-            <label class="switch-checkbox">
-                <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
-                <span class="switch-checkbox-slider"></span>
-            </label>
-            <label for="only">Только со мной</label>
+            <div>
+                <label class="switch-checkbox">
+                    <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
+                    <span class="switch-checkbox-slider"></span>
+                </label>
+                <label for="only">Только со мной</label>
+            </div>
         </div>
         {% elif album_type == "user_photos" %}
         <div class="album-controls">
-            <label class="switch-checkbox">
-                <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
-                <span class="switch-checkbox-slider"></span>
-            </label>
-            <label for="only">Только выбранные пользователи</label>
+            <div id="users"></div>
+
+            <div>
+                <label class="switch-checkbox">
+                    <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
+                    <span class="switch-checkbox-slider"></span>
+                </label>
+                <label for="only">Только выбранные пользователи</label>
+            </div>
         </div>
         {% endif %}
 
@@ -44,6 +51,7 @@
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>
     <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
+    <script src="/js/utils/user_select.js?v={{version}}"></script>
 
     <script src="/js/entities/album.js?v={{version}}"></script>
     <script src="/js/photos/album.js?v={{version}}"></script>
@@ -57,6 +65,18 @@
             resultMessage: GetResultMessage,
             resize: true
         }
+
+        let userSelectConfig = {multiple: false}
+        let userSelect = new UserSelect([{% for user in users %}{username: "{{user.username}}", fullname: "{{user.full_name}}", avatarUrl: "{{user.avatar_url}}"},{% endfor %}], userSelectConfig)
+        userSelect.Build(document.getElementById("users"))
+
+        {% if usernames %}
+        {% for username in usernames %}
+        userSelect.SelectUser("{{username}}")
+        {% endfor %}
+        {% endif %}
+
+        userSelect.onchange = () => GetAlbumPhotos()
 
         let album = new Album({{album|tojson}}, {})
         let infiniteScroll = new InfiniteScroll("photos", config)
