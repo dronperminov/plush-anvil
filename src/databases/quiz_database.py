@@ -1,10 +1,11 @@
 import logging
+from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 from src import Database
 from src.entities.analytics.team_analytics import TeamAnalytics
-from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQuizAction, RemoveQuizAction
+from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQuizAction, RemovePaidDateAction, RemoveQuizAction
 from src.entities.paid_date import PaidDate
 from src.entities.paid_info import PaidInfo
 from src.entities.quiz import Quiz
@@ -18,6 +19,7 @@ class QuizDatabase:
     def __init__(self, database: Database, logger: logging.Logger) -> None:
         self.database = database
         self.logger = logger
+        self.activity_score_alpha = 0.98
 
     def get_count(self) -> int:
         return self.database.quizzes.count_documents({})
@@ -72,9 +74,35 @@ class QuizDatabase:
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f"Added paid date {paid_date.date} for {paid_date.username} by @{username}")
 
+    def remove_paid_date(self, paid_date: PaidDate, username: str) -> bool:
+        if not self.database.paid_dates.find_one(paid_date.to_dict()):
+            return False
+
+        action = RemovePaidDateAction(username=username, timestamp=datetime.now(), paid_date=paid_date)
+        self.database.paid_dates.delete_one(paid_date.to_dict())
+        self.database.history.insert_one(action.to_dict())
+        self.logger.info(f"Removed paid date {paid_date.date} for {paid_date.username} by @{username}")
+        return True
+
     def get_team_analytics(self) -> TeamAnalytics:
         quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}})]
         return TeamAnalytics.evaluate(quizzes=quizzes)
+
+    def get_users(self) -> List[User]:
+        username2score = self.get_activity_scores()
+        users = sorted([User.from_dict(user) for user in self.database.users.find({})], key=lambda user: -username2score[user.username])
+        return users
+
+    def get_activity_scores(self) -> Dict[str, float]:
+        username2score = defaultdict(float)
+        quizzes = list(self.database.quizzes.find({"participants": {"$ne": []}}, {"datetime": 1, "participants": 1}))
+        end_date = max([quiz["datetime"] for quiz in quizzes], default=datetime.now())
+
+        for quiz in quizzes:
+            for participant in quiz["participants"]:
+                username2score[participant["username"]] += self.activity_score_alpha ** (end_date - quiz["datetime"]).days
+
+        return username2score
 
     def get_sticker_users(self, params: PageQuery) -> Tuple[int, List[User], Dict[str, StickerInfo]]:
         username2user = {user["username"]: User.from_dict(user) for user in self.database.users.find({"stickers_start_date": {"$ne": None}})}

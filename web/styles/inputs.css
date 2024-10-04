@@ -182,6 +182,10 @@
     cursor: pointer;
 }
 
+.icon-input-icon img {
+    width: 1.2em;
+}
+
 .icon-input-icon svg {
     fill: var(--icon-input-icon-color);
     vertical-align: middle;

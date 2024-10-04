@@ -22,66 +22,27 @@ class HistoryAction:
 
     @classmethod
     def from_dict(cls: "HistoryAction", data: dict) -> "HistoryAction":
-        name = data["name"]
-        username = data["username"]
-        timestamp = data["timestamp"]
+        name = data.pop("name")
+        username = data.pop("username")
+        timestamp = data.pop("timestamp")
 
-        if name == SignUpAction.name:
-            return SignUpAction(username=username, timestamp=timestamp)
+        actions = [
+            SignUpAction,
+            AddPlaceAction, EditPlaceAction, RemovePlaceAction,
+            AddOrganizerAction, EditOrganizerAction, RemoveOrganizerAction,
+            AddQuizAction, EditQuizAction, RemoveQuizAction,
+            AddAlbumAction, EditAlbumAction, RemoveAlbumAction,
+            AddPhotoAction, EditPhotoAction, RemovePhotoAction,
+            AddMarkupAction, RemoveMarkupAction,
+            AddPaidDateAction, RemovePaidDateAction
+        ]
 
-        if name == AddPlaceAction.name:
-            return AddPlaceAction(username=username, timestamp=timestamp, place_id=data["place_id"])
+        if name in [AddPaidDateAction.name, RemovePaidDateAction.name]:
+            data["paid_date"] = PaidDate.from_dict(data["paid_date"])
 
-        if name == EditPlaceAction.name:
-            return EditPlaceAction(username=username, timestamp=timestamp, place_id=data["place_id"], diff=data["diff"])
-
-        if name == RemovePlaceAction.name:
-            return RemovePlaceAction(username=username, timestamp=timestamp, place_id=data["place_id"])
-
-        if name == AddOrganizerAction.name:
-            return AddOrganizerAction(username=username, timestamp=timestamp, organizer_id=data["organizer_id"])
-
-        if name == EditOrganizerAction.name:
-            return EditOrganizerAction(username=username, timestamp=timestamp, organizer_id=data["organizer_id"], diff=data["diff"])
-
-        if name == RemoveOrganizerAction.name:
-            return RemoveOrganizerAction(username=username, timestamp=timestamp, organizer_id=data["organizer_id"])
-
-        if name == AddQuizAction.name:
-            return AddQuizAction(username=username, timestamp=timestamp, quiz_id=data["quiz_id"])
-
-        if name == EditQuizAction.name:
-            return EditQuizAction(username=username, timestamp=timestamp, quiz_id=data["quiz_id"], diff=data["diff"])
-
-        if name == RemoveQuizAction.name:
-            return RemoveQuizAction(username=username, timestamp=timestamp, quiz_id=data["quiz_id"])
-
-        if name == AddAlbumAction.name:
-            return AddAlbumAction(username=username, timestamp=timestamp, album_id=data["album_id"])
-
-        if name == EditAlbumAction.name:
-            return EditAlbumAction(username=username, timestamp=timestamp, album_id=data["album_id"], diff=data["diff"])
-
-        if name == RemoveAlbumAction.name:
-            return RemoveAlbumAction(username=username, timestamp=timestamp, album_id=data["album_id"])
-
-        if name == AddPhotoAction.name:
-            return AddPhotoAction(username=username, timestamp=timestamp, photo_id=data["photo_id"])
-
-        if name == EditPhotoAction.name:
-            return EditPhotoAction(username=username, timestamp=timestamp, photo_id=data["photo_id"], diff=data["diff"])
-
-        if name == RemovePhotoAction.name:
-            return RemovePhotoAction(username=username, timestamp=timestamp, photo_id=data["photo_id"])
-
-        if name == AddMarkupAction.name:
-            return AddMarkupAction(username=username, timestamp=timestamp, markup_id=data["markup_id"])
-
-        if name == RemoveMarkupAction.name:
-            return RemoveMarkupAction(username=username, timestamp=timestamp, markup_id=data["markup_id"])
-
-        if name == AddPaidDateAction.name:
-            return AddPaidDateAction(username=username, timestamp=timestamp, paid_date=PaidDate.from_dict(data["paid_date"]))
+        for action in actions:
+            if name == action.name:
+                return action(username=username, timestamp=timestamp, **data)
 
         raise ValueError(f'Invalid HistoryAction name "{name}"')
 
@@ -252,6 +213,15 @@ class RemoveMarkupAction(HistoryAction):
 @dataclass
 class AddPaidDateAction(HistoryAction):
     name = "add_paid_date"
+    paid_date: PaidDate
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "paid_date": self.paid_date.to_dict()}
+
+
+@dataclass
+class RemovePaidDateAction(HistoryAction):
+    name = "remove_paid_date"
     paid_date: PaidDate
 
     def to_dict(self) -> dict:

@@ -135,6 +135,17 @@ function FormatDatetime(datetime) {
     return `${day}.${month}.${year} ${hours}:${minutes}`
 }
 
+function FormatInputDate(date = null) {
+    if (date === null)
+        date = new Date()
+
+    let day = `${date.getDate()}`.padStart(2, "0")
+    let month = `${date.getMonth() + 1}`.padStart(2, "0")
+    let year = date.getFullYear()
+
+    return `${year}-${month}-${day}`
+}
+
 function Disable(elements) {
     for (let element of elements)
         element.setAttribute("disabled", "")

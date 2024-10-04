@@ -15,6 +15,24 @@
     font-weight: bold;
 }
 
+.info .icon-input {
+    background: unset;
+    border: none;
+    padding: 0;
+}
+
+.sticker-inputs {
+    display: grid;
+    grid-auto-flow: row;
+    grid-gap: 1em;
+}
+
+.sticker-buttons {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 0.5em;
+}
+
 @media (max-width: 1023px) {
     .stickers {
         grid-template-columns: 1fr 1fr;

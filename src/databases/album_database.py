@@ -105,8 +105,7 @@ class AlbumDatabase:
         return Album(album_id=album_id, title=f'Фото c {", ".join(usernames)}', photo_ids=photo_ids, date=datetime.now(), cover_id=None)
 
     def __get_no_users_photos_album(self) -> Album:
-        photo_ids = {markup["photo_id"] for markup in self.database.markup.find({})}
-        photo_ids = [photo["photo_id"] for photo in self.database.photos.find({"photo_id": {"$nin": list(photo_ids)}}).sort({"timestamp": 1})]
+        photo_ids = [photo["photo_id"] for photo in self.database.photos.find({"markup_ids": []}).sort({"timestamp": 1})]
         album_id = json.dumps({"type": "user_photos", "usernames": [], "only": False})
         return Album(album_id=album_id, title="Фото без отметок", photo_ids=photo_ids, date=datetime.now(), cover_id=None)
 

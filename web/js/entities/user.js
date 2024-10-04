@@ -57,13 +57,12 @@ User.prototype.BuildStickerInfo = function(stickers) {
     MakeElement("user-sticker-type user-sticker-header", stickersBlock, {innerText: "Статус"})
 
     for (let paidInfo of stickers.paid_infos) {
-        let paidType = new PaidType(paidInfo.paid_type)
-        let label = paidType.value == "stickers" ? "stickers" : (paidInfo.extra ? "extra" : "")
+        let label = paidInfo.paid_type == "stickers" ? "stickers" : (paidInfo.extra ? "extra" : "")
 
         MakeElement("user-sticker-date", stickersBlock, {innerText: FormatDatetime(new Date(paidInfo.date))})
         let status = MakeElement("user-sticker-type", stickersBlock)
         MakeElement(`user-sticker-type-icon user-sticker-type-icon-${label}`, status)
-        MakeElement("user-sticker-type-text", status, {innerText: paidType.ToRus()})
+        MakeElement("user-sticker-type-text", status, {innerText: this.GetStickerPaidType(paidInfo)})
     }
 
     return info
@@ -85,4 +84,12 @@ User.prototype.GetBirthDateText = function(days) {
 
 User.prototype.GetStickersCountText = function(stickers) {
     return GetWordForm(stickers.games, ["наклейка", "наклейки", "наклеек"])
+}
+
+User.prototype.GetStickerPaidType = function(paidInfo) {
+    if (paidInfo.extra)
+        return "доп. наклейка"
+
+    let paidType = new PaidType(paidInfo.paid_type)
+    return paidType.ToRus()
 }

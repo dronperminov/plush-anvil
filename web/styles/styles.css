@@ -39,7 +39,7 @@
     /* icon-input  */
     --icon-input-background: #f4f4f4;
     --icon-input-border: var(--border-color);
-    --icon-input-icon-color: var(--icon-color);
+    --icon-input-icon-color: var(--text-color);
     --icon-input-input-color: var(--text-color);
 
     /* search */
@@ -52,6 +52,11 @@
     --search-focus-icon-color: var(--text-color);
     --search-focus-background: #eddce9;
     --search-focus-border: var(--main-color);
+
+    /* user-select */
+    --user-select-hover-background: #f0f0f0;
+    --user-select-count-background: #4caf50;
+    --user-select-count-color: #ffffff;
 }
 
 @font-face {

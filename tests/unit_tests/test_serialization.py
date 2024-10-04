@@ -4,8 +4,8 @@ from unittest import TestCase
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
 from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPaidDateAction, AddPhotoAction, AddPlaceAction, AddQuizAction, \
-    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveMarkupAction, RemoveOrganizerAction, \
-    RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
+    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveMarkupAction, \
+    RemoveOrganizerAction, RemovePaidDateAction, RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
 from src.entities.paid_date import PaidDate
@@ -181,7 +181,8 @@ class TestSerialization(TestCase):
             AddMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
             RemoveMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
 
-            AddPaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28)))
+            AddPaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28))),
+            RemovePaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28)))
         ]
 
         for history_action in history_actions:

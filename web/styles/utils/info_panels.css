@@ -50,6 +50,9 @@
 
 .info-header {
     text-align: center;
+    font-size: 1.3em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
 }
 
 @media (orientation: landscape) and (max-width: 767px) {

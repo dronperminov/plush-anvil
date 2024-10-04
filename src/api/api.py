@@ -57,19 +57,3 @@ def get_birthday_users(params: PageQuery) -> JSONResponse:
     total, users = database.get_birthday_users(params=params)
     username2days = {user.username: user.birth_date.get_days() for user in users}
     return JSONResponse({"status": "success", "total": total, "users": jsonable_encoder(users), "username2days": username2days})
-
-
-@router.get("/stickers")
-def get_stickers(user: Optional[User] = Depends(get_user)) -> Response:
-    if response := admin_redirect(back_url="/stickers", user=user):
-        return response
-
-    template = templates.get_template("admin/stickers.html")
-    content = template.render(version=get_static_hash(), user=user)
-    return HTMLResponse(content=content)
-
-
-@router.post("/stickers")
-def get_sticker_users(params: PageQuery) -> JSONResponse:
-    total, users, username2sticker = quiz_database.get_sticker_users(params=params)
-    return JSONResponse({"status": "success", "total": total, "users": jsonable_encoder(users), "username2sticker": jsonable_encoder(username2sticker)})
