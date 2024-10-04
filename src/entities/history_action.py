@@ -34,7 +34,8 @@ class HistoryAction:
             AddAlbumAction, EditAlbumAction, RemoveAlbumAction,
             AddPhotoAction, EditPhotoAction, RemovePhotoAction,
             AddMarkupAction, RemoveMarkupAction,
-            AddPaidDateAction, RemovePaidDateAction
+            AddPaidDateAction, RemovePaidDateAction,
+            AddAchievementAction, RemoveAchievementAction
         ]
 
         if name in [AddPaidDateAction.name, RemovePaidDateAction.name]:
@@ -226,3 +227,21 @@ class RemovePaidDateAction(HistoryAction):
 
     def to_dict(self) -> dict:
         return {**super().to_dict(), "paid_date": self.paid_date.to_dict()}
+
+
+@dataclass
+class AddAchievementAction(HistoryAction):
+    name = "add_achievement"
+    achievement_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "achievement_id": self.achievement_id}
+
+
+@dataclass
+class RemoveAchievementAction(HistoryAction):
+    name = "remove_achievement"
+    achievement_id: int
+
+    def to_dict(self) -> dict:
+        return {**super().to_dict(), "achievement_id": self.achievement_id}

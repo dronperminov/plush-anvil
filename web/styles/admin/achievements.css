@@ -1,0 +1,47 @@
+.achievements {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 1em;
+    font-size: 16px;
+}
+
+.achievements .user {
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+}
+
+.achievements .user .user-name a {
+    color: var(--text-color);
+    border-color: var(--text-color);
+    font-weight: bold;
+}
+
+.info .icon-input {
+    background: unset;
+    border: none;
+    padding: 0;
+}
+
+.achievements-inputs {
+    display: grid;
+    grid-auto-flow: row;
+    grid-gap: 1em;
+}
+
+.achievements-buttons {
+    display: grid;
+    grid-auto-flow: column;
+    grid-gap: 0.5em;
+}
+
+@media (max-width: 1023px) {
+    .achievements {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 679px) {
+    .achievements {
+        grid-template-columns: 1fr;
+        grid-gap: 0.5em;
+    }
+}

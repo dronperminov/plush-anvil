@@ -49,7 +49,7 @@
     width: 80px;
 }
 
-.info .user-stickers-info {
+.info .user-stickers-info, .info .user-achievements-info {
     text-align: center;
     margin-bottom: 1em;
 }
@@ -105,5 +105,31 @@
 .info .user-sticker-header {
     display: block;
     font-weight: bold;
+    text-align: center;
+}
+
+.info .user-achievements {
+    display: table;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.info .user-achievement {
+    display: table-row;
+}
+
+.info .user-achievement-header {
+    font-weight: bold;
+    text-align: center;
+}
+
+.info .user-achievement-date, .info .user-achievement-title {
+    display: table-cell;
+    vertical: miracles_field;
+    border: 1px solid var(--border-color);
+    padding: 5px 10px;
+}
+
+.info .user-achievement-date {
     text-align: center;
 }

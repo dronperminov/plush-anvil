@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from uvicorn.config import LOGGING_CONFIG
 
 from src import database
-from src.api import albums, api, auth, organizers, places, stickers
+from src.api import achievements, albums, api, auth, organizers, places, stickers
 
 
 def init_routers() -> None:
@@ -17,6 +17,7 @@ def init_routers() -> None:
     app.include_router(places.router)
     app.include_router(organizers.router)
     app.include_router(stickers.router)
+    app.include_router(achievements.router)
 
 
 def init_static_directories() -> None:

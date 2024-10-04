@@ -26,6 +26,7 @@ class Database:
     markup = None
 
     paid_dates = None
+    achievements = None
     metro_stations = None
     history = None
 
@@ -40,7 +41,7 @@ class Database:
 
         self.identifiers = database["identifiers"]
 
-        for name in ["quizzes", "places", "organizers", "albums", "photos", "markup"]:
+        for name in ["quizzes", "places", "organizers", "albums", "photos", "markup", "achievements"]:
             if self.identifiers.find_one({"_id": name}) is None:
                 self.identifiers.insert_one({"_id": name, "value": 0})
 
@@ -72,6 +73,10 @@ class Database:
 
         self.paid_dates = database["paid_dates"]
         self.paid_dates.create_index([("username", ASCENDING)])
+
+        self.achievements = database["achievements"]
+        self.achievements.create_index([("achievement_id", ASCENDING)], unique=True)
+        self.achievements.create_index([("username", ASCENDING)])
 
         self.metro_stations = database["metro_stations"]
 

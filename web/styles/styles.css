@@ -436,4 +436,9 @@ ul {
     h2 {
         font-size: 1em;
     }
+
+    #notifications {
+        margin: 0 10px;
+        bottom: 10px;
+    }
 }

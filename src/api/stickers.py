@@ -33,7 +33,7 @@ def get_sticker_users(params: PageQuery) -> JSONResponse:
 
 
 @router.post("/modify-stickers")
-def add_stickers(params: StickersModification, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+def modify_stickers(params: StickersModification, user: Optional[User] = Depends(get_user)) -> JSONResponse:
     if response := admin_action(user=user):
         return response
 

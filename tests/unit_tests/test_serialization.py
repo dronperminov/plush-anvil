@@ -1,11 +1,12 @@
 from datetime import datetime
 from unittest import TestCase
 
+from src.entities.achievements.handle_achievement import HandleAchievement
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
-from src.entities.history_action import AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPaidDateAction, AddPhotoAction, AddPlaceAction, AddQuizAction, \
-    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAlbumAction, RemoveMarkupAction, \
-    RemoveOrganizerAction, RemovePaidDateAction, RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
+from src.entities.history_action import AddAchievementAction, AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPaidDateAction, AddPhotoAction, AddPlaceAction, \
+    AddQuizAction, EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAchievementAction, RemoveAlbumAction, \
+    RemoveMarkupAction, RemoveOrganizerAction, RemovePaidDateAction, RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
 from src.entities.paid_date import PaidDate
@@ -15,7 +16,7 @@ from src.entities.quiz import Quiz
 from src.entities.quiz_participant import QuizParticipant
 from src.entities.quiz_result import QuizResult
 from src.entities.user import User
-from src.enums import Category, PaidType, UserRole
+from src.enums import Category, HandleAchievementType, PaidType, UserRole
 
 
 class TestSerialization(TestCase):
@@ -154,6 +155,18 @@ class TestSerialization(TestCase):
         paid_date_from_dict = PaidDate.from_dict(paid_date_dict)
         self.assertEqual(paid_date, paid_date_from_dict)
 
+    def test_handle_achievement_serialization(self) -> None:
+        achievement = HandleAchievement(
+            achievement_id=1,
+            username="user",
+            date=datetime(2024, 9, 29),
+            achievement_type=HandleAchievementType.APPEAL_MASTER
+        )
+
+        achievement_dict = achievement.to_dict()
+        achievement_from_dict = HandleAchievement.from_dict(achievement_dict)
+        self.assertEqual(achievement, achievement_from_dict)
+
     def test_history_action_serialization(self) -> None:
         history_actions = [
             SignUpAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51)),
@@ -182,7 +195,10 @@ class TestSerialization(TestCase):
             RemoveMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
 
             AddPaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28))),
-            RemovePaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28)))
+            RemovePaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28))),
+
+            AddAchievementAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), achievement_id=1),
+            RemoveAchievementAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), achievement_id=1)
         ]
 
         for history_action in history_actions:
