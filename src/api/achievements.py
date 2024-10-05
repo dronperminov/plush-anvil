@@ -17,7 +17,7 @@ router = APIRouter()
 
 
 @router.get("/handle-achievements")
-def get_achievements(user: Optional[User] = Depends(get_user)) -> Response:
+def handle_achievements(user: Optional[User] = Depends(get_user)) -> Response:
     if response := admin_redirect(back_url="/achievements", user=user):
         return response
 
@@ -57,3 +57,16 @@ def modify_achievements(params: AchievementsModification, user: Optional[User] =
                     achievement_database.remove_achievement(achievement_id=achievement["achievement_id"], username=user.username)
 
     return JSONResponse({"status": "success"})
+
+
+@router.get("/achievements")
+def get_achievements(user: Optional[User] = Depends(get_user)) -> Response:
+    template = templates.get_template("about/achievements.html")
+    content = template.render(version=get_static_hash(), user=user)
+    return HTMLResponse(content=content)
+
+
+@router.post("/team-achievements")
+def team_achievements(params: PageQuery) -> JSONResponse:
+    total, achievements = achievement_database.get_team_achievements(params=params)
+    return JSONResponse({"status": "success", "total": total, "achievements": jsonable_encoder(achievements)})

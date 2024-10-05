@@ -1,0 +1,48 @@
+{% set title = "Достижения | Плюшевая наковальня" %}
+{% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/about/achievements.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/entities/achievement.css?v={{version}}">
+</head>
+<body ondragstart="return false">
+    {% include "components/menu.html" %}
+
+    <div class="content">
+        <div class="bread-crumbs">
+            <span><a href="/">Главная</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span class="bread-crumbs-current">Достижения</span>
+        </div>
+
+        <h1>Достижения</h1>
+
+        <div id="achievements">
+            <div class="search-results"></div>
+            <div class="achievements"></div>
+            <div class="loader hidden"><img src="/images/loader.svg"></div>
+        </div>
+    </div>
+
+    <script src="/js/utils/utils.js?v={{version}}"></script>
+    <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
+
+    <script src="/js/entities/achievement.js?v={{version}}"></script>
+
+    <script src="/js/about/achievements.js?v={{version}}"></script>
+    <script>
+        let config = {
+            pageSize: 6,
+            url: "/team-achievements",
+
+            getParams: GetParams,
+            onLoad: LoadAchievements,
+            resultMessage: null
+        }
+
+        let infiniteScroll = new InfiniteScroll("achievements", config)
+        infiniteScroll.LoadContent()
+    </script>
+
+    {% include "components/footer.html" %}
+</body>
+</html>
