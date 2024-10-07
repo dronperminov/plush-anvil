@@ -43,8 +43,13 @@ UserSelect.prototype.BuildUser = function(user) {
 
     let name = MakeElement("user-select-username", block, {innerText: `${user.fullname} (@${user.username})`})
 
-    name.addEventListener("click", () => this.SelectUser(user.username))
-    avatar.addEventListener("click", () => this.UnselectUser(user.username))
+    if (this.config.multiple) {
+        name.addEventListener("click", () => this.SelectUser(user.username))
+        avatar.addEventListener("click", () => this.UnselectUser(user.username))
+    }
+    else {
+        block.addEventListener("click", () => this.ToggleUser(user.username))
+    }
 
     return block
 }
@@ -97,6 +102,13 @@ UserSelect.prototype.UnselectUser = function(username) {
     }
 
     this.UpdateSelectUser(username)
+}
+
+UserSelect.prototype.ToggleUser = function(username) {
+    if (username in this.username2selected)
+        this.UnselectUser(username)
+    else
+        this.SelectUser(username)
 }
 
 UserSelect.prototype.UpdateSelectUser = function(username) {
