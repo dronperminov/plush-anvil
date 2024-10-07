@@ -13,9 +13,6 @@
                 <div class="menu-subitem">
                     <a href="/albums"><label>АЛЬБОМЫ</label></a>
                     <a href="/photos"><label>ВСЕ ФОТО</label></a>
-                    {% if user %}
-                    <a href="/photos-with-me"><label>ФОТО СО МНОЙ</label></a>
-                    {% endif %}
                     <a href="/photos-with-users"><label>ФОТО С ЛЮДЬМИ</label></a>
                 </div>
             </div>
@@ -56,7 +53,14 @@
 
             <div class="menu-item">
                 {% if user %}
-                <a href="/profile"><label class="profile"><img src="{{user.avatar_url}}"><span class="mobile-item"> МОЙ ПРОФИЛЬ</span></label></a>
+                <input class="subnav-checkbox" type="checkbox" id="profile-subnav">
+                <label for="profile-subnav" class="profile"><img src="{{user.avatar_url}}"><span class="mobile-item"> ПРОФИЛЬ</span></label>
+
+                <div class="menu-subitem">
+                    <a href="/profile"><label>МОЙ ПРОФИЛЬ</label></a>
+                    <a href="/photos-with-me"><label>ФОТО СО МНОЙ</label></a>
+                    <a href="/my-achievements"><label>МОИ ДОСТИЖЕНИЯ</label></a>
+                </div>
                 {% else %}
                 <a href="/login"><label><img src="/images/icons/login.svg"> ВХОД</label></a>
                 {% endif %}

@@ -32,6 +32,13 @@ def admin_redirect(back_url: str, user: Optional[User]) -> Optional[Response]:
     return None
 
 
+def authorized_action(user: Optional[User]) -> Optional[JSONResponse]:
+    if not user:
+        return JSONResponse({"status": "error", "message": "пользователь не авторизован"})
+
+    return None
+
+
 def admin_action(user: Optional[User]) -> Optional[JSONResponse]:
     if not user:
         return JSONResponse({"status": "error", "message": "пользователь не авторизован"})

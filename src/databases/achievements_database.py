@@ -13,9 +13,12 @@ from src.entities.achievements.solo_achievement import SoloAchievement
 from src.entities.achievements.team_achievements.diversity_month_achievement import DiversityMonthAchievement
 from src.entities.achievements.team_achievements.narrow_circle_achievement import NarrowCircleAchievement
 from src.entities.achievements.team_achievements.there_here_achievement import ThereHereAchievement
+from src.entities.achievements.user_achievements.games_count_achievement import GamesCountAchievement
+from src.entities.achievements.user_achievements.players_count_achievement import PlayersCountAchievement
 from src.entities.history_action import AddAchievementAction, RemoveAchievementAction
 from src.entities.quiz import Quiz
 from src.entities.user import User
+from src.enums import HandleAchievementType
 from src.query_params.page_query import PageQuery
 
 
@@ -45,9 +48,6 @@ class AchievementDatabase:
     def get_achievement(self, achievement_id: int) -> Optional[HandleAchievement]:
         achievement = self.database.achievements.find_one({"achievement_id": achievement_id})
         return HandleAchievement.from_dict(achievement) if achievement else None
-
-    def get_user_achievements(self, username: str) -> List[HandleAchievement]:
-        return [HandleAchievement.from_dict(achievement) for achievement in self.database.achievements.find({"username": username})]
 
     def get_achievement_users(self, params: PageQuery) -> Tuple[int, List[User], Dict[str, List[HandleAchievement]]]:
         username2achievements = defaultdict(list)
@@ -95,3 +95,69 @@ class AchievementDatabase:
 
         achievements = sorted(achievements, key=lambda achievement: achievement.count == 0)
         return len(achievements), achievements[params.skip:params.skip + params.page_size]
+
+    def get_user_achievements(self, params: PageQuery, username: str) -> Tuple[int, List[Achievement]]:
+        achievements = [
+            *self.__get_user_automatic_achievements(username=username),
+            *self.__get_user_handle_achievements(username=username),
+            self.__get_user_photos_achievement(username=username)
+        ]
+
+        for achievement in achievements:
+            achievement.set_label_date()
+
+        achievements = sorted(achievements, key=lambda achievement: achievement.count == 0)
+        return len(achievements), achievements[params.skip:params.skip + params.page_size]
+
+    def __get_user_handle_achievements(self, username: str) -> List[Achievement]:
+        type2achievements = {achievement_type: [] for achievement_type in HandleAchievementType}
+
+        for achievement in self.database.achievements.find({"username": username}):
+            achievement = HandleAchievement.from_dict(achievement)
+            type2achievements[achievement.achievement_type].append(achievement)
+
+        handle_achievements = []
+
+        for achievement_type, type_achievements in type2achievements.items():
+            handle_achievements.append(Achievement(
+                title=achievement_type.to_title(),
+                description=achievement_type.to_description(),
+                image_url=f"/images/achievements/{len(handle_achievements) + 1}.png",
+                count=len(type_achievements),
+                first_date=min([achievement.date for achievement in type_achievements], default=None)
+            ))
+
+        return handle_achievements
+
+    def __get_user_automatic_achievements(self, username: str) -> List[Achievement]:
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}, "participants.username": username}).sort("datetime")]
+        achievements = [
+            SoloAchievement(title="Одиночка", description="участвовать в соло", image="1.png"),
+            GamesCountAchievement(title="Частый гость", description="посетить 100 игр", image="2.png", target_count=100),
+            GamesCountAchievement(title="Преданный фанат", description="посетить 1000 игр", image="3.png", target_count=1000),
+            PlayersCountAchievement(title="Суперкоманда", description="участвовать в команде, состоящей из 10 и более игроков", image="4.png", min_count=10, max_count=12),
+            PlayersCountAchievement(title="Узким кругом", description="участвовать в команде, состоящей из 5 и менее игроков", image="5.png", min_count=1, max_count=5),
+            HardyAchievement(title="Выносливый", description="участвовать в двух играх в один день", image="6.png", min_count=2, max_count=2),
+            HardyAchievement(title="Очень выносливый", description="участвовать в трёх и более играх в один день", image="7.png", min_count=3, max_count=100),
+            PositionDaysAchievement(title="7 дней игр", description="участвовать в играх 7 дней подряд", image="8.png", target_count=7, max_position=100),
+
+            PositionCountAchievement(title="Призёр", description="посетить игру и войти в тройку", image="9.png", target_count=1, max_position=3),
+            PositionCountAchievement(title="Призёр-50", description="посетить 50 игр и войти в тройку", image="10.png", target_count=50, max_position=3),
+            PositionCountAchievement(title="Победитель", description="посетить победную игру", image="11.png", target_count=1, max_position=1),
+            PositionCountAchievement(title="Победитель-50", description="посетить 50 победных игр", image="12.png", target_count=50, max_position=1),
+        ]
+
+        for achievement in achievements:
+            achievement.analyze(quizzes=quizzes)
+
+        return achievements
+
+    def __get_user_photos_achievement(self, username: str) -> Achievement:
+        achievement = Achievement(title="Невидимка", description="не попасть на фото с игры", image_url="/images/achievements/1.png", count=0, first_date=None)
+        album_ids = [quiz["album_id"] for quiz in self.database.quizzes.find({"participants.username": username, "album_id": {"$ne": None}}, {"album_id": 1})]
+
+        for album in self.database.albums.find({"album_id": {"$in": album_ids}}):
+            if not self.database.markup.find_one({"photo_id": {"$in": album["photo_ids"]}, "username": username}):
+                achievement.increment(album["date"])
+
+        return achievement

@@ -1,4 +1,4 @@
-{% set title = "Достижения | Плюшевая наковальня" %}
+{% set title = "Мои достижения | Плюшевая наковальня" %}
 {% include "components/header.html" %}
     <link rel="stylesheet" type="text/css" href="/styles/common/achievements.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/entities/achievement.css?v={{version}}">
@@ -10,10 +10,10 @@
         <div class="bread-crumbs">
             <span><a href="/">Главная</a></span>
             <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Достижения</span>
+            <span class="bread-crumbs-current">Мои достижения</span>
         </div>
 
-        <h1>Достижения</h1>
+        <h1>Мои достижения</h1>
 
         <div id="achievements">
             <div class="search-results"></div>
@@ -32,7 +32,7 @@
     <script>
         let config = {
             pageSize: 6,
-            url: "/team-achievements",
+            url: "/user-achievements",
 
             getParams: GetParams,
             onLoad: LoadAchievements,

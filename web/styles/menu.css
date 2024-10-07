@@ -79,6 +79,11 @@
     border-radius: 0 0 1em 1em;
 }
 
+.menu-item:last-child .menu-subitem {
+    left: unset;
+    right: 0;
+}
+
 .menu-subitem a {
     padding: 1em 10px;
 }

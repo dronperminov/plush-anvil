@@ -14,3 +14,4 @@ ignore = ANN101, ANN003
 
 per-file-ignores =
     scripts/*:T201
+    src/api/profile.py:A005

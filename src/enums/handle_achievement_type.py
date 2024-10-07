@@ -12,13 +12,13 @@ class HandleAchievementType(Enum):
 
     def to_title(self) -> str:
         achievement_type2title = {
-            HandleAchievementType.TOPOGRAPHER: "топограф",
-            HandleAchievementType.OUT_OF_TIME: "вне времени",
-            HandleAchievementType.FORGETFUL: "забывчивый",
-            HandleAchievementType.APPEAL_MASTER: "мастер апелляций",
-            HandleAchievementType.EMPLOYEE: "сотрудник",
-            HandleAchievementType.AUTHOR: "автор",
-            HandleAchievementType.HONEST: "честный"
+            HandleAchievementType.TOPOGRAPHER: "Топограф",
+            HandleAchievementType.OUT_OF_TIME: "Вне времени",
+            HandleAchievementType.FORGETFUL: "Забывчивый",
+            HandleAchievementType.APPEAL_MASTER: "Мастер апелляций",
+            HandleAchievementType.EMPLOYEE: "Сотрудник",
+            HandleAchievementType.AUTHOR: "Автор",
+            HandleAchievementType.HONEST: "Честный"
         }
         return achievement_type2title[self]
 
