@@ -132,7 +132,7 @@ ul {
     height: calc(2em + 4px);
     align-items: center;
     grid-template-columns: 1fr 2em;
-    grid-gap: 1em;
+    grid-gap: 0.5em;
     cursor: pointer;
 }
 
@@ -164,6 +164,8 @@ ul {
     height: 2em;
     border-radius: 100%;
     background-color: var(--circle-color);
+    display: inline-block;
+    cursor: pointer;
 }
 
 .circle-link img {
@@ -172,7 +174,7 @@ ul {
 
 .add-link {
     text-align: right;
-    margin-top: -2em;
+    margin-top: -1.5em;
     margin-bottom: 2em;
 }
 

@@ -66,30 +66,34 @@ function UploadPhotos() {
         return
 
     let input = document.getElementById("photos-input")
+    let photos = document.getElementById("photos").children[1]
     let fetches = []
 
     for (let file of input.files)
-        fetches.push(UploadPhoto(file))
+        fetches.push(album.UploadPhoto(file, photos))
 
     Promise.all(fetches).then(() => GetAlbumPhotos())
 }
 
-function UploadPhoto(image) {
-    let data = new FormData()
-    data.append("image", image)
-    data.append("album_id", album.albumId)
+function RemovePhoto(photoId) {
+    if (!confirm("Вы уверены, что хотите удалить это фото?"))
+        return
 
-    let photos = document.getElementById("photos").children[1]
-    let photo = album.BuildPhoto({preview_url: "/images/albums/photo.webp"})
-    photos.prepend(photo)
-
-    return SendRequest("/upload-photo", data).then(response => {
-        if (response.status != SUCCESS_STATUS) {
-            photos.removeChild(photo)
-            ShowNotification(`Не удалось загрузить фото<br><b>Причина</b>: ${response.message}`)
-            return false
-        }
-
-        return true
+    album.RemovePhoto(photoId).then(result => {
+        if (result)
+            GetAlbumPhotos()
     })
+}
+
+function ToggleEditMode() {
+    let content = document.getElementById("content")
+    let editLink = document.getElementById("edit-link").children[0]
+    let addLink = document.getElementById("add-link")
+    content.classList.toggle("album-edit")
+
+    addLink.classList.toggle("hidden")
+    if (content.classList.contains("album-edit"))
+        editLink.innerText = "ЗАВЕРШИТЬ"
+    else
+        editLink.innerText = "ИЗМЕНИТЬ"
 }

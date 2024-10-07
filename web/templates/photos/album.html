@@ -6,7 +6,7 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
+    <div class="content" id="content">
         <div class="bread-crumbs">
             <span><a href="/">Главная</a></span>
             <img src="/images/icons/bread-crumbs-arrow.svg">
@@ -19,7 +19,8 @@
 
         {% if not album_type %}
         <div class="admin-block add-link">
-            <span class="arrow-link" onclick="SelectPhotos()"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+            <span class="arrow-link" onclick="ToggleEditMode()" id="edit-link"><span class="text">ИЗМЕНИТЬ</span> <span class="arrow"><img src="/images/icons/edit.svg"></span></span>
+            <span class="arrow-link" onclick="SelectPhotos()" id="add-link"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
             <input type="file" accept="images/*" id="photos-input" multiple onchange="UploadPhotos()">
         </div>
         {% elif album_type == "photos_with_me" %}

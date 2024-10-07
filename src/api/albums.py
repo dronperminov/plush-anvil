@@ -14,6 +14,7 @@ from src.entities.photo import Photo
 from src.entities.user import User
 from src.query_params.album_photos import AlbumPhotos
 from src.query_params.album_search import AlbumSearch, AlbumSearchQuery
+from src.query_params.remove_photo import RemovePhoto
 from src.query_params.upload_photo import UploadPhoto
 from src.utils.auth import get_user
 from src.utils.common import get_extension, get_static_hash, save_file
@@ -141,3 +142,16 @@ def upload_photo(params: UploadPhoto = Depends(), user: Optional[User] = Depends
 
     album_database.update_album(album_id=album.album_id, diff=album.get_diff(album_update), username=user.username)
     return JSONResponse({"status": "success", "photo": jsonable_encoder(album_database.get_photo(photo_id=photo_id))})
+
+
+@router.post("/remove-photo")
+def remove_photo(params: RemovePhoto, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    photo = album_database.get_photo(photo_id=params.photo_id)
+    if not photo:
+        return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемое фото, возможно, оно было удалено"})
+
+    album_database.remove_photo(photo_id=params.photo_id, username=user.username)
+    return JSONResponse({"status": "success"})

@@ -146,8 +146,11 @@ class AlbumDatabase:
 
         if not only_remove:
             album = self.get_album(album_id=photo.album_id)
-            diff = album.get_diff({"photo_ids": [album_photo_id for album_photo_id in album.photo_ids if album_photo_id != photo_id]})
-            self.update_album(album_id=album.album_id, diff=diff, username=username)
+            album_update = {"photo_ids": [album_photo_id for album_photo_id in album.photo_ids if album_photo_id != photo_id]}
+            if album.cover_id == photo_id:
+                album_update["cover_id"] = None
+
+            self.update_album(album_id=album.album_id, diff=album.get_diff(album_update), username=username)
 
         self.database.history.insert_one(action.to_dict())
         self.logger.info(f"Removed photo {photo.photo_id} by @{username}")

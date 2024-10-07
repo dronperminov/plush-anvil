@@ -27,5 +27,41 @@ Album.prototype.Build = function() {
 Album.prototype.BuildPhoto = function(photo) {
     let photoBlock = MakeElement("photo")
     MakeElement("", photoBlock, {src: photo.preview_url}, "img")
+
+    let removeIcon = MakeElement("admin-block photo-icon", photoBlock)
+    let circleLink = MakeElement("circle-link", removeIcon, {}, "span")
+    let icon = MakeElement("", circleLink, {src: "/images/icons/trash.svg"}, "img")
+    removeIcon.addEventListener("click", () => RemovePhoto(photo.photo_id))
+
     return photoBlock
+}
+
+Album.prototype.UploadPhoto = function(image, parent) {
+    let data = new FormData()
+    data.append("image", image)
+    data.append("album_id", this.albumId)
+
+    let photo = album.BuildPhoto({preview_url: "/images/albums/photo.webp"})
+    parent.prepend(photo)
+
+    return SendRequest("/upload-photo", data).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            parent.removeChild(photo)
+            ShowNotification(`Не удалось загрузить фото<br><b>Причина</b>: ${response.message}`)
+            return false
+        }
+
+        return true
+    })
+}
+
+Album.prototype.RemovePhoto = function(photoId) {
+    return SendRequest("/remove-photo", {photo_id: photoId}).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось удалить фото<br><b>Причина</b>: ${response.message}`)
+            return false
+        }
+
+        return true
+    })
 }
