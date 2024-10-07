@@ -1,4 +1,4 @@
-{% set title = "Альбомы | Плюшевая наковальня" %}
+{% set title = "%s | Плюшевая наковальня" % album.title %}
 {% include "components/header.html" %}
     <link rel="stylesheet" type="text/css" href="/styles/utils/user_select.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/photos/album.css?v={{version}}">
@@ -15,13 +15,16 @@
             <span class="bread-crumbs-current">{{album.title[:50]}}{% if album.title|length > 50 %}...{%endif %}</span>
         </div>
 
-        <h1 id="album-title">{{album.title}}</h1>
+        <h1>{{album.title}}</h1>
 
         {% if not album_type %}
         <div class="admin-block add-link">
             <span class="arrow-link" onclick="ToggleEditMode()" id="edit-link"><span class="text">ИЗМЕНИТЬ</span> <span class="arrow"><img src="/images/icons/edit.svg"></span></span>
             <span class="arrow-link" onclick="SelectPhotos()" id="add-link"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
             <input type="file" accept="images/*" id="photos-input" multiple onchange="UploadPhotos()">
+        </div>
+        <div class="album-controls hidden" id="edit-block">
+            <input class="basic-input" type="text" value={{album.title|tojson}} id="album-title" placeholder="введите название альбома" onchange="RenameAlbum()">
         </div>
         {% elif album_type == "photos_with_me" %}
         <div class="album-controls">

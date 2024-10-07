@@ -35,8 +35,7 @@ function PushUrlParams(params) {
 }
 
 function LoadAlbumPhotos(response, block) {
-    let title = document.getElementById("album-title")
-    title.innerText = response.album.title
+    ShowAlbumTitle(response.album.title)
 
     for (let photo of response.photos)
         block.appendChild(album.BuildPhoto(photo))
@@ -89,11 +88,34 @@ function ToggleEditMode() {
     let content = document.getElementById("content")
     let editLink = document.getElementById("edit-link").children[0]
     let addLink = document.getElementById("add-link")
+    let editBlock = document.getElementById("edit-block")
+
     content.classList.toggle("album-edit")
 
     addLink.classList.toggle("hidden")
+    editBlock.classList.toggle("hidden")
+
     if (content.classList.contains("album-edit"))
         editLink.innerText = "ЗАВЕРШИТЬ"
     else
         editLink.innerText = "ИЗМЕНИТЬ"
+}
+
+function RenameAlbum() {
+    let title = GetTextInput("album-title", "Название альбома не может быть пустым")
+    if (title === null || title == this.title)
+        return
+
+    album.RenameAlbum(title).then(result => {
+        if (!result)
+            return
+
+        ShowAlbumTitle(title)
+        ShowNotification(`Название альбома успешно изменено на "${title}"`, "success-notification")
+    })
+}
+
+function ShowAlbumTitle(title) {
+    document.querySelector("title").innerText = `${title} | Плюшевая наковальня`
+    document.querySelector("h1").innerText = title
 }

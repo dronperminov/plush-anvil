@@ -89,3 +89,15 @@ Album.prototype.SetCoverPhoto = function(photoId, coverIconImg) {
         return true
     })
 }
+
+Album.prototype.RenameAlbum = function(title) {
+    return SendRequest("/rename-album", {album_id: this.albumId, title: title}).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось изменить название альбома<br><b>Причина</b>: ${response.message}`)
+            return false
+        }
+
+        this.title = title
+        return true
+    })
+}
