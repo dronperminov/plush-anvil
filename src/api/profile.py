@@ -4,11 +4,12 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 
-from src import achievement_database
+from src import achievement_database, database
 from src.api import authorized_action, login_redirect, templates
 from src.entities.user import User
 from src.query_params.page_query import PageQuery
-from src.utils.auth import get_user
+from src.query_params.password_change import PasswordChange
+from src.utils.auth import get_password_hash, get_user, validate_password
 from src.utils.common import get_static_hash
 
 router = APIRouter()
@@ -31,3 +32,27 @@ def user_achievements(params: PageQuery, user: Optional[User] = Depends(get_user
 
     total, achievements = achievement_database.get_user_achievements(params=params, username=user.username)
     return JSONResponse({"status": "success", "total": total, "achievements": jsonable_encoder(achievements)})
+
+
+@router.get("/change-password")
+def get_change_password(user: Optional[User] = Depends(get_user)) -> Response:
+    if not user:
+        return login_redirect(back_url="/change-password")
+
+    template = templates.get_template("profile/change_password.html")
+    return HTMLResponse(content=template.render(version=get_static_hash(), user=user))
+
+
+@router.post("/change-password")
+def change_password(params: PasswordChange, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := authorized_action(user):
+        return response
+
+    if not validate_password(params.curr_password, user.password_hash):
+        return JSONResponse({"status": "error", "message": "Текущий пароль введён неверно"})
+
+    if params.curr_password == params.password:
+        return JSONResponse({"status": "error", "message": "Текущий пароль совпадает с новым"})
+
+    database.users.update_one({"username": user.username}, {"$set": {"password_hash": get_password_hash(params.password)}})
+    return JSONResponse({"status": "success"})
