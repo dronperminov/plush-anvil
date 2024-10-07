@@ -28,12 +28,20 @@ Album.prototype.BuildPhoto = function(photo) {
     let photoBlock = MakeElement("photo")
     MakeElement("", photoBlock, {src: photo.preview_url}, "img")
 
-    let removeIcon = MakeElement("admin-block photo-icon", photoBlock)
-    let circleLink = MakeElement("circle-link", removeIcon, {}, "span")
-    let icon = MakeElement("", circleLink, {src: "/images/icons/trash.svg"}, "img")
+    let removeIcon = this.BuildPhotoIcon("photo-remove-icon", "/images/icons/trash.svg", photoBlock)
     removeIcon.addEventListener("click", () => RemovePhoto(photo.photo_id))
 
+    let coverIcon = this.BuildPhotoIcon("photo-cover-icon", "/images/icons/" + (this.coverId === photo.photo_id ? "star-fill.svg" : "star.svg"), photoBlock)
+    coverIcon.addEventListener("click", () => this.SetCoverPhoto(photo.photo_id, coverIcon.querySelector("img")))
+
     return photoBlock
+}
+
+Album.prototype.BuildPhotoIcon = function(className, icon, parent) {
+    let iconBlock = MakeElement(`admin-block photo-icon ${className}`, parent)
+    let circleLink = MakeElement("circle-link", iconBlock, {}, "span")
+    MakeElement("", circleLink, {src: icon}, "img")
+    return iconBlock
 }
 
 Album.prototype.UploadPhoto = function(image, parent) {
@@ -62,6 +70,22 @@ Album.prototype.RemovePhoto = function(photoId) {
             return false
         }
 
+        return true
+    })
+}
+
+Album.prototype.SetCoverPhoto = function(photoId, coverIconImg) {
+    return SendRequest("/set-cover-photo", {album_id: this.albumId, photo_id: photoId}).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось установить фото в качестве обложки<br><b>Причина</b>: ${response.message}`)
+            return false
+        }
+
+        for (let coverIcon of document.querySelectorAll(".photo-cover-icon img"))
+            coverIcon.src = "/images/icons/star.svg"
+
+        coverIconImg.src = "/images/icons/star-fill.svg"
+        this.coverId = photoId
         return true
     })
 }

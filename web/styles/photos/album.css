@@ -18,14 +18,22 @@
 
 .photo .photo-icon {
     position: absolute;
-    top: 5px;
-    right: 5px;
     font-size: 0.9em;
     display: none;
 }
 
 .album-edit .photo .photo-icon {
     display: block;
+}
+
+.photo-remove-icon {
+    top: 5px;
+    right: 5px;
+}
+
+.photo-cover-icon {
+    bottom: 5px;
+    right: 5px;
 }
 
 .album-controls {

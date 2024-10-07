@@ -14,7 +14,7 @@ def crop_image_square(path: str, size: int) -> None:
 
 
 def make_preview(input_path: str, output_path: str, preview_width: Optional[int] = 500, preview_height: Optional[int] = None) -> None:
-    image = cv2.imread(input_path, cv2.IMREAD_UNCHANGED)
+    image = cv2.imread(input_path)
     image_height, image_width = image.shape[:2]
 
     if preview_width is None:
