@@ -57,3 +57,7 @@ def transliterate(name: str) -> str:
 def save_file(file: UploadFile, output_path: str) -> None:
     with open(output_path, "wb") as f:
         shutil.copyfileobj(file.file, f)
+
+
+def get_extension(filename: str) -> str:
+    return filename.rsplit(".", maxsplit=1)[-1]

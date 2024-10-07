@@ -10,7 +10,7 @@ import-order-style = pycharm
 extend-immutable-calls = Depends, OAuth2PasswordBearer, File, Query, Cookie
 
 exclude = .git, __pycache__, .idea
-ignore = ANN101
+ignore = ANN101, ANN003
 
 per-file-ignores =
     scripts/*:T201

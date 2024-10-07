@@ -92,7 +92,7 @@
             {% for album in last_albums %}
             <div class="top-album">
                 <a href="/albums/{{album.album_id}}">
-                    <img src="https://plush-anvil.ru{{photo_id2photo[album.cover_id].url}}">
+                    <img src="{{photo_id2photo[album.cover_id].url}}" loading="lazy">
                 </a>
             </div>
             {% endfor %}

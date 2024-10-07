@@ -52,3 +52,44 @@ function GetAlbumPhotos() {
     infiniteScroll.Reset()
     infiniteScroll.LoadContent()
 }
+
+function SelectPhotos() {
+    if (typeof album.albumId !== 'number')
+        return
+
+    let input = document.getElementById("photos-input")
+    input.click()
+}
+
+function UploadPhotos() {
+    if (typeof album.albumId !== 'number')
+        return
+
+    let input = document.getElementById("photos-input")
+    let fetches = []
+
+    for (let file of input.files)
+        fetches.push(UploadPhoto(file))
+
+    Promise.all(fetches).then(() => GetAlbumPhotos())
+}
+
+function UploadPhoto(image) {
+    let data = new FormData()
+    data.append("image", image)
+    data.append("album_id", album.albumId)
+
+    let photos = document.getElementById("photos").children[1]
+    let photo = album.BuildPhoto({preview_url: "/images/albums/photo.webp"})
+    photos.prepend(photo)
+
+    return SendRequest("/upload-photo", data).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            photos.removeChild(photo)
+            ShowNotification(`Не удалось загрузить фото<br><b>Причина</b>: ${response.message}`)
+            return false
+        }
+
+        return true
+    })
+}

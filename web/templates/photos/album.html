@@ -17,7 +17,12 @@
 
         <h1 id="album-title">{{album.title}}</h1>
 
-        {% if album_type == "photos_with_me" %}
+        {% if not album_type %}
+        <div class="admin-block add-link">
+            <span class="arrow-link" onclick="SelectPhotos()"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+            <input type="file" accept="images/*" id="photos-input" multiple onchange="UploadPhotos()">
+        </div>
+        {% elif album_type == "photos_with_me" %}
         <div class="album-controls">
             <div>
                 <label class="switch-checkbox">

@@ -29,6 +29,10 @@
     font-weight: bold;
 }
 
+input[type="file"] {
+    display: none;
+}
+
 @media (max-width: 1023px) {
     .photos {
         grid-template-columns: 1fr 1fr 1fr;

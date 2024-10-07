@@ -82,6 +82,10 @@ html {
     background-color: var(--background-color);
 }
 
+html:not([data-user-role="admin"]) .admin-block {
+    display: none;
+}
+
 h1 {
     font-size: 3em;
     margin-bottom: 1em;

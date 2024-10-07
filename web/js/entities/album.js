@@ -6,7 +6,7 @@ function Album(album, photoId2photo) {
     this.photoIds = album.photo_ids
     this.photoId2photo = photoId2photo
 
-    this.coverUrl = this.coverId in photoId2photo ? `https://plush-anvil.ru${photoId2photo[this.coverId].preview_url}` : "/images/albums/default.png"
+    this.coverUrl = this.coverId in photoId2photo ? photoId2photo[this.coverId].preview_url : "/images/albums/default.webp"
 }
 
 Album.prototype.Build = function() {
@@ -26,6 +26,6 @@ Album.prototype.Build = function() {
 
 Album.prototype.BuildPhoto = function(photo) {
     let photoBlock = MakeElement("photo")
-    MakeElement("", photoBlock, {src: `https://plush-anvil.ru${photo.preview_url}`}, "img")
+    MakeElement("", photoBlock, {src: photo.preview_url}, "img")
     return photoBlock
 }
