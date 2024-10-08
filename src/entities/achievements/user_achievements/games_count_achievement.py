@@ -14,7 +14,7 @@ class GamesCountAchievement(Achievement):
 
     def analyze(self, quizzes: List[Quiz]) -> None:
         if len(quizzes) < self.target_count:
-            self.label_date = f'ещё {get_word_form(self.target_count - len(quizzes), ["игр", "игры", "игра"])}'
+            self.label_date = f'ещё {get_word_form(self.target_count - len(quizzes), ["игра", "игры", "игр"])}'
             return
 
         self.count = len(quizzes) // self.target_count

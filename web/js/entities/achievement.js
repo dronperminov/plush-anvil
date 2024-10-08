@@ -33,7 +33,7 @@ Achievement.prototype.GetDateText = function() {
     let text = "пока не открыто"
 
     if (this.labelDate)
-        text += `(${this.labelDate})`
+        text += ` (${this.labelDate})`
 
     return text
 }
