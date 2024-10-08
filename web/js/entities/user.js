@@ -12,7 +12,7 @@ User.prototype.BuildProfile = function(parent, days) {
     let imageCropper = new ImageCropper(imageInput)
 
     image.addEventListener("click", () => imageInput.click())
-    imageCropper.onselect = () => this.UploadAvatar(imageCropper, imageInput, image)
+    imageCropper.onselect = (buttons) => this.UploadAvatar(imageCropper, imageInput, image, buttons)
 
     let profileName = MakeElement("profile-name", parent)
     let name = MakeElement("basic-input text-input", profileName, {type: "text", id: "full-name", value: this.fullname}, "input")
@@ -205,10 +205,13 @@ User.prototype.ChangeFullName = function(input) {
     })
 }
 
-User.prototype.UploadAvatar = function(cropper, input, image) {
+User.prototype.UploadAvatar = function(cropper, input, image, buttons) {
     input.value = null
+    Disable(buttons)
 
     SendRequest("/change-avatar", cropper.GetData()).then(response => {
+        Enable(buttons)
+
         if (response.status != SUCCESS_STATUS) {
             ShowNotification(`Не удалось обновить изображение профиля<br><b>Причина</b>: ${response.message}`)
             return

@@ -20,18 +20,20 @@ ImageCropper.prototype.Build = function() {
     let saveButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Сохранить"}, "button")
 
     this.image.addEventListener("load", () => this.Show())
+    this.view.addEventListener("wheel", (e) => this.MouseWheel(e))
+
     this.view.addEventListener("mousedown", (e) => this.MouseDown(e))
     this.view.addEventListener("mousemove", (e) => this.MouseMove(e))
     this.view.addEventListener("mouseup", (e) => this.MouseUp())
     this.view.addEventListener("mouseleave", (e) => this.MouseUp())
+
     this.view.addEventListener("touchstart", (e) => this.TouchStart(e))
     this.view.addEventListener("touchmove", (e) => this.TouchMove(e))
     this.view.addEventListener("touchend", (e) => this.TouchEnd(e))
     this.view.addEventListener("touchleave", (e) => this.TouchEnd(e))
-    this.view.addEventListener("wheel", (e) => this.MouseWheel(e))
 
     closeButton.addEventListener("click", () => this.Close())
-    saveButton.addEventListener("click", () => this.onselect())
+    saveButton.addEventListener("click", () => this.onselect([closeButton, saveButton]))
 }
 
 ImageCropper.prototype.Load = function() {
@@ -144,12 +146,12 @@ ImageCropper.prototype.GetTouchPoint = function(point) {
 ImageCropper.prototype.TouchStart = function(e) {
     e.preventDefault()
 
-    if (e.targetTouches.length > 2)
+    if (e.touches.length > 1)
         return
 
     this.isPressed = true
 
-    let point = this.GetTouchPoint(e.targetTouches[0])
+    let point = this.GetTouchPoint(e.touches[0])
 
     this.offsetX = point.offsetX - this.size / 2
     this.offsetY = point.offsetY - this.size / 2
@@ -165,13 +167,13 @@ ImageCropper.prototype.TouchMove = function(e) {
 
     e.preventDefault()
 
-    if (e.targetTouches.length > 2)
+    if (e.touches.length > 2)
         return
 
-    let point = this.GetTouchPoint(e.targetTouches[0])
+    let point = this.GetTouchPoint(e.touches[0])
 
-    if (e.targetTouches.length == 2) {
-        let point2 = this.GetTouchPoint(e.targetTouches[1])
+    if (e.touches.length == 2) {
+        let point2 = this.GetTouchPoint(e.touches[1])
         this.offsetX = Math.min(point.offsetX, point2.offsetX)
         this.offsetY = Math.min(point.offsetY, point2.offsetY)
         this.size = this.GetDistance({x: point.offsetX, y: point.offsetY}, {x: point2.offsetX, y: point2.offsetY})
@@ -187,7 +189,7 @@ ImageCropper.prototype.TouchMove = function(e) {
 }
 
 ImageCropper.prototype.TouchEnd = function(e) {
-    if (e.targetTouches.length === 0)
+    if (e.touches.length === 0)
         this.isPressed = false
 }
 

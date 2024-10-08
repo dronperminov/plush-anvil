@@ -14,7 +14,6 @@
     grid-template-rows: max-content 50px;
     align-items: center;
     justify-items: center;
-    cursor: pointer;
 }
 
 .image-cropper-showed {
