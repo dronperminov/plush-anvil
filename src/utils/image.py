@@ -14,14 +14,15 @@ def crop_image_square(path: str, size: int) -> None:
 
 
 def make_avatar(path: str, x: float, y: float, size: float, output_size: int = 200) -> None:
-    image = cv2.imread(path, cv2.IMREAD_UNCHANGED)
+    image = cv2.imread(path)
     height, width = image.shape[:2]
 
-    x = max(0, min(width - 1, int(x * width)))
-    y = max(0, min(height - 1, int(y * height)))
+    x = max(0, min(width - 1, int(x * min(width, height))))
+    y = max(0, min(height - 1, int(y * min(width, height))))
     size = max(0, int(size * min(width, height)))
 
-    image = cv2.resize(image[y:y + size, x:x + size], (output_size, output_size), interpolation=cv2.INTER_AREA)
+    image = image[y:y + size, x:x + size]
+    image = cv2.resize(image, (output_size, output_size), interpolation=cv2.INTER_AREA)
     cv2.imwrite(path, image)
 
 

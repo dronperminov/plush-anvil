@@ -8,9 +8,11 @@ function User(user) {
 User.prototype.BuildProfile = function(parent, days) {
     let profileImage = MakeElement("profile-image", parent)
     let image = MakeElement("", profileImage, {src: this.avatarUrl}, "img")
-    let imageInput = MakeElement("", profileImage, {type: "file", accept: "images/*"}, "input")
-    imageInput.addEventListener("change", () => this.UploadAvatar(imageInput, image))
+    let imageInput = MakeElement("", profileImage, {type: "file", accept: "image/*"}, "input")
+    let imageCropper = new ImageCropper(imageInput)
+
     image.addEventListener("click", () => imageInput.click())
+    imageCropper.onselect = () => this.UploadAvatar(imageCropper, imageInput, image)
 
     let profileName = MakeElement("profile-name", parent)
     let name = MakeElement("basic-input text-input", profileName, {type: "text", id: "full-name", value: this.fullname}, "input")
@@ -203,14 +205,10 @@ User.prototype.ChangeFullName = function(input) {
     })
 }
 
-User.prototype.UploadAvatar = function(input, image) {
-    let data = new FormData()
-    data.append("image", input.files[0])
-    data.append("x", 0)
-    data.append("y", 0)
-    data.append("size", 1)
+User.prototype.UploadAvatar = function(cropper, input, image) {
+    input.value = null
 
-    SendRequest("/change-avatar", data).then(response => {
+    SendRequest("/change-avatar", cropper.GetData()).then(response => {
         if (response.status != SUCCESS_STATUS) {
             ShowNotification(`Не удалось обновить изображение профиля<br><b>Причина</b>: ${response.message}`)
             return
@@ -219,5 +217,7 @@ User.prototype.UploadAvatar = function(input, image) {
         ShowNotification("Изображение профиля успешно обновлено", "success-notification")
         this.avatarUrl = response.avatar_url
         image.src = this.avatarUrl
+        document.querySelector(".menu .profile img").src = this.avatarUrl
+        cropper.Close()
     })
 }

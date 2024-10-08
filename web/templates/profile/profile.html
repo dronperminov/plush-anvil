@@ -1,5 +1,6 @@
 {% set title = "%s (@%s) | Плюшевая наковальня" % (user.full_name, user.username) %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/utils/image_cropper.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/profile/profile.css?v={{version}}">
 </head>
 <body ondragstart="return false">
@@ -34,6 +35,8 @@
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/utils/image_cropper.js?v={{version}}"></script>
+
     <script src="/js/entities/user.js?v={{version}}"></script>
     <script src="/js/profile/profile.js?v={{version}}"></script>
     <script>

@@ -88,8 +88,16 @@ function SetAttributes(element, attributes) {
 }
 
 function MakeElement(className, parent = null, attributes = null, tagName = "div") {
-    let element = document.createElement(tagName)
-    element.className = className
+    let element = null
+
+    if (["svg", "path"].indexOf(tagName) > -1) {
+        element = document.createElementNS("http://www.w3.org/2000/svg", tagName)
+        element.setAttribute("class", className)
+    }
+    else {
+        element = document.createElement(tagName)
+        element.className = className
+    }
 
     SetAttributes(element, attributes)
 

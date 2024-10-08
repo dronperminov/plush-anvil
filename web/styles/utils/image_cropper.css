@@ -1,0 +1,54 @@
+.image-cropper-popup {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: #ffffffdd;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: opacity 0.2s;
+    padding: 1em;
+    display: grid;
+    grid-template-rows: max-content 50px;
+    align-items: center;
+    justify-items: center;
+    cursor: pointer;
+}
+
+.image-cropper-showed {
+    opacity: 1;
+    pointer-events: all;
+    transition: opacity 0.2s;
+}
+
+.image-cropper-view {
+    position: relative;
+    cursor: default;
+}
+
+.image-cropper-image {
+    max-height: calc(100dvh - 2em - 50px);
+    max-width: 100%;
+    border: 1px solid var(--text-color);
+}
+
+.image-cropper-cropper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+}
+
+.image-cropper-path {
+    fill: #000000bb;
+    stroke: #ffffffbb;
+}
+
+.image-cropper-buttons {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 0.5em;
+}
