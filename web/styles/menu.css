@@ -82,6 +82,7 @@
 .menu-item:last-child .menu-subitem {
     left: unset;
     right: 0;
+    text-align: right;
 }
 
 .menu-subitem a {
