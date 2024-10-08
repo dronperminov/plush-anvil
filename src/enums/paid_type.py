@@ -14,3 +14,11 @@ class PaidType(Enum):
         }
 
         return paid_type2rus[self]
+
+    def to_games(self) -> int:
+        paid_type2games = {
+            PaidType.PAID: 1,
+            PaidType.STICKERS: -10,
+            PaidType.FREE: 0
+        }
+        return paid_type2games[self]

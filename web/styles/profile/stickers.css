@@ -1,0 +1,75 @@
+.stickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-gap: 1em;
+    width: 100%;
+}
+
+.sticker {
+    position: relative;
+    padding: 1em;
+    border-radius: 1em;
+    background: linear-gradient(130deg, #440076 8%, #c90267 100%);
+
+    display: grid;
+    grid-template-rows: 2em 1fr;
+    grid-gap: 0.5em;
+}
+
+.sticker-used:after {
+    content: "";
+    background: #ffffff80;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 1em;
+}
+
+.sticker-use {
+    background-color: #ffffff;
+    border-radius: 1em;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    font-weight: bold;
+}
+
+.sticker-cells {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 0.5em 0.2em;
+    align-items: center;
+    justify-items: center;
+}
+
+.sticker-cell {
+    font-size: 0.6em;
+    color: #ffffff;
+    text-align: center;
+}
+
+.sticker-cell img {
+    width: 70%;
+    vertical-align: middle;
+    margin-bottom: 0.2em;
+}
+
+@media (max-width: 1199px) {
+    .stickers {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@media (max-width: 919px) {
+    .stickers {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 539px) {
+    .stickers {
+        grid-template-columns: 1fr;
+    }
+}

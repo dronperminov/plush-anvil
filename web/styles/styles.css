@@ -108,6 +108,12 @@ ul {
     overflow: hidden;
 }
 
+.description {
+    margin-top: -1em;
+    margin-bottom: 1em;
+    color: var(--subtext-color);
+}
+
 .content {
     max-width: var(--max-width);
     margin: 0 auto;

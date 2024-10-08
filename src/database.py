@@ -99,6 +99,9 @@ class Database:
 
         return username2paid_info
 
+    def get_user_paid_info(self, username: str) -> List[PaidInfo]:
+        return [PaidInfo(date=paid_date["date"], paid_type=PaidType.PAID, extra=True) for paid_date in self.paid_dates.find({"username": username})]
+
     def get_identifier(self, collection_name: str) -> int:
         identifier = self.identifiers.find_one_and_update({"_id": collection_name}, {"$inc": {"value": 1}}, return_document=True)
         return identifier["value"]

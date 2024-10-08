@@ -9,6 +9,7 @@ from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQu
 from src.entities.paid_date import PaidDate
 from src.entities.paid_info import PaidInfo
 from src.entities.quiz import Quiz
+from src.entities.sticker import Sticker
 from src.entities.sticker_info import StickerInfo
 from src.entities.user import User
 from src.enums import PaidType
@@ -108,7 +109,7 @@ class QuizDatabase:
         username2user = {user["username"]: User.from_dict(user) for user in self.database.users.find({"stickers_start_date": {"$ne": None}})}
         username2paid_infos = self.database.get_users_paid_info(usernames=list(username2user))
 
-        for quiz in self.database.quizzes.find({"organizer_id": self.__get_smuzi_id(), "datetime": {"$gte": datetime(2024, 4, 1)}}):
+        for quiz in self.database.quizzes.find(self.__get_stickers_query()):
             for participant in quiz["participants"]:
                 username = participant["username"]
                 paid_type = PaidType(participant["paid_type"])
@@ -128,6 +129,25 @@ class QuizDatabase:
         users = sorted([username2user[username] for username in username2sticker_info], key=lambda user: -username2sticker_info[user.username].games)
         return len(username2sticker_info), users[params.skip:params.skip + params.page_size], username2sticker_info
 
+    def get_user_stickers(self, username: str) -> Tuple[int, List[Sticker]]:
+        user = self.database.get_user(username=username)
+        paid_infos = self.database.get_user_paid_info(username=username)
+
+        for quiz in self.database.quizzes.find({**self.__get_stickers_query(), "participants.username": username}):
+            for participant in quiz["participants"]:
+                paid_type = PaidType(participant["paid_type"])
+
+                if participant["username"] == username and paid_type != PaidType.FREE and user.is_valid_sticker_date(quiz["datetime"]):
+                    paid_infos.append(PaidInfo(date=quiz["datetime"], paid_type=paid_type, extra=False))
+
+        paid_infos = sorted(paid_infos, key=lambda paid_info: paid_info.date, reverse=True)
+        end_index = self.__get_last_free_game(paid_infos)
+        stickers = Sticker.from_paid_infos(paid_infos=paid_infos if end_index == -1 else paid_infos[:end_index])
+        return self.__get_paid_games(paid_infos=paid_infos), stickers
+
+    def __get_stickers_query(self) -> dict:
+        return {"organizer_id": self.__get_smuzi_id(), "datetime": {"$gte": datetime(2024, 4, 1)}}
+
     def __get_smuzi_id(self) -> int:
         organizer = self.database.organizers.find_one({"name": "Смузи"}, {"organizer_id": 1})
         return organizer["organizer_id"]
@@ -138,14 +158,7 @@ class QuizDatabase:
         if end_index == -1:
             return len(paid_infos)
 
-        paid_games = 0
-        for paid_info in paid_infos[:end_index]:
-            if paid_info.paid_type == PaidType.PAID:
-                paid_games += 1
-            elif paid_info.paid_type == PaidType.STICKERS:
-                paid_games -= 10
-
-        return paid_games
+        return sum(paid_info.paid_type.to_games() for paid_info in paid_infos[:end_index])
 
     def __get_last_free_game(self, paid_infos: List[PaidInfo]) -> int:
         paid_games = 0
