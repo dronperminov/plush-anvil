@@ -2,8 +2,12 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+from fastapi import UploadFile
+
 from src.entities.birth_date import BirthDate
 from src.enums import UserRole
+from src.utils.common import get_extension, save_file
+from src.utils.image import make_avatar
 
 
 @dataclass
@@ -41,3 +45,11 @@ class User:
 
     def is_valid_sticker_date(self, date: datetime) -> bool:
         return self.stickers_start_date is not None and self.stickers_start_date <= date
+
+    def save_avatar(self, image: UploadFile, x: float, y: float, size: float) -> str:
+        extension = get_extension(image.filename)
+        avatar_path = f"web/images/profiles/{self.username}.{extension}"
+        save_file(image, avatar_path)
+        make_avatar(path=avatar_path, x=x, y=y, size=size)
+
+        return f"/profile-images/{self.username}.{extension}?v={int(datetime.now().timestamp())}"

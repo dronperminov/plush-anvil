@@ -7,6 +7,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from src import achievement_database, album_database, database, quiz_database
 from src.api import authorized_action, login_redirect, templates
 from src.entities.user import User
+from src.query_params.avatar_change import AvatarChange
 from src.query_params.full_name_change import FullNameChange
 from src.query_params.page_query import PageQuery
 from src.query_params.password_change import PasswordChange
@@ -91,3 +92,13 @@ def change_full_name(params: FullNameChange, user: Optional[User] = Depends(get_
 
     database.users.update_one({"username": user.username}, {"$set": {"full_name": params.full_name}})
     return JSONResponse({"status": "success"})
+
+
+@router.post("/change-avatar")
+def change_avatar(params: AvatarChange = Depends(), user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := authorized_action(user):
+        return response
+
+    avatar_url = user.save_avatar(image=params.image, x=params.x, y=params.y, size=params.size)
+    database.users.update_one({"username": user.username}, {"$set": {"avatar_url": avatar_url}})
+    return JSONResponse({"status": "success", "avatar_url": avatar_url})

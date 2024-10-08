@@ -8,6 +8,9 @@ function User(user) {
 User.prototype.BuildProfile = function(parent, days) {
     let profileImage = MakeElement("profile-image", parent)
     let image = MakeElement("", profileImage, {src: this.avatarUrl}, "img")
+    let imageInput = MakeElement("", profileImage, {type: "file", accept: "images/*"}, "input")
+    imageInput.addEventListener("change", () => this.UploadAvatar(imageInput, image))
+    image.addEventListener("click", () => imageInput.click())
 
     let profileName = MakeElement("profile-name", parent)
     let name = MakeElement("basic-input text-input", profileName, {type: "text", id: "full-name", value: this.fullname}, "input")
@@ -197,5 +200,24 @@ User.prototype.ChangeFullName = function(input) {
         ShowNotification("Имя успешно обновлено", "success-notification")
         this.fullname = fullname
         input.blur()
+    })
+}
+
+User.prototype.UploadAvatar = function(input, image) {
+    let data = new FormData()
+    data.append("image", input.files[0])
+    data.append("x", 0)
+    data.append("y", 0)
+    data.append("size", 1)
+
+    SendRequest("/change-avatar", data).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось обновить изображение профиля<br><b>Причина</b>: ${response.message}`)
+            return
+        }
+
+        ShowNotification("Изображение профиля успешно обновлено", "success-notification")
+        this.avatarUrl = response.avatar_url
+        image.src = this.avatarUrl
     })
 }
