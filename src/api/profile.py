@@ -4,15 +4,27 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 
-from src import achievement_database, database, quiz_database
+from src import achievement_database, album_database, database, quiz_database
 from src.api import authorized_action, login_redirect, templates
 from src.entities.user import User
+from src.query_params.full_name_change import FullNameChange
 from src.query_params.page_query import PageQuery
 from src.query_params.password_change import PasswordChange
 from src.utils.auth import get_password_hash, get_user, validate_password
 from src.utils.common import get_static_hash, get_word_form
 
 router = APIRouter()
+
+
+@router.get("/profile")
+def get_profile(user: Optional[User] = Depends(get_user)) -> Response:
+    if not user:
+        return login_redirect(back_url="/profile")
+
+    user_photos = album_database.get_user_photos(username=user.username)
+    template = templates.get_template("profile/profile.html")
+    content = template.render(version=get_static_hash(), user=user, user_photos=user_photos, jsonable_encoder=jsonable_encoder)
+    return HTMLResponse(content=content)
 
 
 @router.get("/my-achievements")
@@ -60,10 +72,22 @@ def change_password(params: PasswordChange, user: Optional[User] = Depends(get_u
         return response
 
     if not validate_password(params.curr_password, user.password_hash):
-        return JSONResponse({"status": "error", "message": "Текущий пароль введён неверно"})
+        return JSONResponse({"status": "error", "message": "текущий пароль введён неверно"})
 
     if params.curr_password == params.password:
-        return JSONResponse({"status": "error", "message": "Текущий пароль совпадает с новым"})
+        return JSONResponse({"status": "error", "message": "текущий пароль совпадает с новым"})
 
     database.users.update_one({"username": user.username}, {"$set": {"password_hash": get_password_hash(params.password)}})
+    return JSONResponse({"status": "success"})
+
+
+@router.post("/change-full-name")
+def change_full_name(params: FullNameChange, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := authorized_action(user):
+        return response
+
+    if not params.full_name:
+        return JSONResponse({"status": "error", "message": "имя пользователя не может быть пустым"})
+
+    database.users.update_one({"username": user.username}, {"$set": {"full_name": params.full_name}})
     return JSONResponse({"status": "success"})

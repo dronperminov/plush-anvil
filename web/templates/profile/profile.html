@@ -1,0 +1,47 @@
+{% set title = "%s (@%s) | Плюшевая наковальня" % (user.full_name, user.username) %}
+{% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/profile/profile.css?v={{version}}">
+</head>
+<body ondragstart="return false">
+    {% include "components/menu.html" %}
+
+    <div class="content">
+        <div class="bread-crumbs">
+            <span><a href="/">Главная</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span class="bread-crumbs-current">Профиль</span>
+        </div>
+
+        <h1>Мой профиль</h1>
+
+        <div class="profile" id="profile"></div>
+
+        {% if user_photos %}
+        <div class="link-header">
+            <h2>ФОТО СО МНОЙ</h2>
+            <a class="arrow-link" href="/photos-with-me"><span class="text">ЕЩЁ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+        </div>
+
+        <div class="photos">
+            {% for photo in user_photos %}
+            <div class="photo">
+                <a href="/photos-with-me"><img src="{{photo.preview_url}}"></a>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <script src="/js/utils/utils.js?v={{version}}"></script>
+    <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/entities/user.js?v={{version}}"></script>
+    <script src="/js/profile/profile.js?v={{version}}"></script>
+    <script>
+        let user = new User({{jsonable_encoder(user)|tojson}})
+        let profile = document.getElementById("profile")
+
+        user.BuildProfile(profile, {{user.birth_date.get_days() if user.birth_date else None}})
+    </script>
+    {% include "components/footer.html" %}
+</body>
+</html>

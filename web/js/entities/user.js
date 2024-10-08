@@ -5,6 +5,42 @@ function User(user) {
     this.birthDate = user.birth_date
 }
 
+User.prototype.BuildProfile = function(parent, days) {
+    let profileImage = MakeElement("profile-image", parent)
+    let image = MakeElement("", profileImage, {src: this.avatarUrl}, "img")
+
+    let profileName = MakeElement("profile-name", parent)
+    let name = MakeElement("basic-input text-input", profileName, {type: "text", id: "full-name", value: this.fullname}, "input")
+
+    let profileBirthday = MakeElement("profile-birthday", parent)
+    MakeElement("", profileBirthday, {src: "/images/icons/birthday.svg"}, "img")
+
+    if (this.birthDate !== null) {
+        let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
+        let day = `${this.birthDate.day}`.padStart(2, "0")
+        MakeElement("", profileBirthday, {innerText: ` ${day} ${months[this.birthDate.month - 1]}`}, "span")
+    }
+    else {
+        MakeElement("", profileBirthday, {innerText: "не указан"}, "span")
+    }
+
+    name.addEventListener("change", () => this.ChangeFullName(name))
+    name.addEventListener("focus", () => {
+        name.classList.remove("text-input")
+    })
+
+    name.addEventListener("blur", () => {
+        if (name.value.trim() === "") {
+            name.value = this.fullname
+            name.classList.remove("error-input")
+        }
+
+        name.classList.add("text-input")
+    })
+
+    return profile
+}
+
 User.prototype.BuildBirthday = function(days) {
     let user = MakeElement("user")
 
@@ -144,4 +180,22 @@ User.prototype.GetStickerPaidType = function(paidInfo) {
 
     let paidType = new PaidType(paidInfo.paid_type)
     return paidType.ToRus()
+}
+
+User.prototype.ChangeFullName = function(input) {
+    let fullname = GetTextInput("full-name", "Имя пользователя не указано")
+    if (fullname === null)
+        return
+
+    SendRequest("/change-full-name", {full_name: fullname}).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось обновить имя<br><b>Причина</b>: ${response.message}`)
+            input.value = this.fullname
+            return
+        }
+
+        ShowNotification("Имя успешно обновлено", "success-notification")
+        this.fullname = fullname
+        input.blur()
+    })
 }

@@ -233,3 +233,8 @@ class AlbumDatabase:
 
         users = sorted([User.from_dict(user) for user in self.database.users.find({})], key=lambda user: -username2score[user.username])
         return users
+
+    def get_user_photos(self, username: str, max_count: int = 10) -> List[Photo]:
+        photo_ids = [markup["photo_id"] for markup in self.database.markup.find({"username": username}, {"photo_id": 1})]
+        photos = [Photo.from_dict(photo) for photo in self.database.photos.find({"photo_id": {"$in": photo_ids}}).sort({"timestamp": -1}).limit(max_count)]
+        return photos
