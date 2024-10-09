@@ -51,11 +51,13 @@
     <script src="/js/utils/content_loader.js?v={{version}}"></script>
 
     <script src="/js/plots/year_grid.js?v={{version}}"></script>
+    <script src="/js/plots/bar_chart.js?v={{version}}"></script>
 
     <script src="/js/about/analytics.js?v={{version}}"></script>
     <script>
         let loaderConfigs = [
-            {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity, load: true}
+            {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity, load: true},
+            {blockId: "position-distribution", url: "/position-distribution-analytics", getParams: GetParams, onLoad: LoadPositions, load: true},
         ]
 
         let loaders = []

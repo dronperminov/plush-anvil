@@ -164,3 +164,7 @@ function Enable(elements) {
     for (let element of elements)
         element.removeAttribute("disabled")
 }
+
+function Round(value, scale = 100) {
+    return Math.round(value * scale) / scale
+}

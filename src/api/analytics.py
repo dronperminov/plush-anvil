@@ -24,3 +24,9 @@ def get_analytics(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
 def get_team_activity_analytics(params: Period) -> JSONResponse:
     team_activity = analytics_database.get_team_activity(params)
     return JSONResponse({"status": "success", "team_activity": {date.strftime("%d.%m.%Y"): count for date, count in team_activity.items()}})
+
+
+@router.post("/position-distribution-analytics")
+def get_position_distribution_analytics(params: Period) -> JSONResponse:
+    positions, mean_position = analytics_database.get_positions(params)
+    return JSONResponse({"status": "success", "positions": positions, "mean_position": mean_position})

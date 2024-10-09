@@ -5,6 +5,23 @@
     margin-bottom: 2em;
 }
 
+.analytics-item {
+    font-size: 1.2em;
+}
+
+.analytics-item-label {
+    font-weight: bold;
+}
+
+.analytics-plot {
+    margin-top: 1em;
+    overflow-x: auto;
+}
+
+.analytics-plot svg {
+    height: 300px;
+}
+
 @media (max-width: 767px) {
     .analytics-block {
         border-radius: 1em;
