@@ -26,6 +26,12 @@ def get_team_activity_analytics(params: Period) -> JSONResponse:
     return JSONResponse({"status": "success", "team_activity": {date.strftime("%d.%m.%Y"): count for date, count in team_activity.items()}})
 
 
+@router.post("/games-result-analytics")
+def get_games_result(params: Period) -> JSONResponse:
+    analytics = analytics_database.get_games_result(params)
+    return JSONResponse({"status": "success", "wins": analytics.wins, "top3": analytics.top3, "top10": analytics.top10, "games": analytics.games})
+
+
 @router.post("/position-distribution-analytics")
 def get_position_distribution_analytics(params: Period) -> JSONResponse:
     positions, mean_position = analytics_database.get_positions(params)

@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Dict, Tuple
 
 from src import Database
+from src.entities.analytics.games_result import GamesResult
 from src.query_params.analytics.period import Period
 
 
@@ -18,6 +19,23 @@ class AnalyticsDatabase:
             date2count[quiz["datetime"]] += 1
 
         return date2count
+
+    def get_games_result(self, period: Period) -> GamesResult:
+        wins, top3, top10, games = 0, 0, 0, 0
+
+        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"result": 1}):
+            position = quiz["result"]["position"]
+
+            if position == 1:
+                wins += 1
+            elif position <= 3:
+                top3 += 1
+            elif position <= 10:
+                top10 += 1
+
+            games += 1
+
+        return GamesResult(wins=wins, top3=top3, top10=top10, games=games)
 
     def get_positions(self, period: Period, max_position: int = 15) -> Tuple[Dict[int, int], float]:
         position2count = {position + 1: 0 for position in range(max_position + 1)}

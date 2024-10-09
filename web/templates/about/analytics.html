@@ -18,7 +18,17 @@
 
         <h1>Аналитика</h1>
 
-        <div class="analytics-block">
+        <div class="analytics">
+            <label>Показать данные за <select class="basic-select" id="period" onchange="UpdateAnalytics()">
+                <option value="">всё время</option>
+                <option value="last-year">прошлый год</option>
+                <option value="curr-year">текущий год</option>
+                <option value="curr-month">текущий месяц</option>
+                <option value="last-month">прошлый месяц</option>
+            </select></label>
+        </div>
+
+        <div class="analytics">
             <h2>АКТИВНОСТЬ КОМАНДЫ</h2>
 
             <div id="team-activity">
@@ -27,7 +37,7 @@
             </div>
         </div>
 
-        <div class="analytics-block">
+        <div class="analytics">
             <h2>РЕЗУЛЬТАТЫ ИГР</h2>
 
             <div id="games-result">
@@ -36,7 +46,7 @@
             </div>
         </div>
 
-        <div class="analytics-block">
+        <div class="analytics">
             <h2>РАСПРЕДЕЛЕНИЕ МЕСТ</h2>
 
             <div id="position-distribution">
@@ -52,11 +62,13 @@
 
     <script src="/js/plots/year_grid.js?v={{version}}"></script>
     <script src="/js/plots/bar_chart.js?v={{version}}"></script>
+    <script src="/js/plots/chart.js?v={{version}}"></script>
 
     <script src="/js/about/analytics.js?v={{version}}"></script>
     <script>
         let loaderConfigs = [
             {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity, load: true},
+            {blockId: "games-result", url: "/games-result-analytics", getParams: GetParams, onLoad: LoadGamesResult, load: true},
             {blockId: "position-distribution", url: "/position-distribution-analytics", getParams: GetParams, onLoad: LoadPositions, load: true},
         ]
 
