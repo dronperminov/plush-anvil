@@ -1,0 +1,68 @@
+{% set title = "Аналитика | Плюшевая наковальня" %}
+{% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/plots/year_grid.css?v={{version}}">
+
+    <link rel="stylesheet" type="text/css" href="/styles/common/analytics.css?v={{version}}">
+</head>
+<body ondragstart="return false">
+    {% include "components/menu.html" %}
+
+    <div class="content">
+        <div class="bread-crumbs">
+            <span><a href="/">Главная</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span><a href="/">О нас</a></span>
+            <img src="/images/icons/bread-crumbs-arrow.svg">
+            <span class="bread-crumbs-current">Аналитика</span>
+        </div>
+
+        <h1>Аналитика</h1>
+
+        <div class="analytics-block">
+            <h2>АКТИВНОСТЬ КОМАНДЫ</h2>
+
+            <div id="team-activity">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="analytics-block">
+            <h2>РЕЗУЛЬТАТЫ ИГР</h2>
+
+            <div id="games-result">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="analytics-block">
+            <h2>РАСПРЕДЕЛЕНИЕ МЕСТ</h2>
+
+            <div id="position-distribution">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/utils/utils.js?v={{version}}"></script>
+    <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/utils/content_loader.js?v={{version}}"></script>
+
+    <script src="/js/plots/year_grid.js?v={{version}}"></script>
+
+    <script src="/js/about/analytics.js?v={{version}}"></script>
+    <script>
+        let loaderConfigs = [
+            {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity, load: true}
+        ]
+
+        let loaders = []
+        for (let config of loaderConfigs)
+            loaders.push(new ContentLoader(config))
+    </script>
+
+    {% include "components/footer.html" %}
+</body>
+</html>

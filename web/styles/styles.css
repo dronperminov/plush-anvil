@@ -58,6 +58,13 @@
     --user-select-hover-background: #f0f0f0;
     --user-select-count-background: #4caf50;
     --user-select-count-color: #ffffff;
+
+    /* analytics */
+    --analytics-button-background: #fddc81;
+    --analytics-button-color: #2e2836b2;
+
+    --analytics-button-selected-background: #f9dc5c;
+    --analytics-button-selected-color: #2e2836;
 }
 
 @font-face {
@@ -447,7 +454,7 @@ ul {
     }
 
     h2 {
-        font-size: 1em;
+        font-size: 1.2em;
     }
 
     #notifications {

@@ -1,0 +1,68 @@
+.year-grid {
+
+}
+
+.year-grid-scrollable {
+    overflow-x: auto;
+}
+
+.year-grid-buttons {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-gap: 0.5em;
+    margin-bottom: 1em;
+}
+
+.year-grid-button {
+    background-color: var(--analytics-button-background);
+    color: var(--analytics-button-color);
+    text-decoration: none;
+    border: none;
+    padding: 7px 10px;
+    border-radius: 10px;
+    font-size: 1.1em;
+    cursor: pointer;
+    outline: none;
+    display: block;
+    text-align: center;
+}
+
+.year-grid-selected-button {
+    background-color: var(--analytics-button-selected-background);
+    color: var(--analytics-button-selected-color);
+    font-weight: bold;
+}
+
+.year-grid-cells {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: 20px repeat(9, 1fr);
+    grid-template-columns: 1.5em;
+    grid-auto-columns: minmax(14px, 18px);
+    grid-gap: 3px;
+}
+
+.year-grid-weekday-cell {
+    align-content: center;
+    font-weight: bold;
+    font-size: 0.7em;
+    text-align: right;
+    padding-right: 3px;
+}
+
+.year-grid-month-cell {
+    align-content: end;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.year-grid-week-cell {
+    font-size: 0.5em;
+    text-align: center;
+    align-content: end;
+}
+
+.year-grid-day-cell, .year-grid-skip-cell {
+    aspect-ratio: 1;
+    border-radius: 4px;
+}

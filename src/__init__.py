@@ -4,6 +4,7 @@ import sys
 from src.database import Database
 from src.databases.achievements_database import AchievementDatabase
 from src.databases.album_database import AlbumDatabase
+from src.databases.analytics_database import AnalyticsDatabase
 from src.databases.organizer_database import OrganizerDatabase
 from src.databases.place_database import PlaceDatabase
 from src.databases.quiz_database import QuizDatabase
@@ -18,4 +19,5 @@ organizer_database = OrganizerDatabase(database=database, logger=logger)
 album_database = AlbumDatabase(database=database, logger=logger)
 achievement_database = AchievementDatabase(database=database, logger=logger)
 quiz_database = QuizDatabase(database=database, logger=logger)
+analytics_database = AnalyticsDatabase(database=database, logger=logger)
 smuzi_rating = SmuziRating()
