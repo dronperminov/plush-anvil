@@ -19,13 +19,16 @@
         <h1>Аналитика</h1>
 
         <div class="analytics">
-            <label>Показать данные за <select class="basic-select" id="period" onchange="UpdateAnalytics()">
+            <label>Показать данные за <select class="basic-select" id="period" onchange="ChangePeriod()">
                 <option value="">всё время</option>
                 <option value="last-year">прошлый год</option>
                 <option value="curr-year">текущий год</option>
                 <option value="curr-month">текущий месяц</option>
                 <option value="last-month">прошлый месяц</option>
+                <option value="period">период</option>
             </select></label>
+
+            <input type="text" class="basic-input hidden" id="period-dates" onchange="ChangeDates()">
         </div>
 
         <div class="analytics">
@@ -42,7 +45,7 @@
 
             <div id="games-result">
                 <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div class="games-result"></div>
+                <div></div>
             </div>
         </div>
 
@@ -58,12 +61,9 @@
         <div class="analytics">
             <h2>ТОП АКТИВНЫХ ИГРОКОВ</h2>
 
-            <p>Топ считается с учётом активности игроков. Алгоритм сортировки игроков по активности учитывает не только общее количество игр, в которых участвовал каждый игрок, но и их давность.
-            Чем больше времени прошло с момента последней игры, тем меньше её вес. Таким образом, игроки, которые ходили на квизы недавно, будут иметь больший показатель активности, чем те, кто ходил давно.</p>
-
             <div id="top-players">
                 <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div class="top-players"></div>
+                <div></div>
             </div>
         </div>
     </div>
@@ -81,6 +81,16 @@
 
     <script src="/js/about/analytics.js?v={{version}}"></script>
     <script>
+        {% if period in ["", "last-year", "curr-year", "last-month", "curr-month"] %}
+        document.getElementById("period").value = "{{period}}"
+        document.getElementById("period-dates").value = "{{period}}"
+        document.getElementById("period-dates").classList.add("hidden")
+        {% elif dates %}
+        document.getElementById("period").value = "period"
+        document.getElementById("period-dates").value = "{{period}}"
+        document.getElementById("period-dates").classList.remove("hidden")
+        {% endif %}
+
         let loaderConfigs = [
             {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity, load: true},
             {blockId: "games-result", url: "/games-result-analytics", getParams: GetParams, onLoad: LoadGamesResult, load: true},

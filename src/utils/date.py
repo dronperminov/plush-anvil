@@ -38,6 +38,17 @@ def parse_period(period: str) -> Optional[Tuple[datetime, datetime]]:
         end_date = datetime(today.year - 1, 12, 31, 23, 59, 59)
         return start_date, end_date
 
+    if match := re.fullmatch(r"(?P<year1>20\d\d)-(?P<year2>20\d\d)", period):
+        year1, year2 = int(match.group("year1")), int(match.group("year2"))
+        start_date = datetime(min(year1, year2), 1, 1, 0, 0, 0)
+        end_date = datetime(max(year1, year2), 12, 31, 23, 59, 59)
+        return start_date, end_date
+
+    if re.fullmatch(r"20\d\d", period):
+        start_date = datetime(int(period), 1, 1, 0, 0, 0)
+        end_date = datetime(int(period), 12, 31, 23, 59, 59)
+        return start_date, end_date
+
     if match := re.fullmatch(r"last-(?P<days>\d+)days", period):
         start_date = datetime(today.year, today.month, today.day, 0, 0, 0) - timedelta(days=int(match.group("days")))
         end_date = datetime(today.year, today.month, today.day, 23, 59, 59)
@@ -48,22 +59,22 @@ def parse_period(period: str) -> Optional[Tuple[datetime, datetime]]:
         end_date = datetime(today.year, today.month, int(match.group("day2")), 23, 59, 59)
         return min(start_date, end_date), max(start_date, end_date)
 
-    if match := re.fullmatch(r"(?P<day1>\d\d?).(?P<month1>\d\d?)-(?P<day2>\d\d?).(?P<month2>\d\d?)", period):
+    if match := re.fullmatch(r"(?P<day1>\d\d?)\.(?P<month1>\d\d?)-(?P<day2>\d\d?)\.(?P<month2>\d\d?)", period):
         start_date = datetime(today.year, int(match.group("month1")), int(match.group("day1")), 0, 0, 0)
         end_date = datetime(today.year, int(match.group("month2")), int(match.group("day2")), 23, 59, 59)
         return min(start_date, end_date), max(start_date, end_date)
 
-    if match := re.fullmatch(r"(?P<day1>\d\d?).(?P<month1>\d\d?).(?P<year1>\d\d\d\d)-(?P<day2>\d\d?).(?P<month2>\d\d?).(?P<year2>\d\d\d\d)", period):
+    if match := re.fullmatch(r"(?P<day1>\d\d?)\.(?P<month1>\d\d?)\.(?P<year1>\d\d\d\d)-(?P<day2>\d\d?)\.(?P<month2>\d\d?)\.(?P<year2>\d\d\d\d)", period):
         start_date = datetime(int(match.group("year1")), int(match.group("month1")), int(match.group("day1")), 0, 0, 0)
         end_date = datetime(int(match.group("year2")), int(match.group("month2")), int(match.group("day2")), 23, 59, 59)
         return min(start_date, end_date), max(start_date, end_date)
 
-    if match := re.fullmatch(r"(?P<day>\d\d?).(?P<month>\d\d?)", period):
+    if match := re.fullmatch(r"(?P<day>\d\d?)\.(?P<month>\d\d?)", period):
         start_date = datetime(today.year, int(match.group("month")), int(match.group("day")), 0, 0, 0)
         end_date = datetime(today.year, int(match.group("month")), int(match.group("day")), 23, 59, 59)
         return start_date, end_date
 
-    if match := re.fullmatch(r"(?P<day>\d\d?).(?P<month>\d\d?).(?P<year>\d\d\d\d)", period):
+    if match := re.fullmatch(r"(?P<day>\d\d?)\.(?P<month>\d\d?)\.(?P<year>\d\d\d\d)", period):
         start_date = datetime(int(match.group("year")), int(match.group("month")), int(match.group("day")), 0, 0, 0)
         end_date = datetime(int(match.group("year")), int(match.group("month")), int(match.group("day")), 23, 59, 59)
         return start_date, end_date

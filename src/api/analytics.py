@@ -1,6 +1,6 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 
 from src import analytics_database
@@ -9,14 +9,16 @@ from src.entities.user import User
 from src.query_params.analytics.period import Period
 from src.utils.auth import get_user
 from src.utils.common import get_static_hash
+from src.utils.date import parse_period
 
 router = APIRouter()
 
 
 @router.get("/analytics")
-def get_analytics(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
+def get_analytics(period: str = Query(""), user: Optional[User] = Depends(get_user)) -> HTMLResponse:
+    dates = parse_period(period=period)
     template = templates.get_template("about/analytics.html")
-    content = template.render(version=get_static_hash(), user=user)
+    content = template.render(version=get_static_hash(), user=user, period=period, dates=dates)
     return HTMLResponse(content=content)
 
 
