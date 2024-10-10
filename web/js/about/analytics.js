@@ -1,9 +1,6 @@
 function GetParams() {
     let period = document.getElementById("period-dates").value
-    let params = {period: period}
-
-    PushUrlParams(params)
-    return params
+    return {period: period}
 }
 
 function PushUrlParams(params) {
@@ -49,6 +46,9 @@ function ChangeDates() {
 }
 
 function UpdateAnalytics() {
+    let params = GetParams()
+    PushUrlParams(params)
+
     for (let loader of loaders) {
         loader.Reset()
         loader.Load()
@@ -141,4 +141,36 @@ function LoadTopPlayers(response, block) {
         let user = new User(player)
         players.appendChild(user.BuildTopPlayer(player))
     }
+}
+
+function BuildGamesOrganizer(organizer, cell) {
+    let div = MakeElement("games-organizer", cell)
+    MakeElement("", div, {src: organizer.image_url}, "img")
+    MakeElement("", div, {innerText: organizer.name}, "span")
+}
+
+function LoadGames(response, block) {
+    if (response.games.length === 0) {
+        MakeElement("description", block, {innerText: "Нет данных за указанный период"})
+        return
+    }
+
+    let columns = [
+        {name: "Дата", build: (quiz, cell) => {cell.innerText = FormatDate(new Date(quiz.datetime))}, type: "date", visible: true, sortable: true, wrap: false},
+        {name: "Место", build: (quiz, cell) => {cell.innerText = quiz.result.position}, type: "number", visible: true, sortable: true, wrap: false},
+        {name: "Название", build: (quiz, cell) => {cell.innerText = quiz.name}, type: "text", visible: true, sortable: true, align: "left", wrap: true},
+        {name: "Категория", build: (quiz, cell) => {new Category(quiz.category).Build(cell)}, type: "text", visible: false, sortable: true, wrap: false},
+        {name: "Организатор", build: (quiz, cell) => {BuildGamesOrganizer(response.organizer_id2organizer[quiz.organizer_id], cell)}, type: "text", visible: false, sortable: true, "align": "left", wrap: false},
+        {name: "Игроки", build: (quiz, cell) => {cell.innerText = quiz.result.players}, type: "number", visible: false, sortable: true, wrap: false},
+        {name: "Команды", build: (quiz, cell) => {cell.innerText = quiz.result.teams}, type: "number", visible: false, sortable: true, wrap: false},
+        {name: "Место проведения", build: (quiz, cell) => {cell.innerText = response.place_id2place[quiz.place_id].name}, type: "text", visible: false, sortable: true, wrap: false},
+    ]
+
+    let games = MakeElement("games", block)
+    let table = new FilterTable(games, columns)
+
+    for (let game of response.games)
+        table.AppendData(game)
+
+    table.ShowNext()
 }

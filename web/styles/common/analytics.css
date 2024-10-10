@@ -80,6 +80,12 @@
     background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
 }
 
+.games-organizer img {
+    width: 25px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
 @media (max-width: 1200px) {
     .top-players {
         grid-template-columns: 1fr 1fr;

@@ -1,9 +1,10 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Query
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from src import analytics_database
+from src import analytics_database, organizer_database, place_database
 from src.api import templates
 from src.entities.user import User
 from src.query_params.analytics.period import Period
@@ -44,3 +45,17 @@ def get_position_distribution_analytics(params: Period) -> JSONResponse:
 def get_top_players(params: Period) -> JSONResponse:
     top_players = analytics_database.get_top_players(params)
     return JSONResponse({"status": "success", "top_players": [player.to_dict() for player in top_players]})
+
+
+@router.post("/games-analytics")
+def get_games(params: Period) -> JSONResponse:
+    games = analytics_database.get_games(params)
+    organizer_id2organizer = organizer_database.get_organizers(organizer_ids=list({game.organizer_id for game in games}))
+    place_id2place = place_database.get_places(place_ids=list({game.place_id for game in games}))
+
+    return JSONResponse({
+        "status": "success",
+        "games": [jsonable_encoder(quiz) for quiz in games],
+        "organizer_id2organizer": jsonable_encoder(organizer_id2organizer),
+        "place_id2place": jsonable_encoder(place_id2place)
+    })

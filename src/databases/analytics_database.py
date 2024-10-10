@@ -6,6 +6,7 @@ from typing import Dict, List, Tuple
 from src import Database
 from src.entities.analytics.games_result import GamesResult
 from src.entities.analytics.top_player import TopPlayer
+from src.entities.quiz import Quiz
 from src.entities.user import User
 from src.enums import Category
 from src.query_params.analytics.period import Period
@@ -85,6 +86,9 @@ class AnalyticsDatabase:
             ))
 
         return sorted(top_players, key=lambda top_player: -top_player.score)
+
+    def get_games(self, period: Period) -> List[Quiz]:
+        return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(self.__quizzes_query(period=period)).sort({"datetime": -1})]
 
     def __quizzes_query(self, period: Period) -> dict:
         return {**period.to_query("datetime"), "result.position": {"$gt": 0}}

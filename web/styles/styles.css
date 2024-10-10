@@ -29,13 +29,13 @@
     --info-background: #cde8f5;
 
     /* buttons */
-    --gradient-button-color: #fff;
-    --gradient-button-border: var(--main-color);
-    --gradient-button-background: linear-gradient(45deg, #e9273f 0%, #c239a3 100%);
+    --gradient-button-color: #444444;
+    --gradient-button-border: #a1dbff;
+    --gradient-button-background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbffc9 0%, #ed9ddc00 100%), #c69deed0;
 
-    --gradient-button-hover-color: #fafafa;
-    --gradient-button-hover-border: var(--main-color);
-    --gradient-button-hover-background: linear-gradient(45deg, #e9425c 0%, #cc50a9 100%);
+    --gradient-button-hover-color: #222222;
+    --gradient-button-hover-border: #ed9ddc;
+    --gradient-button-hover-background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbffa9 0%, #ed9ddc00 100%), #c69deeb0;
 
     /* icon-input  */
     --icon-input-background: #f4f4f4;
@@ -206,6 +206,13 @@ ul {
 .loader {
     padding: 10px 0;
     text-align: center;
+}
+
+.circle {
+    display: inline-block;
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 100%;
 }
 
 /* faq */

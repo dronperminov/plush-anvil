@@ -130,6 +130,14 @@ function GetWordForm(count, forms, onlyForm = false) {
     return onlyForm ? forms[index] : `${count} ${forms[index]}`
 }
 
+function FormatDate(datetime) {
+    let day = `${datetime.getDate()}`.padStart(2, "0")
+    let month = `${datetime.getMonth() + 1}`.padStart(2, "0")
+    let year = datetime.getFullYear()
+
+    return `${day}.${month}.${year}`
+}
+
 function FormatDatetime(datetime) {
     let day = `${datetime.getDate()}`.padStart(2, "0")
     let month = `${datetime.getMonth() + 1}`.padStart(2, "0")

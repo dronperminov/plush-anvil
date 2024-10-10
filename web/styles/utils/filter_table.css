@@ -1,0 +1,69 @@
+.filter-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.filter-table-scrollable {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.filter-table tr {
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+}
+
+.filter-table td, .filter-table th {
+    font-size: 0.9em;
+    padding: 8px 5px;
+    border: 1px solid var(--subtext-color);
+    text-align: center;
+    vertical-align: middle;
+}
+
+.filter-table th {
+    padding: 15px 13px;
+    white-space: nowrap;
+}
+
+.filter-table th.order-asc, .filter-table th.order-desc {
+    padding: 15px 5px;
+    color: var(--main-color);
+}
+
+.filter-table th.order-asc:after {
+    content: "↑";
+    display: inline-block;
+    width: 16px;
+}
+
+.filter-table th.order-desc:after {
+    content: "↓";
+    display: inline-block;
+    width: 16px;
+}
+
+.filter-table .filter-table-left {
+    text-align: left;
+}
+
+.filter-table .filter-table-center {
+    text-align: right;
+}
+
+.filter-table-no-wrap {
+    white-space: nowrap;
+}
+
+.filter-table-buttons {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-gap: 0.5em;
+    margin-top: 1em;
+}
+
+@media (max-width: 767px) {
+    .filter-table td, .filter-table th {
+        font-size: 0.75em;
+    }
+}
