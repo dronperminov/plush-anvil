@@ -86,6 +86,50 @@
     margin-right: 5px;
 }
 
+.month-analytics {
+    margin-top: 3em;
+}
+
+.month-analytics > h2 {
+    margin-bottom: -0.5em;
+}
+
+.months-top-players {
+    max-width: 100%;
+    overflow: auto;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-template-rows: 1fr 27px;
+    grid-gap: 0 5px;
+    font-size: 10px;
+}
+
+.months-top-players-profiles {
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: 1fr;
+    background: radial-gradient(311.93% 67.48% at 40.75% 73.22%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+    border-radius: 8px;
+    padding: 4px 2px;
+}
+
+.months-top-players-profiles img {
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+    padding: 2px;
+}
+
+.months-top-players-profile-current {
+    border: 2px solid var(--main-color);
+    padding: 0 !important;
+}
+
+.months-top-players-date {
+    white-space: nowrap;
+    text-align: center;
+}
+
 @media (max-width: 1200px) {
     .top-players {
         grid-template-columns: 1fr 1fr;

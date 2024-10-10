@@ -15,7 +15,7 @@
 .filter-table td, .filter-table th {
     font-size: 0.9em;
     padding: 8px 5px;
-    border: 1px solid var(--subtext-color);
+    border: 1px solid #ac9eee;
     text-align: center;
     vertical-align: middle;
 }

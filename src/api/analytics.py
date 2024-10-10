@@ -44,7 +44,7 @@ def get_position_distribution_analytics(params: Period) -> JSONResponse:
 @router.post("/top-players-analytics")
 def get_top_players(params: Period) -> JSONResponse:
     top_players = analytics_database.get_top_players(params)
-    return JSONResponse({"status": "success", "top_players": [player.to_dict() for player in top_players]})
+    return JSONResponse({"status": "success", "top_players": jsonable_encoder(top_players)})
 
 
 @router.post("/games-analytics")
@@ -59,3 +59,9 @@ def get_games(params: Period) -> JSONResponse:
         "organizer_id2organizer": jsonable_encoder(organizer_id2organizer),
         "place_id2place": jsonable_encoder(place_id2place)
     })
+
+
+@router.post("/month-analytics")
+def get_month_analytics(params: Period, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    month_analytics = analytics_database.get_month_analytics(params)
+    return JSONResponse({"status": "success", "month_analytics": jsonable_encoder(month_analytics), "username": user.username if user else None})

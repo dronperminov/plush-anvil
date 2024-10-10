@@ -12,13 +12,3 @@ class TopPlayer:
     score: float
     games: int
     category2count: Dict[Category, int]
-
-    def to_dict(self) -> dict:
-        return {
-            "username": self.username,
-            "full_name": self.full_name,
-            "avatar_url": self.avatar_url,
-            "score": self.score,
-            "games": self.games,
-            "category2count": {category.value: count for category, count in self.category2count.items()}
-        }

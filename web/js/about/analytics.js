@@ -118,7 +118,7 @@ function LoadPositions(response, block) {
         data.push({"position": position, "position-label": position <= 15 ? `${position}` : "ниже", "count": response.positions[position]})
 
     let plot = MakeElement("analytics-plot", block)
-    let svg = MakeElement("", plot, {}, "svg")
+    let svg = MakeElement("", plot, {id: "positions-svg"}, "svg")
     let chart = new BarChart({barColor: "#ea97d9", minRectWidth: 35, maxRectWidth: 45, bottomPadding: 12, labelSize: 11})
     chart.Plot(svg, data, "position-label", "count")
 }
@@ -173,4 +173,63 @@ function LoadGames(response, block) {
         table.AppendData(game)
 
     table.ShowNext()
+}
+
+function BuildMonthDataPlot(block, name, data, color, metric, chartType) {
+    let analytics = MakeElement("analytics", block)
+    MakeElement("", analytics, {innerText: name}, "h2")
+
+    let plot = MakeElement("analytics-plot", analytics)
+    let svg = MakeElement("", plot, {id: `${metric}-svg`}, "svg")
+    let chart = null
+
+    if (chartType === "bar-chart")
+        chart = new BarChart({barColor: color})
+    else if (chartType === "plot-chart")
+        chart = new PlotChart({markerColor: color})
+    else
+        return
+
+    chart.Plot(svg, data, "label", metric)
+}
+
+function BuildMonthTopPlayers(block, data, username, topCount = 7) {
+    let analytics = MakeElement("analytics", block)
+    MakeElement("", analytics, {innerText: "ТОП АКТИВНЫХ ИГРОКОВ"}, "h2")
+
+    let players = MakeElement("months-top-players", analytics)
+
+    for (let item of data) {
+        let profiles = MakeElement("months-top-players-profiles", players)
+
+        for (let i = item.top_players.length; i < topCount; i++)
+            MakeElement("", profiles)
+
+        for (let i = 0; i < item.top_players.length && i < topCount; i++)
+            MakeElement(item.top_players[i].username == username ? "months-top-players-profile-current" : "", profiles, {src: item.top_players[i].avatar_url}, "img")
+
+        MakeElement("months-top-players-date", players, {innerHTML: item.label.replace("\n", "<br>")})
+    }
+}
+
+function LoadMonthAnalytics(response, block) {
+    if (response.month_analytics.length < 2) {
+        block.parentNode.parentNode.classList.add("hidden")
+        return
+    }
+
+    let months = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"]
+
+    for (let data of response.month_analytics)
+        data.label = `${months[data.month - 1]}\n${data.year}`
+
+    block.parentNode.parentNode.classList.remove("hidden")
+
+    BuildMonthDataPlot(block, "ИГРЫ", response.month_analytics, "#9cc2ff", "games", "bar-chart")
+    BuildMonthDataPlot(block, "ПОБЕДЫ", response.month_analytics, "#ffa1a6", "wins", "bar-chart")
+    BuildMonthDataPlot(block, "2-3 МЕСТА", response.month_analytics, "#fddc81", "top3", "bar-chart")
+    BuildMonthDataPlot(block, "ВХОЖДЕНИЕ В ТРОЙКУ", response.month_analytics, "#ed9ddc", "prizes", "bar-chart")
+    BuildMonthDataPlot(block, "СРЕДНЯЯ ПОЗИЦИЯ", response.month_analytics, "#9cc2ff", "mean_position", "plot-chart")
+    BuildMonthDataPlot(block, "СРЕДНЕЕ ЧИСЛО ИГРОКОВ", response.month_analytics, "#9cc2ff", "mean_players", "plot-chart")
+    BuildMonthTopPlayers(block, response.month_analytics, response.username)
 }

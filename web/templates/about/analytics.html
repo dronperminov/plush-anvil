@@ -76,6 +76,15 @@
                 <div></div>
             </div>
         </div>
+
+        <div class="month-analytics">
+            <h2>АНАЛИТИКА ПО МЕСЯЦАМ</h2>
+
+            <div id="month-analytics">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
     </div>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
@@ -86,6 +95,7 @@
     <script src="/js/plots/year_grid.js?v={{version}}"></script>
     <script src="/js/plots/bar_chart.js?v={{version}}"></script>
     <script src="/js/plots/chart.js?v={{version}}"></script>
+    <script src="/js/plots/plot_chart.js?v={{version}}"></script>
 
     <script src="/js/entities/category.js?v={{version}}"></script>
     <script src="/js/entities/user.js?v={{version}}"></script>
@@ -107,7 +117,8 @@
             {blockId: "games-result", url: "/games-result-analytics", getParams: GetParams, onLoad: LoadGamesResult},
             {blockId: "position-distribution", url: "/position-distribution-analytics", getParams: GetParams, onLoad: LoadPositions},
             {blockId: "top-players", url: "/top-players-analytics", getParams: GetParams, onLoad: LoadTopPlayers},
-            {blockId: "games", url: "/games-analytics", getParams: GetParams, onLoad: LoadGames, load: true}
+            {blockId: "games", url: "/games-analytics", getParams: GetParams, onLoad: LoadGames},
+            {blockId: "month-analytics", url: "/month-analytics", getParams: GetParams, onLoad: LoadMonthAnalytics}
         ]
 
         let loaders = []
