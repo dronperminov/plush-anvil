@@ -16,8 +16,7 @@ function LoadTeamActivity(response, block) {
 }
 
 function LoadGamesResult(response, block) {
-    let results = MakeElement("games-result", block)
-    let plot = MakeElement("analytics-chart", results)
+    let plot = MakeElement("analytics-chart", block)
     let svg = MakeElement("", plot, {}, "svg")
 
     let data = [
@@ -30,7 +29,7 @@ function LoadGamesResult(response, block) {
     let chart = new Chart({})
     chart.Plot(svg, data, "Всего игр", response.games)
 
-    let blocks = MakeElement("analytics-blocks", results)
+    let blocks = MakeElement("analytics-blocks", block)
 
     let items = [
         {label: "Победы", value: response.wins, part: response.wins / response.games, color: "#ffa1a6"},
@@ -62,4 +61,11 @@ function LoadPositions(response, block) {
     let svg = MakeElement("", plot, {}, "svg")
     let chart = new BarChart({barColor: "#ea97d9", minRectWidth: 35, maxRectWidth: 45, bottomPadding: 12, labelSize: 11})
     chart.Plot(svg, data, "position-label", "count")
+}
+
+function LoadTopPlayers(response, block) {
+    for (let player of response.top_players) {
+        let user = new User(player)
+        block.appendChild(user.BuildTopPlayer(player))
+    }
 }

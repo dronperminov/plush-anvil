@@ -1,7 +1,7 @@
 {% set title = "Аналитика | Плюшевая наковальня" %}
 {% include "components/header.html" %}
     <link rel="stylesheet" type="text/css" href="/styles/plots/year_grid.css?v={{version}}">
-
+    <link rel="stylesheet" type="text/css" href="/styles/entities/user.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/common/analytics.css?v={{version}}">
 </head>
 <body ondragstart="return false">
@@ -42,7 +42,7 @@
 
             <div id="games-result">
                 <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
+                <div class="games-result"></div>
             </div>
         </div>
 
@@ -52,6 +52,18 @@
             <div id="position-distribution">
                 <div class="loader hidden"><img src="/images/loader.svg"></div>
                 <div></div>
+            </div>
+        </div>
+
+        <div class="analytics">
+            <h2>ТОП АКТИВНЫХ ИГРОКОВ</h2>
+
+            <p>Топ считается с учётом активности игроков. Алгоритм сортировки игроков по активности учитывает не только общее количество игр, в которых участвовал каждый игрок, но и их давность.
+            Чем больше времени прошло с момента последней игры, тем меньше её вес. Таким образом, игроки, которые ходили на квизы недавно, будут иметь больший показатель активности, чем те, кто ходил давно.</p>
+
+            <div id="top-players">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div class="top-players"></div>
             </div>
         </div>
     </div>
@@ -64,12 +76,16 @@
     <script src="/js/plots/bar_chart.js?v={{version}}"></script>
     <script src="/js/plots/chart.js?v={{version}}"></script>
 
+    <script src="/js/entities/category.js?v={{version}}"></script>
+    <script src="/js/entities/user.js?v={{version}}"></script>
+
     <script src="/js/about/analytics.js?v={{version}}"></script>
     <script>
         let loaderConfigs = [
             {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity, load: true},
             {blockId: "games-result", url: "/games-result-analytics", getParams: GetParams, onLoad: LoadGamesResult, load: true},
             {blockId: "position-distribution", url: "/position-distribution-analytics", getParams: GetParams, onLoad: LoadPositions, load: true},
+            {blockId: "top-players", url: "/top-players-analytics", getParams: GetParams, onLoad: LoadTopPlayers, load: true},
         ]
 
         let loaders = []

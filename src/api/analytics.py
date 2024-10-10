@@ -36,3 +36,9 @@ def get_games_result(params: Period) -> JSONResponse:
 def get_position_distribution_analytics(params: Period) -> JSONResponse:
     positions, mean_position = analytics_database.get_positions(params)
     return JSONResponse({"status": "success", "positions": positions, "mean_position": mean_position})
+
+
+@router.post("/top-players-analytics")
+def get_top_players(params: Period) -> JSONResponse:
+    top_players = analytics_database.get_top_players(params)
+    return JSONResponse({"status": "success", "top_players": [player.to_dict() for player in top_players]})

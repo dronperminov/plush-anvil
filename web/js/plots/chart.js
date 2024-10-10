@@ -10,7 +10,7 @@ function Chart(config = null) {
 
     this.labelColor = config.labelColor || "#222222"
     this.labelSize = config.labelSize || 14
-    this.valueSize = config.valueSize || 50
+    this.valueSize = config.valueSize || 42
 }
 
 Chart.prototype.GetAngles = function(data) {

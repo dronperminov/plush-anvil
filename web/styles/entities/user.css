@@ -34,6 +34,16 @@
     font-size: 0.9em;
 }
 
+.user .user-activity {
+    margin-top: 5px;
+    font-size: 0.8em;
+}
+
+.user .user-categories {
+    margin-top: 5px;
+    font-size: 0.8em;
+}
+
 .info .user-avatar {
     text-align: center;
 }

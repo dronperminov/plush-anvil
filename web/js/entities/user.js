@@ -157,6 +157,22 @@ User.prototype.BuildAchievementsInfo = function(achievements) {
     return info
 }
 
+User.prototype.BuildTopPlayer = function(params) {
+    let user = MakeElement("user")
+
+    let userAvatar = MakeElement("user-avatar", user)
+    let userAvatarLink = MakeElement("", userAvatar, {href: `/profile?username=${this.username}`}, "a")
+    MakeElement("", userAvatarLink, {src: this.avatarUrl}, "img")
+
+    let userInfo = MakeElement("user-info", user)
+    let userName = MakeElement("user-name", userInfo)
+    MakeElement("link", userName, {href: `/profile?username=${this.username}`, innerText: this.fullname}, "a")
+
+    MakeElement("user-activity", userInfo, {innerHTML: `<b>Активность</b>: ${this.GetGamesActivityText(params.games, params.score)}`})
+    MakeElement("user-categories", userInfo, {innerHTML: `<b>Топ категорий</b>: ${this.GetTopCategoriesText(params.category2count)}`})
+    return user
+}
+
 User.prototype.GetBirthDateText = function(days) {
     let months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"]
     let date = `${this.birthDate.day} ${months[this.birthDate.month - 1]}`
@@ -223,4 +239,18 @@ User.prototype.UploadAvatar = function(cropper, input, image, buttons) {
         document.querySelector(".menu .profile img").src = this.avatarUrl
         cropper.Close()
     })
+}
+
+User.prototype.GetGamesActivityText = function(games, score) {
+    return `${GetWordForm(games, ["игра", "игры", "игр"])} (${Round(score, 10)})`
+}
+
+User.prototype.GetTopCategoriesText = function(category2count) {
+    let categories = []
+
+    for (let [category, count] of Object.entries(category2count))
+        categories.push({count: count, category: new Category(category)})
+
+    categories.sort((a, b) => b.count - a.count)
+    return categories.slice(0, 3).map(category => category.category.ToRus()).join(", ")
 }
