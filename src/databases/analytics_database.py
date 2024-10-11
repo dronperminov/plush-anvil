@@ -22,7 +22,7 @@ class AnalyticsDatabase:
     def get_team_activity(self, period: Period) -> Dict[datetime, int]:
         date2count = defaultdict(int)
         for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"datetime": 1}):
-            date2count[quiz["datetime"]] += 1
+            date2count[quiz["datetime"].date()] += 1
 
         return date2count
 

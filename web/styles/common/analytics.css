@@ -86,7 +86,7 @@
 
 .games-controls select {
     margin-left: 0.5em;
-    margin-bottom: 0.5em;
+    margin-top: 0.5em;
 }
 
 .games-controls label {
@@ -185,6 +185,12 @@
         grid-template-columns: 1fr;
         grid-gap: 0.5em;
         font-size: 0.9em;
+    }
+
+    .games-controls select {
+        display: block;
+        width: 100%;
+        margin-left: 0;
     }
 }
 

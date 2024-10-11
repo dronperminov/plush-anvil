@@ -79,12 +79,6 @@
     border-radius: 0 0 1em 1em;
 }
 
-.menu-item:last-child .menu-subitem {
-    left: unset;
-    right: 0;
-    text-align: right;
-}
-
 .menu-subitem a {
     padding: 1em 10px;
 }
@@ -124,6 +118,12 @@
 
     .menu-item, .menu-item a, .menu-item label {
         cursor: pointer;
+    }
+
+    .menu-item:last-child .menu-subitem {
+        left: unset;
+        right: 0;
+        text-align: right;
     }
 
     .mobile-item {
