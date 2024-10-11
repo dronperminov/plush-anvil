@@ -116,31 +116,32 @@ FilterTable.prototype.GetTotalRows = function() {
 
 FilterTable.prototype.UpdateButtons = function(total) {
     this.showCount = Math.min(Math.max(this.showCount, this.showSize), total)
-
-    if (this.showCount == total)
-        this.showBtn.classList.add("hidden")
-    else
-        this.showBtn.classList.remove("hidden")
-
-    if (this.showCount <= this.showSize)
-        this.collapseBtn.classList.add("hidden")
-    else
-        this.collapseBtn.classList.remove("hidden")
+    this.UpdateVisibility(this.showBtn, this.showCount != total)
+    this.UpdateVisibility(this.collapseBtn, this.showCount > this.showSize)
 }
 
 FilterTable.prototype.Show = function() {
     let total = 0
 
     for (let data of this.data) {
-        if (total < this.showCount)
-            data.row.classList.remove("hidden")
-        else
-            data.row.classList.add("hidden")
+        this.UpdateVisibility(data.row, total < this.showCount)
+
+        for (let column of this.columns) {
+            this.UpdateVisibility(data.name2cell[column.name], column.visible)
+            this.UpdateVisibility(column.cell, column.visible)
+        }
 
         total++
     }
 
     this.UpdateButtons(total)
+}
+
+FilterTable.prototype.UpdateVisibility = function(node, condition) {
+    if (condition)
+        node.classList.remove("hidden")
+    else
+        node.classList.add("hidden")
 }
 
 FilterTable.prototype.ShowNext = function() {
@@ -152,4 +153,12 @@ FilterTable.prototype.Collapse = function() {
     this.showCount = this.showSize
     this.Show()
     this.table.scrollIntoView({behavior: "smooth", block: "start"})
+}
+
+FilterTable.prototype.UpdateColumnsVisibility = function(columns) {
+    for (let column of this.columns)
+        if (column.name in columns)
+            column.visible = columns[column.name]
+
+    this.Show()
 }

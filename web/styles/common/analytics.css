@@ -80,6 +80,15 @@
     background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
 }
 
+.games-controls {
+    margin-bottom: 1em;
+}
+
+.games-controls label {
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .games-organizer img {
     width: 25px;
     vertical-align: middle;

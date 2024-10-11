@@ -81,7 +81,7 @@ class AnalyticsDatabase:
                 top_players=self.__get_top_players(quizzes=quizzes)
             ))
 
-        return sorted(month_analytics, key=lambda data: (data.year, data.month))
+        return sorted(month_analytics, key=lambda data: (data.year, data.month), reverse=True)
 
     def __quizzes_query(self, period: Period) -> dict:
         return {**period.to_query("datetime"), "result.position": {"$gt": 0}}

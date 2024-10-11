@@ -119,6 +119,15 @@ function MakeIconInput(parent = null, icon, inputId, inputClass, inputAttributes
     return input
 }
 
+function MakeCheckbox(text, id, parent) {
+    let label = MakeElement("switch-checkbox", parent, {}, "label")
+    let input = MakeElement("", label, {type: "checkbox", id: id}, "input")
+    MakeElement("switch-checkbox-slider", label, {}, "span")
+    MakeElement("", parent, {for: id, innerText: ` ${text}`}, "label")
+
+    return input
+}
+
 function GetWordForm(count, forms, onlyForm = false) {
     let index = 0
 

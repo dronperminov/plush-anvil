@@ -155,6 +155,11 @@ function LoadGames(response, block) {
         return
     }
 
+    let gamesControls = MakeElement("games-controls", block)
+    let detailedTable = MakeCheckbox("Подробно", "detailed-table", gamesControls)
+
+    let games = MakeElement("games", block)
+
     let columns = [
         {name: "Дата", build: (quiz, cell) => {cell.innerText = FormatDate(new Date(quiz.datetime))}, type: "date", visible: true, sortable: true, wrap: false},
         {name: "Место", build: (quiz, cell) => {cell.innerText = quiz.result.position}, type: "number", visible: true, sortable: true, wrap: false},
@@ -166,13 +171,17 @@ function LoadGames(response, block) {
         {name: "Место проведения", build: (quiz, cell) => {cell.innerText = response.place_id2place[quiz.place_id].name}, type: "text", visible: false, sortable: true, wrap: false},
     ]
 
-    let games = MakeElement("games", block)
     let table = new FilterTable(games, columns)
 
     for (let game of response.games)
         table.AppendData(game)
 
     table.ShowNext()
+
+    detailedTable.addEventListener("click", () => {
+        let visible = detailedTable.checked
+        table.UpdateColumnsVisibility({"Категория": visible, "Организатор": visible, "Игроки": visible, "Команды": visible, "Место проведения": visible})
+    })
 }
 
 function BuildMonthDataPlot(block, name, data, color, metric, chartType) {
