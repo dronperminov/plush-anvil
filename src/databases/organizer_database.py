@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 from src import Database
 from src.entities.history_action import AddOrganizerAction, EditOrganizerAction, RemoveOrganizerAction
 from src.entities.organizer import Organizer
+from src.entities.quiz import Quiz
 
 
 class OrganizerDatabase:
@@ -52,11 +53,15 @@ class OrganizerDatabase:
         return {organizer["organizer_id"]: Organizer.from_dict(organizer) for organizer in self.database.organizers.find({"organizer_id": {"$in": organizer_ids}})}
 
     def get_all_organizers(self) -> List[Organizer]:
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}})]
+        return self.get_quiz_organizers(quizzes=quizzes)
+
+    def get_quiz_organizers(self, quizzes: List[Quiz]) -> List[Organizer]:
         today = datetime.now()
         organizer_id2score = defaultdict(float)
 
-        for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}}):
-            organizer_id2score[quiz["organizer_id"]] += 0.98 ** (today - quiz["datetime"]).days
+        for quiz in quizzes:
+            organizer_id2score[quiz.organizer_id] += 0.98 ** (today - quiz.datetime).days
 
         organizers = [Organizer.from_dict(organizer) for organizer in self.database.organizers.find({})]
         return sorted(organizers, key=lambda organizer: -organizer_id2score.get(organizer.organizer_id, 0))

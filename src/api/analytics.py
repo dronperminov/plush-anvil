@@ -50,14 +50,22 @@ def get_top_players(params: Period) -> JSONResponse:
 @router.post("/games-analytics")
 def get_games(params: Period) -> JSONResponse:
     games = analytics_database.get_games(params)
+    categories = analytics_database.get_quiz_categories(quizzes=games)
+
     organizer_id2organizer = organizer_database.get_organizers(organizer_ids=list({game.organizer_id for game in games}))
+    organizers = organizer_database.get_quiz_organizers(quizzes=games)
+
     place_id2place = place_database.get_places(place_ids=list({game.place_id for game in games}))
+    places = place_database.get_quiz_places(quizzes=games)
 
     return JSONResponse({
         "status": "success",
         "games": [jsonable_encoder(quiz) for quiz in games],
         "organizer_id2organizer": jsonable_encoder(organizer_id2organizer),
-        "place_id2place": jsonable_encoder(place_id2place)
+        "organizers": jsonable_encoder(organizers),
+        "place_id2place": jsonable_encoder(place_id2place),
+        "places": jsonable_encoder(places),
+        "categories": jsonable_encoder(categories)
     })
 
 

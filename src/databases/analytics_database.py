@@ -83,6 +83,15 @@ class AnalyticsDatabase:
 
         return sorted(month_analytics, key=lambda data: (data.year, data.month), reverse=True)
 
+    def get_quiz_categories(self, quizzes: List[Quiz]) -> List[Category]:
+        today = datetime.now()
+        category2score = defaultdict(float)
+
+        for quiz in quizzes:
+            category2score[quiz.category] += 0.98 ** (today - quiz.datetime).days
+
+        return sorted(list(category2score), key=lambda category: -category2score[category])
+
     def __quizzes_query(self, period: Period) -> dict:
         return {**period.to_query("datetime"), "result.position": {"$gt": 0}}
 

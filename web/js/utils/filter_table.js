@@ -114,16 +114,35 @@ FilterTable.prototype.GetTotalRows = function() {
     return this.data.length
 }
 
-FilterTable.prototype.UpdateButtons = function(total) {
+FilterTable.prototype.UpdateButtons = function() {
+    let total = this.GetTotal()
     this.showCount = Math.min(Math.max(this.showCount, this.showSize), total)
+
     this.UpdateVisibility(this.showBtn, this.showCount != total)
     this.UpdateVisibility(this.collapseBtn, this.showCount > this.showSize)
 }
 
+FilterTable.prototype.GetTotal = function() {
+    let total = 0
+
+    for (let data of this.data)
+        if (this.FilterRow(data))
+            total++
+
+    return total
+}
+
 FilterTable.prototype.Show = function() {
+    this.UpdateButtons()
+
     let total = 0
 
     for (let data of this.data) {
+        if (!this.FilterRow(data)) {
+            this.UpdateVisibility(data.row, false)
+            continue
+        }
+
         this.UpdateVisibility(data.row, total < this.showCount)
 
         for (let column of this.columns) {
@@ -133,8 +152,6 @@ FilterTable.prototype.Show = function() {
 
         total++
     }
-
-    this.UpdateButtons(total)
 }
 
 FilterTable.prototype.UpdateVisibility = function(node, condition) {
@@ -161,4 +178,12 @@ FilterTable.prototype.UpdateColumnsVisibility = function(columns) {
             column.visible = columns[column.name]
 
     this.Show()
+}
+
+FilterTable.prototype.FilterRow = function(row) {
+    for (let column of this.columns)
+        if (column.filter && !column.filter(row.name2cell[column.name].innerText))
+            return false
+
+    return true
 }

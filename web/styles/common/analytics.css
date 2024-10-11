@@ -84,6 +84,11 @@
     margin-bottom: 1em;
 }
 
+.games-controls select {
+    margin-left: 0.5em;
+    margin-bottom: 0.5em;
+}
+
 .games-controls label {
     font-weight: bold;
     cursor: pointer;

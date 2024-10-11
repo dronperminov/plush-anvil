@@ -6,6 +6,7 @@ from typing import Dict, List, Optional
 from src import Database
 from src.entities.history_action import AddPlaceAction, EditPlaceAction, RemovePlaceAction
 from src.entities.place import Place
+from src.entities.quiz import Quiz
 
 
 class PlaceDatabase:
@@ -52,11 +53,15 @@ class PlaceDatabase:
         return {place["place_id"]: Place.from_dict(place) for place in self.database.places.find({"place_id": {"$in": place_ids}})}
 
     def get_all_places(self) -> List[Place]:
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}})]
+        return self.get_quiz_places(quizzes=quizzes)
+
+    def get_quiz_places(self, quizzes: List[Quiz]) -> List[Place]:
         today = datetime.now()
         place_id2score = defaultdict(float)
 
-        for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}}):
-            place_id2score[quiz["place_id"]] += 0.98 ** (today - quiz["datetime"]).days
+        for quiz in quizzes:
+            place_id2score[quiz.place_id] += 0.98 ** (today - quiz.datetime).days
 
         places = [Place.from_dict(place) for place in self.database.places.find({})]
         return sorted(places, key=lambda place: -place_id2score.get(place.place_id, 0))

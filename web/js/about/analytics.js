@@ -149,6 +149,17 @@ function BuildGamesOrganizer(organizer, cell) {
     MakeElement("", div, {innerText: organizer.name}, "span")
 }
 
+function BuildGamesFilter(block, values, name, onchange) {
+    let select = MakeElement("basic-select", block, {}, "select")
+    MakeElement("", select, {innerText: name, value: "all"}, "option")
+
+    for (let value of values)
+        MakeElement("", select, {innerText: value, value: value}, "option")
+
+    select.addEventListener("change", onchange)
+    return select
+}
+
 function LoadGames(response, block) {
     if (response.games.length === 0) {
         MakeElement("description", block, {innerText: "Нет данных за указанный период"})
@@ -157,18 +168,29 @@ function LoadGames(response, block) {
 
     let gamesControls = MakeElement("games-controls", block)
     let detailedTable = MakeCheckbox("Подробно", "detailed-table", gamesControls)
+    let positionFilter = BuildGamesFilter(gamesControls, ["победы", "2-3 места", "призовые места", "ниже тройки"], "Все места", () => table.Show())
+    let categoryFilter = BuildGamesFilter(gamesControls, response.categories.map(category => new Category(category).ToRus()), "Все категории", () => table.Show())
+    let placeFilter = BuildGamesFilter(gamesControls, response.places.map(place => place.name), "Все места проведения", () => table.Show())
+    let organizerFilter = BuildGamesFilter(gamesControls, response.organizers.map(organizer => organizer.name), "Все организаторы", () => table.Show())
+
+    let position2values = {
+        "победы": {min: 1, max: 1},
+        "2-3 места": {min: 2, max: 3},
+        "призовые места": {min: 1, max: 3},
+        "ниже тройки": {min: 4, max: Infinity},
+    }
 
     let games = MakeElement("games", block)
 
     let columns = [
         {name: "Дата", build: (quiz, cell) => {cell.innerText = FormatDate(new Date(quiz.datetime))}, type: "date", visible: true, sortable: true, wrap: false},
-        {name: "Место", build: (quiz, cell) => {cell.innerText = quiz.result.position}, type: "number", visible: true, sortable: true, wrap: false},
+        {name: "Место", build: (quiz, cell) => {cell.innerText = quiz.result.position}, type: "number", visible: true, sortable: true, wrap: false, filter: (value) => positionFilter.value === "all" || (position2values[positionFilter.value].min <= +value && +value <= position2values[positionFilter.value].max)},
         {name: "Название", build: (quiz, cell) => {cell.innerText = quiz.name}, type: "text", visible: true, sortable: true, align: "left", wrap: true},
-        {name: "Категория", build: (quiz, cell) => {new Category(quiz.category).Build(cell)}, type: "text", visible: false, sortable: true, wrap: false},
-        {name: "Организатор", build: (quiz, cell) => {BuildGamesOrganizer(response.organizer_id2organizer[quiz.organizer_id], cell)}, type: "text", visible: false, sortable: true, "align": "left", wrap: false},
+        {name: "Категория", build: (quiz, cell) => {new Category(quiz.category).Build(cell)}, type: "text", visible: false, sortable: true, wrap: false, filter: (value) => categoryFilter.value === "all" || value.trim() == categoryFilter.value},
+        {name: "Организатор", build: (quiz, cell) => {BuildGamesOrganizer(response.organizer_id2organizer[quiz.organizer_id], cell)}, type: "text", visible: false, sortable: true, "align": "left", wrap: false, filter: (value) => organizerFilter.value === "all" || value == organizerFilter.value},
         {name: "Игроки", build: (quiz, cell) => {cell.innerText = quiz.result.players}, type: "number", visible: false, sortable: true, wrap: false},
         {name: "Команды", build: (quiz, cell) => {cell.innerText = quiz.result.teams}, type: "number", visible: false, sortable: true, wrap: false},
-        {name: "Место проведения", build: (quiz, cell) => {cell.innerText = response.place_id2place[quiz.place_id].name}, type: "text", visible: false, sortable: true, wrap: false},
+        {name: "Место проведения", build: (quiz, cell) => {cell.innerText = response.place_id2place[quiz.place_id].name}, type: "text", visible: false, sortable: true, wrap: false, filter: (value) => placeFilter.value === "all" || value == placeFilter.value},
     ]
 
     let table = new FilterTable(games, columns)
