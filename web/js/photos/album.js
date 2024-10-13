@@ -38,7 +38,7 @@ function LoadAlbumPhotos(response, block) {
     ShowAlbumTitle(response.album.title)
 
     for (let photo of response.photos)
-        block.appendChild(album.BuildPhoto(photo))
+        block.appendChild(album.BuildPhoto(photo, gallery))
 
     return response.photos.length
 }
@@ -48,6 +48,8 @@ function GetResultMessage(total) {
 }
 
 function GetAlbumPhotos() {
+    gallery.Clear()
+
     infiniteScroll.Reset()
     infiniteScroll.LoadContent()
 }
