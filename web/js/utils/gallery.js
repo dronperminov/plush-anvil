@@ -12,6 +12,12 @@ Gallery.prototype.Build = function() {
     this.BuildTopControls(view)
     this.BuildImageView(view)
     this.BuildBottomControls(view)
+
+    this.pressed = false
+    this.swipeOffset = 0
+    this.padding = 1
+
+    this.ResetScale()
 }
 
 Gallery.prototype.BuildTopControls = function(view) {
@@ -46,13 +52,14 @@ Gallery.prototype.BuildImage = function(addEvent = false) {
     if (addEvent) {
         imageBlock.addEventListener("transitionend", () => this.Show())
 
-        imageBlock.addEventListener("mousedown", (e) => this.MouseDownImageView(this.GetMousePoint(e, false)))
-        imageBlock.addEventListener("mousemove", (e) => this.MouseMoveImageView(this.GetMousePoint(e, true)))
+        imageBlock.addEventListener("mousedown", (e) => this.MouseDownImageView(e))
+        imageBlock.addEventListener("mousemove", (e) => this.MouseMoveImageView(e))
         imageBlock.addEventListener("mouseup", (e) => this.MouseUpImageView())
         imageBlock.addEventListener("mouseleave", (e) => this.MouseUpImageView())
+        imageBlock.addEventListener("wheel", (e) => this.MouseWheelImageView(e))
 
-        imageBlock.addEventListener("touchstart", (e) => this.MouseDownImageView(this.GetMousePoint(e, false)))
-        imageBlock.addEventListener("touchmove", (e) => this.MouseMoveImageView(this.GetMousePoint(e, true)))
+        imageBlock.addEventListener("touchstart", (e) => this.MouseDownImageView(e))
+        imageBlock.addEventListener("touchmove", (e) => this.MouseMoveImageView(e))
         imageBlock.addEventListener("touchend", (e) => this.MouseUpImageView())
         imageBlock.addEventListener("touchleave", (e) => this.MouseUpImageView())
     }
@@ -86,6 +93,8 @@ Gallery.prototype.Close = function() {
 
     for (let image of [this.leftImage, this.image, this.rightImage])
         image.removeAttribute("src")
+
+    this.ResetScale()
 }
 
 Gallery.prototype.AddPhoto = function(photoId, photo) {
@@ -106,11 +115,34 @@ Gallery.prototype.Clear = function() {
     this.showIndex = 0
 }
 
+Gallery.prototype.ResetScale = function() {
+    this.offsetX = 0
+    this.offsetY = 0
+    this.scale = 1
+
+    this.UpdateScale()
+}
+
+Gallery.prototype.UpdateScale = function() {
+    let rect = this.image.parentNode.getBoundingClientRect()
+    let width = this.image.clientWidth * this.scale
+    let height = this.image.clientHeight * this.scale
+
+    let x = Math.max(0, (width - rect.width) / 2 + this.padding)
+    let y = Math.max(0, (height - rect.height) / 2 + this.padding)
+
+    this.offsetX = Math.max(-x, Math.min(x, this.offsetX))
+    this.offsetY = Math.max(-y, Math.min(y, this.offsetY))
+
+    this.image.setAttribute("style", `transform: matrix(${this.scale},0,0,${this.scale},${this.offsetX},${this.offsetY})`)
+}
+
 Gallery.prototype.Prev = function() {
     if (this.showIndex <= 0)
         return
 
     this.showIndex--
+    this.ResetScale()
     this.TranslatePhotos(-1)
 }
 
@@ -119,6 +151,7 @@ Gallery.prototype.Next = function() {
         return
 
     this.showIndex++
+    this.ResetScale()
     this.TranslatePhotos(1)
 }
 
@@ -151,32 +184,62 @@ Gallery.prototype.TranslatePhotos = function(dx) {
 
         image.parentNode.setAttribute("style", `transform: translateX(${offset}%)`)
     }
+
+    this.UpdateScale()
 }
 
 Gallery.prototype.GetMousePoint = function(e, prevent) {
     if (prevent)
         e.preventDefault()
 
-    if (e.touches)
-        return {x: e.touches[0].clientX, y: e.touches[0].clientY}
+    let rect = this.imageView.getBoundingClientRect()
 
-    return {x: e.clientX, y: e.clientY}
+    if (!e.touches)
+        return {x: e.clientX - rect.left, y: e.clientY - rect.top}
+
+    if (e.touches.length === 1)
+        return {x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top}
+
+    return {
+        p1: {x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top},
+        p2: {x: e.touches[1].clientX - rect.left, y: e.touches[1].clientY - rect.top}
+    }
 }
 
-Gallery.prototype.MouseDownImageView = function(point) {
+Gallery.prototype.MouseDownImageView = function(e) {
     this.pressed = true
-    this.point = point
+    this.point = this.GetMousePoint(e, false)
     this.swipeOffset = 0
 }
 
-Gallery.prototype.MouseMoveImageView = function(point) {
+Gallery.prototype.MouseMoveImageView = function(e) {
     if (!this.pressed)
         return
 
-    this.swipeOffset += -(point.x - this.point.x) / this.image.parentNode.clientWidth
-    this.point = point
+    let point = this.GetMousePoint(e, true)
 
-    this.TranslatePhotos(this.swipeOffset)
+    if (e.touches && e.touches.length == 2) {
+        let prev = this.GetCenter(this.point.p1, this.point.p2)
+        let p = this.GetCenter(point.p1, point.p2)
+        let scale = this.GetDistance(point.p1, point.p2) / this.GetDistance(this.point.p1, this.point.p2)
+
+        this.ScaleAt(p, this.scale * scale)
+
+        this.offsetX += p.x - prev.x
+        this.offsetY += p.y - prev.y
+        this.UpdateScale()
+    }
+    else if (this.scale !== 1) {
+        this.offsetX += point.x - this.point.x
+        this.offsetY += point.y - this.point.y
+        this.UpdateScale()
+    }
+    else {
+        this.swipeOffset -= (point.x - this.point.x) / this.image.parentNode.clientWidth
+        this.TranslatePhotos(this.swipeOffset)
+    }
+
+    this.point = point
 }
 
 Gallery.prototype.MouseUpImageView = function() {
@@ -185,10 +248,44 @@ Gallery.prototype.MouseUpImageView = function() {
 
     this.pressed = false
 
+    if (this.scale !== 1)
+        return
+
     if (this.swipeOffset < -0.25 && this.showIndex > 0)
         this.Prev()
     else if (this.swipeOffset > 0.25 && this.showIndex < this.photos.length - 1)
         this.Next()
     else
         this.TranslatePhotos(0)
+}
+
+Gallery.prototype.MouseWheelImageView = function(e) {
+    let point = this.GetMousePoint(e, true)
+    let scale = this.scale * Math.pow(1.25, -Math.sign(e.deltaY))
+
+    this.ScaleAt(point, scale)
+    this.UpdateScale()
+}
+
+Gallery.prototype.ScaleAt = function(point, scale) {
+    scale = Math.max(1, Math.min(32, scale))
+
+    let x = point.x - (this.image.offsetLeft + this.image.clientWidth / 2)
+    let y = point.y - (this.image.offsetTop + this.image.clientHeight / 2)
+    let scaleDelta = scale / this.scale
+
+    this.scale *= scaleDelta
+    this.offsetX = x - (x - this.offsetX) * scaleDelta
+    this.offsetY = y - (y - this.offsetY) * scaleDelta
+}
+
+Gallery.prototype.GetCenter = function(p1, p2) {
+    return {x: (p1.x + p2.x) / 2, y: (p1.y + p2.y) / 2}
+}
+
+Gallery.prototype.GetDistance = function(p1, p2) {
+    let dx = p1.x - p2.x
+    let dy = p1.y - p2.y
+
+    return Math.sqrt(dx*dx + dy*dy)
 }
