@@ -196,6 +196,14 @@ class AlbumDatabase:
         markup = self.database.markup.find_one({"markup_id": markup_id})
         return Markup.from_dict(markup) if markup else None
 
+    def get_photo_markup(self, photo_ids: List[int]) -> Dict[int, List[Markup]]:
+        photo_id2markup = {photo_id: [] for photo_id in photo_ids}
+
+        for markup in self.database.markup.find({"photo_id": {"$in": photo_ids}}):
+            photo_id2markup[markup["photo_id"]].append(Markup.from_dict(markup))
+
+        return photo_id2markup
+
     def update_quiz(self, quiz_id: int, diff: dict, username: str) -> None:
         if not diff:
             return

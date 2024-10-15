@@ -1,0 +1,34 @@
+.markup {
+    display: grid;
+    align-items: end;
+    justify-items: center;
+    padding: 5px;
+    border-radius: 0.5em;
+
+    position: absolute;
+    z-index: 1;
+}
+
+.markup-finished {
+    background-color: #ffffff18;
+    border: 1px solid #ffffff30;
+}
+
+.markup-finished:hover {
+    border-color: #ffffffaa;
+    background-color: #ffffff50;
+}
+
+.markup-name {
+    display: none;
+}
+
+.markup-finished:hover .markup-name {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #00000080;
+    color: #ffffff;
+    font-size: 0.8em;
+    text-align: center;
+}

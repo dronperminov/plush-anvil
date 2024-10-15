@@ -41,11 +41,20 @@
     cursor: pointer;
     width: 28px;
     vertical-align: middle;
+    border-radius: 0.5em;
+}
+
+.gallery-icon:hover, .gallery-icon-pressed {
+    background-color: #fddc81;
 }
 
 .gallery-top-controls {
     display: grid;
     grid-template-columns: 1fr max-content;
+}
+
+.gallery-top-controls-left .gallery-icon {
+    margin-right: 0.5em
 }
 
 .gallery-image-view {
@@ -82,10 +91,6 @@
     width: 2em;
     background-color: #ffffff80;
     border-radius: 0.5em;
-}
-
-.gallery-prev-icon:hover, .gallery-next-icon:hover {
-    background-color: #fddc81;
 }
 
 .gallery-prev-icon {

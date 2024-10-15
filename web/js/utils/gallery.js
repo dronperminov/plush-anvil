@@ -1,5 +1,16 @@
-function Gallery() {
+const GALLERY_VIEW_MODE = "view"
+const GALLERY_MARKUP_MODE = "markup"
+
+function Gallery(users) {
     this.Build()
+
+    this.point = null
+    this.swipeOffset = 0
+    this.padding = 1
+    this.mode = GALLERY_VIEW_MODE
+    this.markup = new Markup(this.image, users)
+
+    this.ResetScale()
     this.Clear()
 }
 
@@ -12,12 +23,6 @@ Gallery.prototype.Build = function() {
     this.BuildTopControls(view)
     this.BuildImageView(view)
     this.BuildBottomControls(view)
-
-    this.pressed = false
-    this.swipeOffset = 0
-    this.padding = 1
-
-    this.ResetScale()
 }
 
 Gallery.prototype.BuildTopControls = function(view) {
@@ -27,6 +32,9 @@ Gallery.prototype.BuildTopControls = function(view) {
     let downloadIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/download.svg", title: "Скачать"}, "img")
     let downloadLink = MakeElement("", null, {download: ""}, "a")
     downloadIcon.addEventListener("click", () => this.Download(downloadLink))
+
+    let markupIcon = MakeElement("gallery-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
+    markupIcon.addEventListener("click", () => this.ToggleMarkupMode(markupIcon))
 
     let closeIcon = MakeElement("gallery-icon", controls, {src: "/images/icons/close.svg", title: "Закрыть"}, "img")
     closeIcon.addEventListener("click", () => this.Close())
@@ -48,6 +56,7 @@ Gallery.prototype.BuildImageView = function(view) {
 
 Gallery.prototype.BuildImage = function(addEvent = false) {
     let imageBlock = MakeElement("gallery-image", this.imageView)
+    let image = MakeElement("", imageBlock, {}, "img")
 
     if (addEvent) {
         imageBlock.addEventListener("transitionend", () => this.Show())
@@ -62,9 +71,11 @@ Gallery.prototype.BuildImage = function(addEvent = false) {
         imageBlock.addEventListener("touchmove", (e) => this.MouseMoveImageView(e))
         imageBlock.addEventListener("touchend", (e) => this.MouseUpImageView())
         imageBlock.addEventListener("touchleave", (e) => this.MouseUpImageView())
+
+        image.addEventListener("load", () => this.markup.Show(this.photos[this.showIndex].photoId))
     }
 
-    return MakeElement("", imageBlock, {}, "img")
+    return image
 }
 
 Gallery.prototype.BuildBottomControls = function(view) {
@@ -97,9 +108,10 @@ Gallery.prototype.Close = function() {
     this.ResetScale()
 }
 
-Gallery.prototype.AddPhoto = function(photoId, photo) {
-    this.photoId2index[photoId] = this.photos.length
+Gallery.prototype.AddPhoto = function(photo, markup) {
+    this.photoId2index[photo.photoId] = this.photos.length
     this.photos.push(photo)
+    this.markup.Add(photo.photoId, markup)
 }
 
 Gallery.prototype.ShowPhoto = function(photoId) {
@@ -113,6 +125,7 @@ Gallery.prototype.Clear = function() {
     this.photos = []
     this.photoId2index = {}
     this.showIndex = 0
+    this.markup.Clear()
 }
 
 Gallery.prototype.ResetScale = function() {
@@ -135,6 +148,7 @@ Gallery.prototype.UpdateScale = function() {
     this.offsetY = Math.max(-y, Math.min(y, this.offsetY))
 
     this.image.setAttribute("style", `transform: matrix(${this.scale},0,0,${this.scale},${this.offsetX},${this.offsetY})`)
+    this.markup.Update(this.offsetX, this.offsetY, this.scale)
 }
 
 Gallery.prototype.Prev = function() {
@@ -172,7 +186,8 @@ Gallery.prototype.SetPhoto = function(image, index) {
         return
     }
 
-    image.setAttribute("src", this.photos[index].url)
+    if (image.getAttribute("src") !== this.photos[index].url)
+        image.setAttribute("src", this.photos[index].url)
 }
 
 Gallery.prototype.TranslatePhotos = function(dx) {
@@ -184,6 +199,9 @@ Gallery.prototype.TranslatePhotos = function(dx) {
 
         image.parentNode.setAttribute("style", `transform: translateX(${offset}%)`)
     }
+
+    if (dx === -1 || dx === 1)
+        this.markup.Reset()
 
     this.UpdateScale()
 }
@@ -207,56 +225,88 @@ Gallery.prototype.GetMousePoint = function(e, prevent) {
 }
 
 Gallery.prototype.MouseDownImageView = function(e) {
-    this.pressed = true
     this.point = this.GetMousePoint(e, false)
-    this.swipeOffset = 0
+
+    if (this.mode == GALLERY_VIEW_MODE) {
+        this.swipeOffset = 0
+    }
+    else if (this.mode == GALLERY_MARKUP_MODE) {
+        this.markup.MouseDown(this.point)
+    }
 }
 
 Gallery.prototype.MouseMoveImageView = function(e) {
-    if (!this.pressed)
+    if (this.point === null)
         return
 
     let point = this.GetMousePoint(e, true)
 
     if (e.touches && e.touches.length == 2) {
-        let prev = this.GetCenter(this.point.p1, this.point.p2)
-        let p = this.GetCenter(point.p1, point.p2)
-        let scale = this.GetDistance(point.p1, point.p2) / this.GetDistance(this.point.p1, this.point.p2)
-
-        this.ScaleAt(p, this.scale * scale)
-
-        this.offsetX += p.x - prev.x
-        this.offsetY += p.y - prev.y
-        this.UpdateScale()
+        this.ZoomOnPitch(point)
     }
-    else if (this.scale !== 1) {
-        this.offsetX += point.x - this.point.x
-        this.offsetY += point.y - this.point.y
-        this.UpdateScale()
+    else if (this.mode == GALLERY_VIEW_MODE) {
+        if (this.scale === 1) {
+            this.Swipe(point)
+        }
+        else {
+            this.Move(point)
+        }
     }
-    else {
-        this.swipeOffset -= (point.x - this.point.x) / this.image.parentNode.clientWidth
-        this.TranslatePhotos(this.swipeOffset)
+    else if (this.mode == GALLERY_MARKUP_MODE) {
+        this.markup.MouseMove(this.point)
     }
 
     this.point = point
 }
 
 Gallery.prototype.MouseUpImageView = function() {
-    if (!this.pressed)
+    if (this.point === null)
         return
 
-    this.pressed = false
+    this.point = null
 
-    if (this.scale !== 1)
-        return
+    if (this.mode == GALLERY_VIEW_MODE) {
+        if (this.scale === 1)
+            this.SwipeEnd()
+    }
+    else if (this.mode == GALLERY_MARKUP_MODE) {
+        this.markup.MouseUp(this.point)
+    }
+}
 
-    if (this.swipeOffset < -0.25 && this.showIndex > 0)
+Gallery.prototype.ZoomOnPitch = function(point) {
+    let prev = this.GetCenter(this.point.p1, this.point.p2)
+    let p = this.GetCenter(point.p1, point.p2)
+    let scale = this.GetDistance(point.p1, point.p2) / this.GetDistance(this.point.p1, this.point.p2)
+
+    this.ScaleAt(p, this.scale * scale)
+
+    this.offsetX += p.x - prev.x
+    this.offsetY += p.y - prev.y
+    this.UpdateScale()
+}
+
+Gallery.prototype.Move = function(point) {
+    this.offsetX += point.x - this.point.x
+    this.offsetY += point.y - this.point.y
+    this.UpdateScale()
+}
+
+Gallery.prototype.Swipe = function(point) {
+    this.swipeOffset -= (point.x - this.point.x) / this.image.parentNode.clientWidth
+    this.TranslatePhotos(this.swipeOffset)
+}
+
+Gallery.prototype.SwipeEnd = function() {
+    if (this.swipeOffset < -0.25 && this.showIndex > 0) {
         this.Prev()
-    else if (this.swipeOffset > 0.25 && this.showIndex < this.photos.length - 1)
+    }
+    else if (this.swipeOffset > 0.25 && this.showIndex < this.photos.length - 1) {
         this.Next()
-    else
+    }
+    else {
         this.TranslatePhotos(0)
+    }
 }
 
 Gallery.prototype.MouseWheelImageView = function(e) {
@@ -288,4 +338,9 @@ Gallery.prototype.GetDistance = function(p1, p2) {
     let dy = p1.y - p2.y
 
     return Math.sqrt(dx*dx + dy*dy)
+}
+
+Gallery.prototype.ToggleMarkupMode = function(icon) {
+    icon.classList.toggle("gallery-icon-pressed")
+    this.mode = this.mode == GALLERY_VIEW_MODE ? GALLERY_MARKUP_MODE : GALLERY_VIEW_MODE
 }

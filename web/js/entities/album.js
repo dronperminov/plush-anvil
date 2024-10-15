@@ -24,7 +24,7 @@ Album.prototype.Build = function() {
     return album
 }
 
-Album.prototype.BuildPhoto = function(photo, gallery) {
+Album.prototype.BuildPhoto = function(photo, markup, gallery = null) {
     let photoBlock = MakeElement("photo")
     MakeElement("", photoBlock, {src: photo.preview_url}, "img")
 
@@ -34,8 +34,13 @@ Album.prototype.BuildPhoto = function(photo, gallery) {
     let coverIcon = this.BuildPhotoIcon("photo-cover-icon", "/images/icons/" + (this.coverId === photo.photo_id ? "star-fill.svg" : "star.svg"), photoBlock)
     coverIcon.addEventListener("click", () => this.SetCoverPhoto(photo.photo_id, coverIcon.querySelector("img")))
 
-    gallery.AddPhoto(photo.photo_id, photo)
-    photoBlock.addEventListener("click", () => gallery.ShowPhoto(photo.photo_id))
+    if (gallery !== null) {
+        gallery.AddPhoto({photoId: photo.photo_id, url: photo.url}, markup)
+        photoBlock.addEventListener("click", (e) => {
+            if (e.target !== removeIcon && e.target != coverIcon)
+                gallery.ShowPhoto(photo.photo_id)
+        })
+    }
 
     return photoBlock
 }

@@ -38,7 +38,7 @@ function LoadAlbumPhotos(response, block) {
     ShowAlbumTitle(response.album.title)
 
     for (let photo of response.photos)
-        block.appendChild(album.BuildPhoto(photo, gallery))
+        block.appendChild(album.BuildPhoto(photo, response.photo_id2markup[photo.photo_id], gallery))
 
     return response.photos.length
 }

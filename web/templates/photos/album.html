@@ -2,6 +2,7 @@
 {% include "components/header.html" %}
     <link rel="stylesheet" type="text/css" href="/styles/utils/user_select.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/utils/gallery.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/utils/markup.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/photos/album.css?v={{version}}">
 </head>
 <body ondragstart="return false">
@@ -62,6 +63,7 @@
     <script src="/js/utils/fetch.js?v={{version}}"></script>
     <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
     <script src="/js/utils/user_select.js?v={{version}}"></script>
+    <script src="/js/utils/markup.js?v={{version}}"></script>
     <script src="/js/utils/gallery.js?v={{version}}"></script>
 
     <script src="/js/entities/album.js?v={{version}}"></script>
@@ -91,7 +93,7 @@
         userSelect.onchange = () => GetAlbumPhotos()
         {% endif %}
 
-        let gallery = new Gallery()
+        let gallery = new Gallery([{% for user in users %}{username: "{{user.username}}", fullname: "{{user.full_name}}", avatarUrl: "{{user.avatar_url}}"},{% endfor %}])
         let album = new Album({{album|tojson}}, {})
         let infiniteScroll = new InfiniteScroll("photos", config)
         GetAlbumPhotos()

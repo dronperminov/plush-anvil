@@ -96,10 +96,13 @@ def album_photos(params: AlbumPhotos) -> JSONResponse:
         return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемый альбом, возможно он был удалён"})
 
     total, photos = album_database.get_album_photos(album=album, params=params)
+    photo_id2markup = album_database.get_photo_markup(photo_ids=[photo.photo_id for photo in photos])
+
     return JSONResponse({
         "status": "success",
         "total": total,
         "photos": jsonable_encoder(photos),
+        "photo_id2markup": jsonable_encoder(photo_id2markup),
         "album": jsonable_encoder(album)
     })
 
