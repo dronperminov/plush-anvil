@@ -121,7 +121,7 @@ UserSelect.prototype.UpdateSelectUser = function(username) {
         block.classList.add("user-select-user-selected")
 
     let countBlock = block.querySelector(".user-select-selected-count")
-    countBlock.innerText = this.config.multiple ? count : ""
+    countBlock.innerText = this.config.multiple && count > 0 ? count : ""
 
     this.SortUsers()
 
@@ -166,4 +166,19 @@ UserSelect.prototype.GetSelected = function() {
 
 UserSelect.prototype.HaveSelected = function() {
     return this.selected.length > 0
+}
+
+UserSelect.prototype.Clear = function() {
+    for (let username of this.selected) {
+        delete this.username2selected[username]
+
+        let block = this.username2block[username]
+        block.classList.remove("user-select-user-selected")
+
+        let countBlock = block.querySelector(".user-select-selected-count")
+        countBlock.innerText = ""
+    }
+
+    this.selected = []
+    this.SortUsers()
 }

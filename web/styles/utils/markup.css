@@ -2,16 +2,25 @@
     display: grid;
     align-items: end;
     justify-items: center;
-    padding: 5px;
     border-radius: 0.5em;
 
     position: absolute;
     z-index: 1;
 }
 
+.markup-hidden {
+    display: none !important;
+}
+
 .markup-finished {
+    padding: 5px;
     background-color: #ffffff18;
     border: 1px solid #ffffff30;
+}
+
+.markup-editing {
+    background-color: transparent;
+    border: 1px dashed #ffffff;
 }
 
 .markup-finished:hover {
@@ -31,4 +40,32 @@
     color: #ffffff;
     font-size: 0.8em;
     text-align: center;
+}
+
+.markup-users {
+    position: absolute;
+    background-color: #ffffff;
+    padding: 5px;
+    z-index: 2;
+    font-size: 0.9em;
+}
+
+.markup .markup-icon {
+    position: absolute;
+    filter: invert(80%);
+    cursor: pointer;
+    right: 2px;
+    top: 2px;
+    display: none;
+    width: 20px;
+    height: 20px;
+    z-index: 100;
+}
+
+.markup .markup-icon:hover {
+    filter: invert(100%);
+}
+
+.markup-mode .markup .markup-icon {
+    display: block;
 }

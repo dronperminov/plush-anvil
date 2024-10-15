@@ -44,8 +44,16 @@
     border-radius: 0.5em;
 }
 
-.gallery-icon:hover, .gallery-icon-pressed {
+.gallery-icon:hover {
     background-color: #fddc81;
+}
+
+.markup-icon:hover {
+    background-color: transparent;
+}
+
+.gallery-icon-pressed, .gallery-icon-pressed:hover {
+    background-color: #fddc81 !important;
 }
 
 .gallery-top-controls {

@@ -33,7 +33,7 @@ Gallery.prototype.BuildTopControls = function(view) {
     let downloadLink = MakeElement("", null, {download: ""}, "a")
     downloadIcon.addEventListener("click", () => this.Download(downloadLink))
 
-    let markupIcon = MakeElement("gallery-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
+    let markupIcon = MakeElement("gallery-icon markup-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
     markupIcon.addEventListener("click", () => this.ToggleMarkupMode(markupIcon))
 
     let closeIcon = MakeElement("gallery-icon", controls, {src: "/images/icons/close.svg", title: "Закрыть"}, "img")
@@ -105,6 +105,7 @@ Gallery.prototype.Close = function() {
     for (let image of [this.leftImage, this.image, this.rightImage])
         image.removeAttribute("src")
 
+    this.markup.Reset()
     this.ResetScale()
 }
 
@@ -148,7 +149,7 @@ Gallery.prototype.UpdateScale = function() {
     this.offsetY = Math.max(-y, Math.min(y, this.offsetY))
 
     this.image.setAttribute("style", `transform: matrix(${this.scale},0,0,${this.scale},${this.offsetX},${this.offsetY})`)
-    this.markup.Update(this.offsetX, this.offsetY, this.scale)
+    this.markup.UpdateScale(this.offsetX, this.offsetY, this.scale)
 }
 
 Gallery.prototype.Prev = function() {
@@ -224,18 +225,46 @@ Gallery.prototype.GetMousePoint = function(e, prevent) {
     }
 }
 
+Gallery.prototype.GetRelativePoint = function(e, prevent) {
+    let point = this.GetMousePoint(e, prevent)
+
+    let cx = this.image.offsetLeft + this.image.clientWidth / 2
+    let cy = this.image.offsetTop + this.image.clientHeight / 2
+
+    let x = 0.5 + (point.x - cx - this.offsetX) / (this.image.clientWidth * this.scale)
+    let y = 0.5 + (point.y - cy - this.offsetY) / (this.image.clientHeight * this.scale)
+    return {x, y}
+}
+
+Gallery.prototype.IsPitch = function(e) {
+    return e.touches && e.touches.length > 1
+}
+
 Gallery.prototype.MouseDownImageView = function(e) {
-    this.point = this.GetMousePoint(e, false)
+    if (!this.IsValidEvent(e))
+        return
+
+    if (this.mode == GALLERY_MARKUP_MODE && !this.IsPitch(e)) {
+        this.markup.MouseDown(this.GetRelativePoint(e, true))
+        return
+    }
+
+    this.point = this.GetMousePoint(e, true)
 
     if (this.mode == GALLERY_VIEW_MODE) {
         this.swipeOffset = 0
     }
-    else if (this.mode == GALLERY_MARKUP_MODE) {
-        this.markup.MouseDown(this.point)
-    }
 }
 
 Gallery.prototype.MouseMoveImageView = function(e) {
+    if (!this.IsValidEvent(e))
+        return
+
+    if (this.mode == GALLERY_MARKUP_MODE && !this.IsPitch(e)) {
+        this.markup.MouseMove(this.GetRelativePoint(e, true))
+        return
+    }
+
     if (this.point === null)
         return
 
@@ -252,14 +281,16 @@ Gallery.prototype.MouseMoveImageView = function(e) {
             this.Move(point)
         }
     }
-    else if (this.mode == GALLERY_MARKUP_MODE) {
-        this.markup.MouseMove(this.point)
-    }
 
     this.point = point
 }
 
 Gallery.prototype.MouseUpImageView = function() {
+    if (this.mode == GALLERY_MARKUP_MODE) {
+        this.markup.MouseUp()
+        return
+    }
+
     if (this.point === null)
         return
 
@@ -268,9 +299,6 @@ Gallery.prototype.MouseUpImageView = function() {
     if (this.mode == GALLERY_VIEW_MODE) {
         if (this.scale === 1)
             this.SwipeEnd()
-    }
-    else if (this.mode == GALLERY_MARKUP_MODE) {
-        this.markup.MouseUp(this.point)
     }
 }
 
@@ -310,11 +338,22 @@ Gallery.prototype.SwipeEnd = function() {
 }
 
 Gallery.prototype.MouseWheelImageView = function(e) {
+    if (!this.IsValidEvent(e))
+        return
+
     let point = this.GetMousePoint(e, true)
     let scale = this.scale * Math.pow(1.25, -Math.sign(e.deltaY))
 
     this.ScaleAt(point, scale)
     this.UpdateScale()
+}
+
+Gallery.prototype.IsValidEvent = function(e) {
+    for (let node = e.target; node != this.image.parentNode; node = node.parentNode)
+        if (node.classList.contains("markup-users") || node.classList.contains("markup-icon"))
+            return false
+
+    return true
 }
 
 Gallery.prototype.ScaleAt = function(point, scale) {
@@ -342,5 +381,14 @@ Gallery.prototype.GetDistance = function(p1, p2) {
 
 Gallery.prototype.ToggleMarkupMode = function(icon) {
     icon.classList.toggle("gallery-icon-pressed")
-    this.mode = this.mode == GALLERY_VIEW_MODE ? GALLERY_MARKUP_MODE : GALLERY_VIEW_MODE
+
+    if (this.mode == GALLERY_VIEW_MODE) {
+        this.mode = GALLERY_MARKUP_MODE
+        this.image.parentNode.classList.add("markup-mode")
+        return
+    }
+
+    this.mode = GALLERY_VIEW_MODE
+    this.image.parentNode.classList.remove("markup-mode")
+    this.markup.EndEdit()
 }

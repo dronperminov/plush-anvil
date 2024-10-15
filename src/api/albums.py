@@ -10,11 +10,13 @@ from fastapi.responses import HTMLResponse, JSONResponse, Response
 from src import album_database, database
 from src.api import admin_action, login_redirect, send_error, templates
 from src.entities.album import Album
+from src.entities.markup import Markup
 from src.entities.photo import Photo
 from src.entities.user import User
 from src.query_params.album_photos import AlbumPhotos
 from src.query_params.album_search import AlbumSearch, AlbumSearchQuery
 from src.query_params.cover_photo import CoverPhoto
+from src.query_params.markup_remove import MarkupRemove
 from src.query_params.remove_photo import RemovePhoto
 from src.query_params.rename_album import RenameAlbum
 from src.query_params.upload_photo import UploadPhoto
@@ -189,4 +191,34 @@ def rename_album(params: RenameAlbum, user: Optional[User] = Depends(get_user)) 
         return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемый альбом, возможно, он был удалён"})
 
     album_database.update_album(album_id=params.album_id, diff=album.get_diff({"title": params.title}), username=user.username)
+    return JSONResponse({"status": "success"})
+
+
+@router.post("/add-markup")
+def add_markup(markup: Markup, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    photo = album_database.get_photo(photo_id=markup.photo_id)
+    if not photo:
+        return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемое фото, возможно, оно был удалено"})
+
+    if not database.users.find_one({"username": markup.username}):
+        return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемого пользователя, возможно, он был удалён"})
+
+    markup.markup_id = database.get_identifier("markup")
+    album_database.add_markup(markup=markup, username=user.username)
+    return JSONResponse({"status": "success", "markup": jsonable_encoder(album_database.get_markup(markup_id=markup.markup_id))})
+
+
+@router.post("/remove-markup")
+def remove_markup(params: MarkupRemove, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    markup = album_database.get_markup(markup_id=params.markup_id)
+    if not markup:
+        return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемую отметку, возможно, она была удалена"})
+
+    album_database.remove_markup(markup_id=params.markup_id, username=user.username)
     return JSONResponse({"status": "success"})
