@@ -1,27 +1,31 @@
 .content {
-    max-width: 500px;
+    display: grid;
+    align-items: center;
+    justify-items: center;
     margin: 0 auto;
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    border-radius: 0 0 10px 10px;
 }
 
-.content .logo {
-    text-align: center;
-    margin-bottom: 1em;
+.sign-form {
+    background: #ffffff4d;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+
+    border-radius: 2em;
+    padding: 3em 2em;
+    width: 100%;
+    max-width: 850px;
 }
 
-.content .logo img {
-    width: 120px;
-    vertical-align: middle
+.sign-form .sign-button {
+    text-align: right;
+    margin-top: 1em;
+    font-size: 0.95em;
 }
 
 .login-header {
-    font-size: 1.4em;
+    font-size: 2em;
     font-weight: bold;
-    text-align: center;
-    margin-bottom: 0.6em;
+    margin-bottom: 1em;
 }
 
 .sign-option {
@@ -61,6 +65,9 @@
 
 .icon-input {
     margin-bottom: 0.5em;
+    padding: 0.7em 1em;
+    background: #ffffff99;
+    border-radius: 1.5em;
 }
 
 .captcha-block {
@@ -70,4 +77,20 @@
 .g-recaptcha {
     display: inline-block;
     margin: 0 auto;
+}
+
+@media (max-width: 767px) {
+    .sign-form {
+        padding: 30px 10px;
+    }
+
+    .login-header {
+        font-size: 1.5em;
+        text-align: center;
+    }
+
+    .icon-input {
+        padding: 0.7em 0.7em;
+        border-radius: 1em;
+    }
 }

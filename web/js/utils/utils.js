@@ -29,10 +29,14 @@ function ShowNotification(text, className = "error-notification", showTime = 200
 
 function ClearInputError(inputId) {
     let input = document.getElementById(inputId)
+    let name = document.getElementById(`${inputId}-name`)
     let label = document.getElementById(`${inputId}-label`)
     let icon = document.getElementById(`${inputId}-icon`)
 
     input.classList.remove("error-input")
+
+    if (name !== null)
+        name.classList.remove("error-name")
 
     if (icon !== null)
         icon.classList.remove("error-icon")
@@ -43,11 +47,15 @@ function ClearInputError(inputId) {
 
 function InputError(inputId, error = "") {
     let input = document.getElementById(inputId)
+    let name = document.getElementById(`${inputId}-name`)
     let label = document.getElementById(`${inputId}-label`)
     let icon = document.getElementById(`${inputId}-icon`)
 
     input.classList.add("error-input")
     input.focus()
+
+    if (name !== null)
+        name.classList.add("error-name")
 
     if (icon !== null)
         icon.classList.add("error-icon")

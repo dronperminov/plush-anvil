@@ -126,6 +126,7 @@ ul {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 1em 75px;
+    min-height: calc(100dvh - 70px);
 }
 
 .link {

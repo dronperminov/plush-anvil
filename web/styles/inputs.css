@@ -184,6 +184,12 @@
     border: 1px solid var(--icon-input-border);
 }
 
+.icon-input-name {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 0.5em;
+}
+
 .icon-input-icon {
     cursor: pointer;
 }
@@ -205,6 +211,10 @@
     display: grid;
     grid-auto-flow: column;
     grid-gap: 0.5em;
+}
+
+.error-name {
+    color: var(--error-color);
 }
 
 .error-input, .error-input:hover, .error-input:focus {

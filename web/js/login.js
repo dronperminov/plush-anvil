@@ -11,36 +11,17 @@ function GetSignInParams() {
 }
 
 function GetBirthDate() {
-    let day = GetTextInput("birth-date-day", "День рождения не заполнен")
-    if (day === null)
-        return null
-
-    if (day.match(/^\d\d?$/gi) === null) {
-        InputError("birth-date-day", "День рождения не является числом")
-        return null
-    }
-
-    let month = GetTextInput("birth-date-month", "Месяц рождения не заполнен")
-    if (month === null)
-        return null
-
-    if (month.match(/^\d\d?$/gi) === null) {
-        InputError("birth-date-month", "Месяц рождения не является числом")
-        return null
-    }
-
-    if (+month < 1 || +month > 12) {
-        InputError("birth-date-month", "Месяц рождения должен быть числом от 1 до 12")
-        return null
-    }
+    let day = +document.getElementById("birth-date-day").value
+    let month = +document.getElementById("birth-date-month").value
 
     let month2days = {1: 31, 2: 29, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
-    if (+day < 1 || +day > month2days[+month]) {
-        InputError("birth-date-day", `День рождения должен быть числом от 1 до ${month2days[+month]}`)
+
+    if (day < 1 || day > month2days[month]) {
+        InputError("birth-date-day", `День рождения не может быть числом больше ${month2days[+month]}`)
         return null
     }
 
-    return {day: +day, month: +month}
+    return {day: day, month: month}
 }
 
 function GetSignUpParams() {
@@ -58,6 +39,14 @@ function GetSignUpParams() {
         return null
     }
 
+    let fullname = GetTextInput("full-name", "Полное имя не заполнено")
+    if (fullname === null)
+        return null
+
+    let birthDate = GetBirthDate()
+    if (birthDate === null)
+        return null
+
     let password = GetTextInput("password", "Пароль не заполнен")
     if (password === null)
         return null
@@ -71,14 +60,6 @@ function GetSignUpParams() {
         InputError("password-confirm", "Пароли не совпадают")
         return null
     }
-
-    let fullname = GetTextInput("full-name", "Полное имя не заполнено")
-    if (fullname === null)
-        return null
-
-    let birthDate = GetBirthDate()
-    if (birthDate === null)
-        return null
 
     let response = grecaptcha.getResponse()
     if (response.length == 0) {
