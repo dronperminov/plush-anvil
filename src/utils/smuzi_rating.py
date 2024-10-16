@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List
 
 from src.entities.quiz import Quiz
@@ -25,6 +26,9 @@ class SmuziRating:
             1: 100, 2: 95, 3: 90, 4: 85, 5: 80, 6: 75, 7: 70, 8: 65,
             9: 60, 10: 58, 11: 56, 12: 54, 13: 53, 14: 52, 15: 51
         }
+
+    def get_rating(self, position: int, date: datetime) -> int:
+        return 0 if date < datetime(2024, 1, 1) else self.position2score.get(position, 50)
 
     def get_info(self, quizzes: List[Quiz]) -> RatingInfo:
         rating = 0

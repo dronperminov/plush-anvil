@@ -263,4 +263,7 @@ function LoadMonthAnalytics(response, block) {
     BuildMonthDataPlot(block, "СРЕДНЯЯ ПОЗИЦИЯ", response.month_analytics, "#9cc2ff", "mean_position", "plot-chart")
     BuildMonthDataPlot(block, "СРЕДНЕЕ ЧИСЛО ИГРОКОВ", response.month_analytics, "#9cc2ff", "mean_players", "plot-chart")
     BuildMonthTopPlayers(block, response.month_analytics, response.username)
+
+    if (response.month_analytics[0].year >= 2024)
+        BuildMonthDataPlot(block, "СМУЗИ РЕЙТИНГ", response.month_analytics, "#fddc81", "smuzi_rating", "bar-chart")
 }

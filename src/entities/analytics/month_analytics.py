@@ -15,3 +15,4 @@ class MonthAnalytics:
     mean_position: float
     mean_players: float
     top_players: List[TopPlayer]
+    smuzi_rating: int
