@@ -26,7 +26,7 @@ Album.prototype.Build = function() {
 
 Album.prototype.BuildPhoto = function(photo, markup, gallery = null) {
     let photoBlock = MakeElement("photo")
-    MakeElement("", photoBlock, {src: photo.preview_url}, "img")
+    let img = MakeElement("", photoBlock, {src: photo.preview_url}, "img")
 
     let removeIcon = this.BuildPhotoIcon("photo-remove-icon", "/images/icons/trash.svg", photoBlock)
     removeIcon.addEventListener("click", () => RemovePhoto(photo.photo_id))
@@ -36,10 +36,7 @@ Album.prototype.BuildPhoto = function(photo, markup, gallery = null) {
 
     if (gallery !== null) {
         gallery.AddPhoto({photoId: photo.photo_id, url: photo.url}, markup)
-        photoBlock.addEventListener("click", (e) => {
-            if (e.target !== removeIcon && e.target != coverIcon)
-                gallery.ShowPhoto(photo.photo_id)
-        })
+        img.addEventListener("click", (e) => gallery.ShowPhoto(photo.photo_id))
     }
 
     return photoBlock
@@ -107,5 +104,19 @@ Album.prototype.RenameAlbum = function(title) {
 
         this.title = title
         return true
+    })
+}
+
+Album.prototype.Remove = function() {
+    if (!confirm(`Вы уверены, что хотите удалить фотоальбом "${this.title}"?`))
+        return
+
+    SendRequest("/remove-album", {album_id: this.albumId}).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось удалить альбом<br><b>Причина</b>: ${response.message}`)
+            return false
+        }
+
+        location.href = "/albums"
     })
 }

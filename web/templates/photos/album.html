@@ -23,6 +23,7 @@
         <div class="admin-block add-link">
             <span class="arrow-link" onclick="ToggleEditMode()" id="edit-link"><span class="text">ИЗМЕНИТЬ</span> <span class="arrow"><img src="/images/icons/edit.svg"></span></span>
             <span class="arrow-link" onclick="SelectPhotos()" id="add-link"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+            <span class="arrow-link" onclick="RemoveAlbum()" id="add-link"><span class="text">УДАЛИТЬ</span> <span class="arrow"><img src="/images/icons/trash.svg"></span></span>
             <input type="file" accept="images/*" id="photos-input" multiple onchange="UploadPhotos()">
         </div>
         <div class="album-controls hidden" id="edit-block">

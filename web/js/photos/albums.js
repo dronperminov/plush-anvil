@@ -66,3 +66,34 @@ function ClearAlbums() {
     ResetFilters()
     SearchAlbums()
 }
+
+function MakeNewAlbumInfo() {
+    let info = MakeElement("info", null, {id: "new-album"})
+
+    MakeElement("info-header", info, {innerText: "Добавить новый альбом"})
+    MakeIconInput(info, '<img src="/images/icons/edit.svg">', "new-album-title", "basic-input", {placeholder: "название альбома"})
+
+    let button = MakeElement("basic-button gradient-button", info, {innerText: "Добавить"}, "button")
+    button.addEventListener("click", () => CreateAlbum(button))
+    return info
+}
+
+function CreateAlbum(button) {
+    let title = GetTextInput("new-album-title", "Название альбома не может быть пустым")
+    if (title === null)
+        return
+
+    Disable([button])
+    SendRequest("/add-album", {title: title}).then(response => {
+        Enable([button])
+
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось создать новый альбом.<br><b>Причина</b>: ${response.message}`, "error-notification")
+            return
+        }
+
+        document.getElementById("new-album-title").value = ""
+        infos.Close()
+        ClearAlbums()
+    })
+}

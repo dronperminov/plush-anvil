@@ -13,7 +13,9 @@ from src.entities.album import Album
 from src.entities.markup import Markup
 from src.entities.photo import Photo
 from src.entities.user import User
+from src.query_params.album_add import AlbumAdd
 from src.query_params.album_photos import AlbumPhotos
+from src.query_params.album_remove import AlbumRemove
 from src.query_params.album_search import AlbumSearch, AlbumSearchQuery
 from src.query_params.cover_photo import CoverPhoto
 from src.query_params.markup_remove import MarkupRemove
@@ -61,6 +63,28 @@ def album_response(album: Album, user: User, album_type: str = "", **kwargs) -> 
 def get_album(album_id: int, user: Optional[User] = Depends(get_user)) -> HTMLResponse:
     album = album_database.get_album(album_id=album_id)
     return album_response(album=album, user=user)
+
+
+@router.post("/add-album")
+def add_album(params: AlbumAdd, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    album = Album(album_id=database.get_identifier("albums"), title=params.title, photo_ids=[], date=datetime.now(), cover_id=None)
+    album_database.add_album(album=album, username=user.username)
+    return JSONResponse({"status": "success"})
+
+
+@router.post("/remove-album")
+def remove_album(params: AlbumRemove, user: Optional[User] = Depends(get_user)) -> JSONResponse:
+    if response := admin_action(user=user):
+        return response
+
+    if not album_database.get_album(album_id=params.album_id):
+        return JSONResponse({"status": "error", "message": "не удалось найти запрашиваемый альбом, возможно он был удалён"})
+
+    album_database.remove_album(album_id=params.album_id, username=user.username)
+    return JSONResponse({"status": "success"})
 
 
 @router.get("/photos")

@@ -1,5 +1,6 @@
 {% set title = "Альбомы | Плюшевая наковальня" %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/utils/info_panels.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/utils/search.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/photos/albums.css?v={{version}}">
 </head>
@@ -14,6 +15,10 @@
         </div>
 
         <h1>АЛЬБОМЫ</h1>
+
+        <div class="admin-block add-link">
+            <span class="arrow-link" onclick="infos.Show('new-album')"><span class="text">СОЗДАТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+        </div>
 
         <div class="search search-query-empty" id="search">
             <div class="search-main">
@@ -77,6 +82,7 @@
     <script src="/js/utils/swipe_handler.js?v={{version}}"></script>
     <script src="/js/utils/search.js?v={{version}}"></script>
     <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
+    <script src="/js/utils/info_panels.js?v={{version}}"></script>
 
     <script src="/js/entities/album.js?v={{version}}"></script>
 
@@ -94,6 +100,8 @@
 
         let search = new Search("search", () => SearchAlbums(), () => ClearAlbums())
         let infiniteScroll = new InfiniteScroll("albums", config)
+        let infos = new InfoPanels()
+        infos.Add(MakeNewAlbumInfo())
 
         {% if search_params %}
         document.getElementById("query").value = {{search_params.query|tojson}}

@@ -117,6 +117,10 @@ function RenameAlbum() {
     })
 }
 
+function RemoveAlbum() {
+    album.Remove()
+}
+
 function ShowAlbumTitle(title) {
     document.querySelector("title").innerText = `${title} | Плюшевая наковальня`
     document.querySelector("h1").innerText = title
