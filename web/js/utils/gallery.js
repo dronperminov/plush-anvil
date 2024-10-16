@@ -23,6 +23,9 @@ Gallery.prototype.Build = function() {
     this.BuildTopControls(view)
     this.BuildImageView(view)
     this.BuildBottomControls(view)
+
+    window.addEventListener("resize", () => this.UpdateScale())
+    document.addEventListener("keydown", (e) => this.KeyDown(e))
 }
 
 Gallery.prototype.BuildTopControls = function(view) {
@@ -30,11 +33,11 @@ Gallery.prototype.BuildTopControls = function(view) {
     let leftControls = MakeElement("gallery-top-controls-left", controls)
 
     let downloadIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/download.svg", title: "Скачать"}, "img")
-    let downloadLink = MakeElement("", null, {download: ""}, "a")
-    downloadIcon.addEventListener("click", () => this.Download(downloadLink))
+    this.downloadLink = MakeElement("", null, {download: ""}, "a")
+    downloadIcon.addEventListener("click", () => this.Download())
 
-    let markupIcon = MakeElement("gallery-icon markup-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
-    markupIcon.addEventListener("click", () => this.ToggleMarkupMode(markupIcon))
+    this.markupIcon = MakeElement("gallery-icon markup-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
+    this.markupIcon.addEventListener("click", () => this.ToggleMarkupMode())
 
     let closeIcon = MakeElement("gallery-icon", controls, {src: "/images/icons/close.svg", title: "Закрыть"}, "img")
     closeIcon.addEventListener("click", () => this.Close())
@@ -105,6 +108,9 @@ Gallery.prototype.Close = function() {
     for (let image of [this.leftImage, this.image, this.rightImage])
         image.removeAttribute("src")
 
+    if (this.mode != GALLERY_VIEW_MODE)
+        this.ToggleMarkupMode()
+
     this.markup.Reset()
     this.ResetScale()
 }
@@ -170,12 +176,12 @@ Gallery.prototype.Next = function() {
     this.TranslatePhotos(1)
 }
 
-Gallery.prototype.Download = function(link) {
+Gallery.prototype.Download = function() {
     if (!this.image.hasAttribute("src"))
         return
 
-    link.setAttribute("href", this.image.getAttribute("src"))
-    link.click()
+    this.downloadLink.setAttribute("href", this.image.getAttribute("src"))
+    this.downloadLink.click()
 }
 
 Gallery.prototype.SetPhoto = function(image, index) {
@@ -245,11 +251,11 @@ Gallery.prototype.MouseDownImageView = function(e) {
         return
 
     if (this.mode == GALLERY_MARKUP_MODE && !this.IsPitch(e)) {
-        this.markup.MouseDown(this.GetRelativePoint(e, true))
+        this.markup.MouseDown(this.GetRelativePoint(e, false))
         return
     }
 
-    this.point = this.GetMousePoint(e, true)
+    this.point = this.GetMousePoint(e, false)
 
     if (this.mode == GALLERY_VIEW_MODE) {
         this.swipeOffset = 0
@@ -299,6 +305,33 @@ Gallery.prototype.MouseUpImageView = function() {
     if (this.mode == GALLERY_VIEW_MODE) {
         if (this.scale === 1)
             this.SwipeEnd()
+    }
+}
+
+Gallery.prototype.KeyDown = function(e) {
+    if (!this.gallery.classList.contains("gallery-open"))
+        return
+
+    if (e.code == "Escape") {
+        e.preventDefault()
+        this.Close()
+        return
+    }
+
+    if (this.mode != GALLERY_VIEW_MODE)
+        return
+
+    if (e.code == "ArrowLeft") {
+        e.preventDefault()
+        this.Prev()
+    }
+    else if (e.code == "ArrowRight") {
+        e.preventDefault()
+        this.Next()
+    }
+    else if (e.code == "KeyS" && e.ctrlKey) {
+        e.preventDefault()
+        this.Download()
     }
 }
 
@@ -379,8 +412,8 @@ Gallery.prototype.GetDistance = function(p1, p2) {
     return Math.sqrt(dx*dx + dy*dy)
 }
 
-Gallery.prototype.ToggleMarkupMode = function(icon) {
-    icon.classList.toggle("gallery-icon-pressed")
+Gallery.prototype.ToggleMarkupMode = function() {
+    this.markupIcon.classList.toggle("gallery-icon-pressed")
 
     if (this.mode == GALLERY_VIEW_MODE) {
         this.mode = GALLERY_MARKUP_MODE
