@@ -60,6 +60,15 @@
         </div>
 
         <div class="analytics">
+            <h2>КАТЕГОРИИ ИГР</h2>
+
+            <div id="games-categories">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="analytics">
             <h2>ТОП АКТИВНЫХ ИГРОКОВ</h2>
 
             <div id="top-players">
@@ -116,6 +125,7 @@
             {blockId: "team-activity", url: "/team-activity-analytics", getParams: GetParams, onLoad: LoadTeamActivity},
             {blockId: "games-result", url: "/games-result-analytics", getParams: GetParams, onLoad: LoadGamesResult},
             {blockId: "position-distribution", url: "/position-distribution-analytics", getParams: GetParams, onLoad: LoadPositions},
+            {blockId: "games-categories", url: "/games-categories-analytics", getParams: GetParams, onLoad: LoadGamesCategories},
             {blockId: "top-players", url: "/top-players-analytics", getParams: GetParams, onLoad: LoadTopPlayers},
             {blockId: "games", url: "/games-analytics", getParams: GetParams, onLoad: LoadGames},
             {blockId: "month-analytics", url: "/month-analytics", getParams: GetParams, onLoad: LoadMonthAnalytics}

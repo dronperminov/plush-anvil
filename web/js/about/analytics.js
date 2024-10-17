@@ -123,6 +123,59 @@ function LoadPositions(response, block) {
     chart.Plot(svg, data, "position-label", "count")
 }
 
+function BuildGamesCategoriesChart(response, block) {
+    let plot = MakeElement("analytics-chart", block)
+    let svg = MakeElement("", plot, {}, "svg")
+    let data = []
+
+    for (let item of response.categories) {
+        let category = new Category(item.category)
+        data.push({value: item.games, color: category.ToColor()})
+    }
+
+    let chart = new Chart()
+    chart.Plot(svg, data)
+}
+
+function BuildGamesCategoriesBars(response, block) {
+    let maxGames = 0
+
+    for (let item of response.categories)
+        maxGames = Math.max(maxGames, item.games)
+
+    MakeElement("description", block, {innerText: "Чтобы увидеть более подробную информацию, нажмите на интересующую категорию."}, "p")
+
+    for (let item of response.categories) {
+        let category = new Category(item.category)
+        let color = category.ToColor()
+
+        let bar = MakeElement("analytics-categories-bar", block, {style: `background-color: ${color}4d;`})
+        let main = MakeElement("analytics-categories-bar-main", bar, {style: `background-color: ${color}; width: ${item.games / maxGames * 100}%;`}, "span")
+        MakeElement("analytics-categories-bar-label", main, {innerText: category.ToRus()}, "span")
+        MakeElement("analytics-categories-bar-value", bar, {innerText: item.games}, "span")
+
+        let info = MakeElement("analytics-categories-info", block, {style: `background-color: ${color}20; border-color: ${color};`})
+        bar.addEventListener("click", () => info.classList.toggle("analytics-categories-info-open"))
+
+        // TODO
+        MakeElement("", info, {innerText: "РЕЗУЛЬТАТЫ ИГР"}, "h2")
+        LoadGamesResult(item, info)
+        MakeElement("", info, {innerText: "РАСПРЕДЕЛЕНИЕ МЕСТ"}, "h2")
+        LoadPositions(item, info)
+    }
+}
+
+function LoadGamesCategories(response, block) {
+    if (response.categories.length === 0) {
+        MakeElement("", block, {innerText: "КАТЕГОРИИ ИГР"}, "h2")
+        MakeElement("description", block, {innerText: "Нет данных за указанный период"})
+        return
+    }
+
+    BuildGamesCategoriesChart(response, MakeElement("analytics-categories-chart", block))
+    BuildGamesCategoriesBars(response, MakeElement("analytics-categories-bars", block))
+}
+
 function LoadTopPlayers(response, block) {
     if (response.top_players.length === 0) {
         MakeElement("description", block, {innerText: "Нет данных за указанный период"})

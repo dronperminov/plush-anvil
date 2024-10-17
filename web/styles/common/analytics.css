@@ -65,6 +65,68 @@
     font-weight: bold;
 }
 
+.analytics-categories-chart {
+    margin-bottom: 2em;
+}
+
+.analytics-categories-bar {
+    margin-bottom: 0.5em;
+    border-radius: 0.5em;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    height: 2em;
+}
+
+.analytics-categories-bar-main {
+    border-radius: 0.5em;
+    position: relative;
+    height: 100%;
+    display: inline-block;
+}
+
+.analytics-categories-bar-label {
+    font-weight: bold;
+    position: absolute;
+    left: 0.5em;
+    top: 0;
+    bottom: 0;
+    display: grid;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.analytics-categories-bar-value {
+    position: absolute;
+    right: 0.5em;
+    top: 0;
+    bottom: 0;
+    display: inline-grid;
+    align-items: center;
+}
+
+.analytics-categories-info {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s;
+    font-size: 0.9em;
+}
+
+.analytics-categories-info-open {
+    border-radius: 1em;
+    margin-bottom: 1em;
+    border-width: 1px;
+    border-style: solid;
+    padding: 1em;
+    max-height: 1000px;
+    overflow: auto;
+    transition: max-height 0.2s;
+}
+
+.analytics-categories-info .games-result {
+    margin-bottom: 2em;
+}
+
 .top-players {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

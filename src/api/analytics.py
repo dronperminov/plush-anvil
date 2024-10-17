@@ -41,6 +41,12 @@ def get_position_distribution_analytics(params: Period) -> JSONResponse:
     return JSONResponse({"status": "success", "positions": positions, "mean_position": mean_position})
 
 
+@router.post("/games-categories-analytics")
+def get_games_categories_analytics(params: Period) -> JSONResponse:
+    categories = analytics_database.get_categories(params)
+    return JSONResponse({"status": "success", "categories": jsonable_encoder(categories)})
+
+
 @router.post("/top-players-analytics")
 def get_top_players(params: Period) -> JSONResponse:
     top_players = analytics_database.get_top_players(params)

@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import Dict, List, Tuple
 
 from src import Database
+from src.entities.analytics.category_analytics import CategoryAnalytics
 from src.entities.analytics.games_result import GamesResult
 from src.entities.analytics.month_analytics import MonthAnalytics
 from src.entities.analytics.top_player import TopPlayer
@@ -46,15 +47,32 @@ class AnalyticsDatabase:
         return GamesResult(wins=wins, top3=top3, top10=top10, games=games)
 
     def get_positions(self, period: Period, max_position: int = 15) -> Tuple[Dict[int, int], float]:
-        position2count = {position + 1: 0 for position in range(max_position + 1)}
-        positions = []
+        quizzes = self.database.quizzes.find(self.__quizzes_query(period=period), {"result": 1})
+        positions, mean_position = self.__get_positions(quizzes=quizzes)
+        return positions, mean_position
 
-        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"result": 1}):
-            position = quiz["result"]["position"]
-            position2count[min(max_position + 1, position)] += 1
-            positions.append(position)
+    def get_categories(self, period: Period) -> List[CategoryAnalytics]:
+        category2quizzes: Dict[Category, list] = defaultdict(list)
 
-        return position2count, sum(positions) / max(len(positions), 1)
+        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"category": 1, "result": 1}):
+            category2quizzes[Category(quiz["category"])].append(quiz)
+
+        analytics = []
+
+        for category, quizzes in category2quizzes.items():
+            positions, mean_position = self.__get_positions(quizzes=quizzes)
+
+            analytics.append(CategoryAnalytics(
+                category=category,
+                games=len(quizzes),
+                wins=sum(1 for quiz in quizzes if quiz["result"]["position"] == 1),
+                top3=sum(1 for quiz in quizzes if 2 <= quiz["result"]["position"] <= 3),
+                top10=sum(1 for quiz in quizzes if 4 <= quiz["result"]["position"] <= 10),
+                mean_position=mean_position,
+                positions=positions
+            ))
+
+        return sorted(analytics, key=lambda item: (item.category == Category.OTHER, -item.games))
 
     def get_top_players(self, period: Period) -> List[TopPlayer]:
         return self.__get_top_players(quizzes=self.database.quizzes.find(self.__quizzes_query(period=period), {"participants": 1, "datetime": 1, "category": 1}))
@@ -131,3 +149,14 @@ class AnalyticsDatabase:
             ))
 
         return sorted(top_players, key=lambda top_player: -top_player.score)
+
+    def __get_positions(self, quizzes: List[dict], max_position: int = 15) -> Tuple[Dict[int, int], float]:
+        position2count = {position + 1: 0 for position in range(max_position + 1)}
+        positions = []
+
+        for quiz in quizzes:
+            position = quiz["result"]["position"]
+            position2count[min(max_position + 1, position)] += 1
+            positions.append(position)
+
+        return position2count, sum(positions) / max(len(positions), 1)
