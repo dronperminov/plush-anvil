@@ -91,11 +91,13 @@ function ToggleEditMode() {
     let editLink = document.getElementById("edit-link").children[0]
     let addLink = document.getElementById("add-link")
     let editBlock = document.getElementById("edit-block")
+    let removeLink = document.getElementById("remove-link")
 
     content.classList.toggle("album-edit")
 
     addLink.classList.toggle("hidden")
     editBlock.classList.toggle("hidden")
+    removeLink.classList.toggle("hidden")
 
     if (content.classList.contains("album-edit"))
         editLink.innerText = "ЗАВЕРШИТЬ"
