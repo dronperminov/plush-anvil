@@ -193,3 +193,16 @@ function Enable(elements) {
 function Round(value, scale = 100) {
     return Math.round(value * scale) / scale
 }
+
+function GetMonthFromRus(month) {
+    let rus2month = {
+        "январь": 1, "февраль": 2, "март": 3, "апрель": 4, "май": 5, "июнь": 6,
+        "июль": 7, "август": 8, "сентябрь": 9, "октябрь": 10, "ноябрь": 11, "декабрь": 12
+    }
+    return rus2month[month.toLowerCase()]
+}
+
+function GetRusMonth(month) {
+    let months = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"]
+    return months[month - 1]
+}

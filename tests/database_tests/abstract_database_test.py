@@ -23,7 +23,7 @@ class AbstractDatabaseTest(TestCase):
         cls.place_database = PlaceDatabase(database=cls.database, logger=logger)
         cls.organizer_database = OrganizerDatabase(database=cls.database, logger=logger)
         cls.album_database = AlbumDatabase(database=cls.database, logger=logger)
-        cls.quiz_database = QuizDatabase(database=cls.database, logger=logger)
+        cls.quiz_database = QuizDatabase(database=cls.database, place_database=cls.place_database, organizer_database=cls.organizer_database, logger=logger)
 
     @classmethod
     def tearDownClass(cls: "AbstractDatabaseTest") -> None:

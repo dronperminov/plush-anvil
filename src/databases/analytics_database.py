@@ -87,8 +87,11 @@ class AnalyticsDatabase:
             month2quizzes[(quiz["datetime"].year, quiz["datetime"].month)].append(quiz)
 
         month_analytics = []
+        smuzi_id = self.database.get_smuzi_id()
 
         for (year, month), quizzes in month2quizzes.items():
+            smuzi_quizzes = [quiz for quiz in quizzes if quiz["organizer_id"] == smuzi_id]
+
             month_analytics.append(MonthAnalytics(
                 month=month,
                 year=year,
@@ -99,7 +102,7 @@ class AnalyticsDatabase:
                 mean_position=round(sum(quiz["result"]["position"] for quiz in quizzes) / len(quizzes), 1),
                 mean_players=round(sum(len(quiz["participants"]) for quiz in quizzes) / len(quizzes), 1),
                 top_players=self.__get_top_players(quizzes=quizzes),
-                smuzi_rating=sum([self.smuzi_rating.get_rating(quiz["result"]["position"], quiz["datetime"]) for quiz in quizzes if not quiz["ignore_rating"]])
+                smuzi_rating=sum([self.smuzi_rating.get_rating(quiz["result"]["position"], quiz["datetime"]) for quiz in smuzi_quizzes if not quiz["ignore_rating"]])
             ))
 
         return sorted(month_analytics, key=lambda data: (data.year, data.month), reverse=True)

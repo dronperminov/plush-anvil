@@ -1,5 +1,6 @@
 {% set title = "Плюшевая наковальня" %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/common/schedule.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/index.css?v={{version}}">
 </head>
 <body ondragstart="return false">
@@ -50,6 +51,27 @@
         {% endif %}
 
         <h2>РАСПИСАНИЕ</h2>
+
+        <div class="schedule">
+            <div class="schedule-date" id="schedule-date">
+                <div class="schedule-date-controls">
+                    <div class="schedule-date-prev" onclick="StepSchedule(-1)">
+                        <img src="/images/icons/angle-left.svg">
+                    </div>
+
+                    <div class="schedule-date-value"><span id="schedule-date-month">{{get_rus_month(today)|upper}}</span> <span id="schedule-date-year">{{today.year}}</span></div>
+
+                    <div class="schedule-date-next" onclick="StepSchedule(1)">
+                        <img src="/images/icons/angle-right.svg">
+                    </div>
+                </div>
+            </div>
+
+            <div id="schedule">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
 
         <div class="link-header">
             <h2>О КОМАНДЕ</h2>
@@ -170,7 +192,14 @@
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>
+    <script src="/js/utils/content_loader.js?v={{version}}"></script>
+    <script src="/js/entities/schedule.js?v={{version}}"></script>
 
+    <script src="/js/index.js?v={{version}}"></script>
+    <script>
+        let scheduleConfig = {blockId: "schedule", url: "/schedule", getParams: GetScheduleParams, onLoad: LoadSchedule, load: true, clearBeforeLoad: true}
+        let scheduleLoader = new ContentLoader(scheduleConfig)
+    </script>
     {% include "components/footer.html" %}
 </body>
 </html>

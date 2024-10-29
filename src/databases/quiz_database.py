@@ -4,21 +4,28 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 from src import Database
+from src.databases.organizer_database import OrganizerDatabase
+from src.databases.place_database import PlaceDatabase
 from src.entities.analytics.team_analytics import TeamAnalytics
 from src.entities.history_action import AddPaidDateAction, AddQuizAction, EditQuizAction, RemovePaidDateAction, RemoveQuizAction
 from src.entities.paid_date import PaidDate
 from src.entities.paid_info import PaidInfo
 from src.entities.quiz import Quiz
+from src.entities.schedule import Schedule
 from src.entities.sticker import Sticker
 from src.entities.sticker_info import StickerInfo
 from src.entities.user import User
 from src.enums import PaidType
 from src.query_params.page_query import PageQuery
+from src.query_params.schedule_params import ScheduleParams
+from src.utils.date import get_month_range
 
 
 class QuizDatabase:
-    def __init__(self, database: Database, logger: logging.Logger) -> None:
+    def __init__(self, database: Database, place_database: PlaceDatabase, organizer_database: OrganizerDatabase, logger: logging.Logger) -> None:
         self.database = database
+        self.place_database = place_database
+        self.organizer_database = organizer_database
         self.logger = logger
         self.activity_score_alpha = 0.98
 
@@ -59,8 +66,8 @@ class QuizDatabase:
     def get_rating_quizzes(self) -> List[Quiz]:
         query = {
             "datetime": {"$gte": datetime(2024, 1, 1)},
-            "result": {"$ne": None},
-            "organizer_id": self.__get_smuzi_id(),
+            "result.position": {"$gt": 0},
+            "organizer_id": self.database.get_smuzi_id(),
             "ignore_rating": {"$ne": True}
         }
         return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(query).sort("datetime", 1)]
@@ -145,12 +152,31 @@ class QuizDatabase:
         stickers = Sticker.from_paid_infos(paid_infos=paid_infos if end_index == -1 else paid_infos[:end_index])
         return self.__get_paid_games(paid_infos=paid_infos), stickers
 
-    def __get_stickers_query(self) -> dict:
-        return {"organizer_id": self.__get_smuzi_id(), "datetime": {"$gte": datetime(2024, 4, 1)}}
+    def get_schedule(self, params: ScheduleParams) -> Schedule:
+        start_date, end_date = get_month_range(year=params.year, month=params.month)
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"datetime": {"$gte": start_date, "$lte": end_date}}).sort({"datetime": 1})]
 
-    def __get_smuzi_id(self) -> int:
-        organizer = self.database.organizers.find_one({"name": "Смузи"}, {"organizer_id": 1})
-        return organizer["organizer_id"]
+        places = self.place_database.get_quiz_places(quizzes=quizzes, only_used=True)
+        organizers = self.organizer_database.get_quiz_organizers(quizzes=quizzes, only_used=True)
+
+        day2quizzes: Dict[int, list] = defaultdict(list)
+
+        for quiz in quizzes:
+            day2quizzes[quiz.datetime.day].append(quiz)
+
+        schedule = Schedule(
+            month=params.month,
+            year=params.year,
+            places=places,
+            organizers=organizers,
+            analytics=TeamAnalytics.evaluate(quizzes=quizzes),
+            day2quizzes={day: day_quizzes for day, day_quizzes in day2quizzes.items()}
+        )
+
+        return schedule
+
+    def __get_stickers_query(self) -> dict:
+        return {"organizer_id": self.database.get_smuzi_id(), "datetime": {"$gte": datetime(2024, 4, 1)}}
 
     def __get_paid_games(self, paid_infos: List[PaidInfo]) -> int:
         end_index = self.__get_last_free_game(paid_infos)

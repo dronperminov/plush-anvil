@@ -7,6 +7,7 @@ function ContentLoader(config) {
     this.url = config.url
     this.getParams = config.getParams || null
     this.onLoad = config.onLoad
+    this.clearBeforeLoad = config.clearBeforeLoad || false
 
     if (config.load)
         this.Load()
@@ -16,6 +17,9 @@ ContentLoader.prototype.Load = function() {
     let params = this.getParams === null ? {} : this.getParams()
     if (params === null)
         return
+
+    if (this.clearBeforeLoad)
+        this.Clear()
 
     this.loader.classList.remove("hidden")
 
@@ -31,7 +35,11 @@ ContentLoader.prototype.Load = function() {
     })
 }
 
-ContentLoader.prototype.Reset = function() {
+ContentLoader.prototype.Clear = function() {
     this.block.innerHTML = ""
+}
+
+ContentLoader.prototype.Reset = function() {
+    this.Clear()
     this.loader.classList.add("hidden")
 }

@@ -35,7 +35,7 @@ class SmuziRating:
         level = -1
 
         for quiz in quizzes:
-            rating += self.position2score.get(quiz.result.position, 50)
+            rating += self.get_rating(position=quiz.result.position, date=quiz.datetime)
 
             if level < len(self.levels) - 1 and rating >= self.levels[level + 1].score:
                 level += 1

@@ -59,10 +59,10 @@ def get_games(params: Period) -> JSONResponse:
     categories = analytics_database.get_quiz_categories(quizzes=games)
 
     organizer_id2organizer = organizer_database.get_organizers(organizer_ids=list({game.organizer_id for game in games}))
-    organizers = organizer_database.get_quiz_organizers(quizzes=games)
+    organizers = organizer_database.get_quiz_organizers(quizzes=games, only_used=True)
 
     place_id2place = place_database.get_places(place_ids=list({game.place_id for game in games}))
-    places = place_database.get_quiz_places(quizzes=games)
+    places = place_database.get_quiz_places(quizzes=games, only_used=True)
 
     return JSONResponse({
         "status": "success",

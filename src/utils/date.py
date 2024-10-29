@@ -4,6 +4,11 @@ from datetime import datetime, timedelta
 from typing import Optional, Tuple
 
 
+def get_rus_month(date: datetime) -> str:
+    months = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"]
+    return months[date.month - 1]
+
+
 def get_month_range(year: int, month: int) -> Tuple[datetime, datetime]:
     start_date = datetime(year, month, 1, 0, 0, 0)
     _, num_days = calendar.monthrange(start_date.year, start_date.month)

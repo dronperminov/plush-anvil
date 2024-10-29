@@ -167,7 +167,6 @@ function BuildGamesCategoriesBars(response, block) {
 
 function LoadGamesCategories(response, block) {
     if (response.categories.length === 0) {
-        MakeElement("", block, {innerText: "КАТЕГОРИИ ИГР"}, "h2")
         MakeElement("description", block, {innerText: "Нет данных за указанный период"})
         return
     }

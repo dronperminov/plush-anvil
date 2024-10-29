@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends
@@ -8,8 +9,10 @@ from src import album_database, database, organizer_database, place_database, qu
 from src.api import admin_redirect, templates
 from src.entities.user import User
 from src.query_params.page_query import PageQuery
+from src.query_params.schedule_params import ScheduleParams
 from src.utils.auth import get_user
 from src.utils.common import get_static_hash, get_word_form
+from src.utils.date import get_rus_month
 
 router = APIRouter()
 
@@ -25,6 +28,8 @@ def index(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
     organizer_id2organizer = organizer_database.get_organizers(organizer_ids=list({quiz.organizer_id for quiz in nearest_quizzes}))
     photo_id2photo = album_database.get_photos(photo_ids=[album.cover_id for album in last_albums])
 
+    today = datetime.now()
+
     template = templates.get_template("index.html")
     content = template.render(
         version=get_static_hash(),
@@ -36,7 +41,9 @@ def index(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
         place_id2place=place_id2place,
         organizer_id2organizer=organizer_id2organizer,
         photo_id2photo=photo_id2photo,
-        get_word_form=get_word_form
+        get_word_form=get_word_form,
+        today=today,
+        get_rus_month=get_rus_month
     )
 
     return HTMLResponse(content=content)
@@ -57,3 +64,9 @@ def get_birthday_users(params: PageQuery) -> JSONResponse:
     total, users = database.get_birthday_users(params=params)
     username2days = {user.username: user.birth_date.get_days() for user in users}
     return JSONResponse({"status": "success", "total": total, "users": jsonable_encoder(users), "username2days": username2days})
+
+
+@router.post("/schedule")
+def get_schedule(params: ScheduleParams) -> JSONResponse:
+    schedule = quiz_database.get_schedule(params=params)
+    return JSONResponse({"status": "success", "schedule": jsonable_encoder(schedule)})
