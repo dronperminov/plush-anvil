@@ -149,6 +149,7 @@
 .games-controls select {
     margin-left: 0.5em;
     margin-top: 0.5em;
+    background-color: #fddc8180;
 }
 
 .games-controls label {

@@ -1,6 +1,5 @@
 .filter-table {
     width: 100%;
-    border-collapse: collapse;
 }
 
 .filter-table-scrollable {
@@ -9,25 +8,33 @@
 }
 
 .filter-table tr {
-    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbff99 0%, #ed9ddc00 100%), #c69dee80;
+
 }
 
 .filter-table td, .filter-table th {
     font-size: 0.9em;
-    padding: 8px 5px;
-    border: 1px solid #ac9eee;
     text-align: center;
     vertical-align: middle;
+    border-radius: 0.75em;
+    padding: 15px 13px;
 }
 
 .filter-table th {
-    padding: 15px 13px;
     white-space: nowrap;
+    background-color: #ee9ddc;
+    border: 1px solid #ffffff;
+    color: #2e2836b2;
+    cursor: pointer;
+}
+
+.filter-table td {
+    background-color: #ffffff;
+    border: 1px solid #ee9ddc;
 }
 
 .filter-table th.order-asc, .filter-table th.order-desc {
     padding: 15px 5px;
-    color: var(--main-color);
+    color: var(--text-color);
 }
 
 .filter-table th.order-asc:after {
@@ -55,11 +62,64 @@
 }
 
 .filter-table-buttons {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    grid-gap: 0.5em;
     margin-top: 1em;
+}
+
+.filter-table-show-btn, .filter-table-collapse-btn {
+    cursor: pointer;
+    display: inline-grid;
+    grid-template-columns: 1.5em 1fr;
+    align-items: center;
+}
+
+.filter-table-collapse-btn {
+    margin-right: 1em;
+}
+
+.filter-table-btn-icon {
+    display: inline-block;
+    width: 1.3em;
+    height: 1.3em;
+    background-color: #ee9ddc80;
+    border-radius: 100%;
+    position: relative;
+}
+
+.filter-table-btn-icon:before, .filter-table-btn-icon:after {
+    content: "";
+    display: block;
+    background-color: #c239a3;
+    width: 2px;
+    height: 30%;
+    position: absolute;
+}
+
+.filter-table-btn-icon:before {
+    left: calc(28% + 2px);
+}
+
+.filter-table-btn-icon:after {
+    right: calc(28% + 2px);
+}
+
+.filter-table-show-btn .filter-table-btn-icon:before {
+    top: 35%;
+    transform: rotate(-45deg);
+}
+
+.filter-table-show-btn .filter-table-btn-icon:after {
+    top: 35%;
+    transform: rotate(45deg);
+}
+
+.filter-table-collapse-btn .filter-table-btn-icon:before {
+    bottom: 35%;
+    transform: rotate(45deg);
+}
+
+.filter-table-collapse-btn .filter-table-btn-icon:after {
+    bottom: 35%;
+    transform: rotate(-45deg);
 }
 
 @media (max-width: 767px) {

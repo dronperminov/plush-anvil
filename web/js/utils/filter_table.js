@@ -23,10 +23,15 @@ FilterTable.prototype.BuildHeader = function() {
 }
 
 FilterTable.prototype.BuildButtons = function() {
-    this.collapseBtn = MakeElement("basic-button gradient-button", this.buttons, {innerText: "Свернуть"}, "button")
-    this.collapseBtn.addEventListener("click", () => this.Collapse())
+    this.collapseBtn = MakeElement("filter-table-collapse-btn", this.buttons)
+    MakeElement("filter-table-btn-icon", this.collapseBtn, {}, "span")
+    MakeElement("filter-table-btn-label", this.collapseBtn, {innerText: "СВЕРНУТЬ"}, "span")
 
-    this.showBtn = MakeElement("basic-button gradient-button", this.buttons, {innerText: "Показать ещё"}, "button")
+    this.showBtn = MakeElement("filter-table-show-btn", this.buttons)
+    MakeElement("filter-table-btn-icon", this.showBtn, {}, "span")
+    MakeElement("filter-table-btn-label", this.showBtn, {innerText: "ПОКАЗАТЬ БОЛЬШЕ"}, "span")
+
+    this.collapseBtn.addEventListener("click", () => this.Collapse())
     this.showBtn.addEventListener("click", () => this.ShowNext())
 }
 
