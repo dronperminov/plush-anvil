@@ -1,7 +1,7 @@
 .albums {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 2em;
+    grid-gap: 1.5em;
 }
 
 .album {
@@ -23,7 +23,7 @@
     grid-template-columns: 1fr 2em;
     grid-gap: 0.5em;
     padding: 1em 10px;
-    font-size: 0.9em;
+    font-size: 0.8em;
 }
 
 @media (max-width: 1023px) {
@@ -35,7 +35,7 @@
 @media (max-width: 679px) {
     .albums {
         grid-template-columns: 1fr 1fr;
-        grid-gap: 1.5em;
+        grid-gap: 1.25em;
     }
 }
 

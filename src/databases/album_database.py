@@ -167,6 +167,13 @@ class AlbumDatabase:
         photo_id2photo = self.get_photos(photo_ids=photo_ids)
         return len(album.photo_ids), [photo_id2photo[photo_id] for photo_id in photo_ids]
 
+    def get_album_titles(self, album_ids: List[int]) -> Dict[int, str]:
+        album_id2title = {album_id: "" for album_id in album_ids}
+        for album in self.database.albums.find({"album_id": {"$in": album_ids}}, {"album_id": 1, "title": 1}):
+            album_id2title[album["album_id"]] = album["title"]
+
+        return album_id2title
+
     def add_markup(self, markup: Markup, username: str) -> None:
         action = AddMarkupAction(username=username, timestamp=datetime.now(), markup_id=markup.markup_id)
         self.database.markup.insert_one(markup.to_dict())

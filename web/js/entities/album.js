@@ -24,7 +24,7 @@ Album.prototype.Build = function() {
     return album
 }
 
-Album.prototype.BuildPhoto = function(photo, markup, gallery = null) {
+Album.prototype.BuildPhoto = function(photo, markup, title, gallery = null) {
     let photoBlock = MakeElement("photo")
     let img = MakeElement("", photoBlock, {src: photo.preview_url}, "img")
 
@@ -35,7 +35,7 @@ Album.prototype.BuildPhoto = function(photo, markup, gallery = null) {
     coverIcon.addEventListener("click", () => this.SetCoverPhoto(photo.photo_id, coverIcon.querySelector("img")))
 
     if (gallery !== null) {
-        gallery.AddPhoto({photoId: photo.photo_id, url: photo.url}, markup)
+        gallery.AddPhoto({photoId: photo.photo_id, url: photo.url, albumId: photo.album_id, title: title}, markup)
         img.addEventListener("click", (e) => gallery.ShowPhoto(photo.photo_id))
     }
 

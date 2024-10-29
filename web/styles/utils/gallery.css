@@ -109,6 +109,10 @@
     right: 2px;
 }
 
+.gallery-bottom-controls {
+    text-align: right;
+}
+
 @media (max-width: 767px) {
     .gallery {
         padding: 10px;

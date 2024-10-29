@@ -39,6 +39,9 @@ Gallery.prototype.BuildTopControls = function(view) {
     this.markupIcon = MakeElement("gallery-icon markup-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
     this.markupIcon.addEventListener("click", () => this.ToggleMarkupMode())
 
+    let infoIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/info.svg", title: "Информация"}, "img")
+    infoIcon.addEventListener("click", () => this.ShowInfo())
+
     let closeIcon = MakeElement("gallery-icon", controls, {src: "/images/icons/close.svg", title: "Закрыть"}, "img")
     closeIcon.addEventListener("click", () => this.Close())
 }
@@ -83,6 +86,11 @@ Gallery.prototype.BuildImage = function(addEvent = false) {
 
 Gallery.prototype.BuildBottomControls = function(view) {
     let controls = MakeElement("gallery-bottom-controls", view)
+
+    this.albumLink = MakeElement("arrow-link", controls, {target: "_blank"}, "a")
+    MakeElement("text", this.albumLink, {innerText: "ПЕРЕЙТИ В АЛЬБОМ"})
+    let arrow = MakeElement("arrow", this.albumLink, {})
+    MakeElement("", arrow, {src: "/images/icons/arrow-right.svg"}, "img")
 }
 
 Gallery.prototype.Show = function() {
@@ -113,6 +121,18 @@ Gallery.prototype.Close = function() {
 
     this.markup.Reset()
     this.ResetScale()
+}
+
+Gallery.prototype.ShowInfo = function() {
+    if (this.showIndex < 0 || this.showIndex >= this.photos.length)
+        return
+
+    let info = [
+        `<b>Альбом</b>: ${this.photos[this.showIndex].title}`,
+        `<b>Размер изображения</b>: ${this.image.naturalWidth}x${this.image.naturalHeight}`
+    ]
+
+    ShowNotification(info.join("<br>"), "info-notification", 2500)
 }
 
 Gallery.prototype.AddPhoto = function(photo, markup) {
@@ -195,6 +215,8 @@ Gallery.prototype.SetPhoto = function(image, index) {
 
     if (image.getAttribute("src") !== this.photos[index].url)
         image.setAttribute("src", this.photos[index].url)
+
+    this.albumLink.setAttribute("href", `/albums/${this.photos[index].albumId}`)
 }
 
 Gallery.prototype.TranslatePhotos = function(dx) {

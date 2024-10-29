@@ -123,13 +123,15 @@ def album_photos(params: AlbumPhotos) -> JSONResponse:
 
     total, photos = album_database.get_album_photos(album=album, params=params)
     photo_id2markup = album_database.get_photo_markup(photo_ids=[photo.photo_id for photo in photos])
+    album_id2title = album_database.get_album_titles(album_ids=list({photo.album_id for photo in photos}))
 
     return JSONResponse({
         "status": "success",
         "total": total,
         "photos": jsonable_encoder(photos),
         "photo_id2markup": jsonable_encoder(photo_id2markup),
-        "album": jsonable_encoder(album)
+        "album": jsonable_encoder(album),
+        "album_id2title": album_id2title
     })
 
 
