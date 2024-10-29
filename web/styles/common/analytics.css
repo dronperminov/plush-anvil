@@ -162,14 +162,6 @@
     margin-right: 5px;
 }
 
-.month-analytics {
-    margin-top: 3em;
-}
-
-.month-analytics > h2 {
-    margin-bottom: -0.5em;
-}
-
 .months-top-players {
     max-width: 100%;
     overflow: auto;
@@ -204,6 +196,37 @@
 .months-top-players-date {
     white-space: nowrap;
     text-align: center;
+}
+
+.analytics-labels {
+    overflow-x: auto;
+    max-width: 100%;
+    white-space: nowrap;
+}
+
+.analytics-label {
+    display: inline-block;
+    background-color: #fddc81;
+    border-radius: 0.5em;
+    padding: 0.4em 0.7em;
+    margin-right: 0.5em;
+    cursor: pointer;
+    color: #2e2836b2;
+}
+
+.analytics-label:last-child {
+    margin-right: 0;
+}
+
+.analytics-label-selected {
+    font-weight: bold;
+    cursor: default;
+    background-color: #f9dc5c;
+    color: var(--text-color);
+}
+
+.analytics-plots {
+    margin-bottom: 3em;
 }
 
 @media (max-width: 1200px) {

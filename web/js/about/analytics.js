@@ -259,7 +259,7 @@ function LoadGames(response, block) {
 }
 
 function BuildMonthDataPlot(block, name, data, color, metric, chartType) {
-    let analytics = MakeElement("analytics", block)
+    let analytics = MakeElement("", block)
     MakeElement("", analytics, {innerText: name}, "h2")
 
     let plot = MakeElement("analytics-plot", analytics)
@@ -274,10 +274,11 @@ function BuildMonthDataPlot(block, name, data, color, metric, chartType) {
         return
 
     chart.Plot(svg, data, "label", metric)
+    return analytics
 }
 
 function BuildMonthTopPlayers(block, data, username, topCount = 7) {
-    let analytics = MakeElement("analytics", block)
+    let analytics = MakeElement("", block)
     MakeElement("", analytics, {innerText: "ТОП АКТИВНЫХ ИГРОКОВ"}, "h2")
 
     let players = MakeElement("months-top-players", analytics)
@@ -295,27 +296,61 @@ function BuildMonthTopPlayers(block, data, username, topCount = 7) {
     }
 }
 
+function BuildMonthGroup(block, data, configs) {
+    let labels = MakeElement("analytics-labels", block)
+    let plots = MakeElement("analytics-plots", block)
+
+    for (let config of configs) {
+        let label = MakeElement("analytics-label", labels, {innerText: config.text})
+        let plot = BuildMonthDataPlot(plots, "", data, config.color, config.label, config.type)
+
+        label.addEventListener("click", () => {
+            for (let child of labels.children)
+                child.classList.remove("analytics-label-selected")
+
+            for (let child of plots.children)
+                child.classList.add("hidden")
+
+            label.classList.add("analytics-label-selected")
+            plot.classList.remove("hidden")
+        })
+
+        if (config.label === configs[0].label) {
+            label.classList.add("analytics-label-selected")
+        }
+        else {
+            plot.classList.add("hidden")
+        }
+    }
+}
+
 function LoadMonthAnalytics(response, block) {
     if (response.month_analytics.length < 2) {
         block.parentNode.parentNode.classList.add("hidden")
         return
     }
 
-    let months = ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"]
-
     for (let data of response.month_analytics)
-        data.label = `${months[data.month - 1]}\n${data.year}`
+        data.label = `${GetRusMonth(data.month)}\n${data.year}`
 
     block.parentNode.parentNode.classList.remove("hidden")
 
-    BuildMonthDataPlot(block, "ИГРЫ", response.month_analytics, "#9cc2ff", "games", "bar-chart")
-    BuildMonthDataPlot(block, "ПОБЕДЫ", response.month_analytics, "#ffa1a6", "wins", "bar-chart")
-    BuildMonthDataPlot(block, "2-3 МЕСТА", response.month_analytics, "#fddc81", "top3", "bar-chart")
-    BuildMonthDataPlot(block, "ВХОЖДЕНИЕ В ТРОЙКУ", response.month_analytics, "#ed9ddc", "prizes", "bar-chart")
-    BuildMonthDataPlot(block, "СРЕДНЯЯ ПОЗИЦИЯ", response.month_analytics, "#9cc2ff", "mean_position", "plot-chart")
-    BuildMonthDataPlot(block, "СРЕДНЕЕ ЧИСЛО ИГРОКОВ", response.month_analytics, "#9cc2ff", "mean_players", "plot-chart")
-    BuildMonthTopPlayers(block, response.month_analytics, response.username)
+    let gamesConfigs = [
+        {label: "games", color: "#9cc2ff", text: "Игры", type: "bar-chart"},
+        {label: "wins", color: "#ffa1a6", text: "Победы", type: "bar-chart"},
+        {label: "top3", color: "#fddc81", text: "2-3 места", type: "bar-chart"},
+        {label: "prizes", color: "#ed9ddc", text: "Вхождение в тройку", type: "bar-chart"}
+    ]
 
     if (response.month_analytics[0].year >= 2024)
-        BuildMonthDataPlot(block, "СМУЗИ РЕЙТИНГ", response.month_analytics, "#fddc81", "smuzi_rating", "bar-chart")
+        gamesConfigs.push({label: "smuzi_rating", color: "#fddc81", text: "Смузи рейтинг", type: "bar-chart"})
+
+    let meanConfigs = [
+        {label: "mean_position", color: "#9cc2ff", text: "Средняя позиция", type: "plot-chart"},
+        {label: "mean_players", color: "#9cc2ff", text: "Среднее число игроков", type: "plot-chart"},
+    ]
+
+    BuildMonthGroup(block, response.month_analytics, gamesConfigs)
+    BuildMonthGroup(block, response.month_analytics, meanConfigs)
+    BuildMonthTopPlayers(block, response.month_analytics, response.username)
 }
