@@ -196,9 +196,27 @@ function LoadTopPlayers(response, block) {
 }
 
 function BuildGamesOrganizer(organizer, cell) {
-    let div = MakeElement("games-organizer", cell)
-    MakeElement("", div, {src: organizer.image_url}, "img")
-    MakeElement("", div, {innerText: organizer.name}, "span")
+    let block = MakeElement("games-organizer", cell)
+    MakeElement("", block, {src: organizer.image_url}, "img")
+    MakeElement("", block, {innerText: organizer.name}, "span")
+}
+
+function BuildGamesParticipants(participants, username2avatar, username2score, cell) {
+    participants.sort((a, b) => username2score[b.username] - username2score[a.username])
+
+    let block = MakeElement("games-participants", cell)
+
+    for (let participant of participants)
+        MakeElement("", block, {src: username2avatar[participant.username]}, "img")
+}
+
+function BuildGamesPhotoAlbum(albumId, cell) {
+    if (!albumId) {
+        cell.innerText = "-"
+        return
+    }
+
+    MakeElement("link", cell, {href: `/albums/${albumId}`, innerText: albumId, target: "_blank"}, "a")
 }
 
 function BuildGamesFilter(block, values, name, onchange) {
@@ -241,8 +259,10 @@ function LoadGames(response, block) {
         {name: "НАЗВАНИЕ", build: (quiz, cell) => {cell.innerText = quiz.name}, type: "text", visible: true, sortable: true, align: "left", wrap: true},
         {name: "ОРГАНИЗАТОР", build: (quiz, cell) => {BuildGamesOrganizer(response.organizer_id2organizer[quiz.organizer_id], cell)}, type: "text", visible: false, sortable: true, "align": "left", wrap: false, filter: (value) => organizerFilter.value === "all" || value == organizerFilter.value},
         {name: "ИГРОКИ", build: (quiz, cell) => {cell.innerText = quiz.result.players}, type: "number", visible: false, sortable: true, wrap: false},
+        {name: "СОСТАВ", build: (quiz, cell) => {BuildGamesParticipants(quiz.participants, response.username2avatar_url, response.username2score, cell)}, type: "other", visible: false, sortable: false, wrap: false},
         {name: "КОМАНДЫ", build: (quiz, cell) => {cell.innerText = quiz.result.teams}, type: "number", visible: false, sortable: true, wrap: false},
         {name: "МЕСТО ПРОВЕДЕНИЯ", build: (quiz, cell) => {cell.innerText = response.place_id2place[quiz.place_id].name}, type: "text", visible: false, sortable: true, wrap: false, filter: (value) => placeFilter.value === "all" || value == placeFilter.value},
+        {name: "ФОТОАЛЬБОМ", build: (quiz, cell) => {BuildGamesPhotoAlbum(quiz.album_id, cell)}, type: "text", visible: false, sortable: false, wrap: false, filter: (value) => placeFilter.value === "all" || value == placeFilter.value},
     ]
 
     let table = new FilterTable(games, columns)
@@ -254,7 +274,7 @@ function LoadGames(response, block) {
 
     detailedTable.addEventListener("click", () => {
         let visible = detailedTable.checked
-        table.UpdateColumnsVisibility({"КАТЕГОРИЯ": visible, "ОРГАНИЗАТОР": visible, "ИГРОКИ": visible, "КОМАНДЫ": visible, "МЕСТО ПРОВЕДЕНИЯ": visible})
+        table.UpdateColumnsVisibility({"КАТЕГОРИЯ": visible, "ОРГАНИЗАТОР": visible, "ИГРОКИ": visible, "СОСТАВ": visible, "КОМАНДЫ": visible, "МЕСТО ПРОВЕДЕНИЯ": visible, "ФОТОАЛЬБОМ": visible})
     })
 }
 

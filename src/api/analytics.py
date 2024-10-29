@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse
 
-from src import analytics_database, organizer_database, place_database
+from src import analytics_database, database, organizer_database, place_database, quiz_database
 from src.api import templates
 from src.entities.user import User
 from src.query_params.analytics.period import Period
@@ -64,6 +64,9 @@ def get_games(params: Period) -> JSONResponse:
     place_id2place = place_database.get_places(place_ids=list({game.place_id for game in games}))
     places = place_database.get_quiz_places(quizzes=games, only_used=True)
 
+    username2avatar_url = database.get_user_avatar_urls(usernames=list({participant.username for game in games for participant in game.participants}))
+    username2score = quiz_database.get_activity_scores()
+
     return JSONResponse({
         "status": "success",
         "games": [jsonable_encoder(quiz) for quiz in games],
@@ -71,7 +74,9 @@ def get_games(params: Period) -> JSONResponse:
         "organizers": jsonable_encoder(organizers),
         "place_id2place": jsonable_encoder(place_id2place),
         "places": jsonable_encoder(places),
-        "categories": jsonable_encoder(categories)
+        "categories": jsonable_encoder(categories),
+        "username2avatar_url": username2avatar_url,
+        "username2score": username2score
     })
 
 

@@ -110,7 +110,7 @@ class QuizDatabase:
             for participant in quiz["participants"]:
                 username2score[participant["username"]] += self.activity_score_alpha ** (end_date - quiz["datetime"]).days
 
-        return username2score
+        return {username: score for username, score in username2score.items()}
 
     def get_sticker_users(self, params: PageQuery) -> Tuple[int, List[User], Dict[str, StickerInfo]]:
         username2user = {user["username"]: User.from_dict(user) for user in self.database.users.find({"stickers_start_date": {"$ne": None}})}

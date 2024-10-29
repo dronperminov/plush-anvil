@@ -163,6 +163,20 @@
     margin-right: 5px;
 }
 
+.games-participants {
+    display: grid;
+    grid-auto-columns: 30px;
+    grid-auto-flow: column;
+    grid-gap: 5px;
+    max-width: 170px;
+    overflow-x: auto;
+}
+
+.games-participants img {
+    width: 100%;
+    border-radius: 100%;
+}
+
 .months-top-players {
     max-width: 100%;
     overflow: auto;

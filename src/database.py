@@ -91,6 +91,14 @@ class Database:
         user: dict = self.users.find_one({"username": {"$regex": f"^{re.escape(username)}$", "$options": "i"}})
         return User.from_dict(user) if user else None
 
+    def get_user_avatar_urls(self, usernames: List[str]) -> Dict[str, str]:
+        username2avatar_url = {username: "/profile-images/default.png" for username in usernames}
+
+        for user in self.users.find({"username": {"$in": usernames}}, {"username": 1, "avatar_url": 1}):
+            username2avatar_url[user["username"]] = user["avatar_url"]
+
+        return username2avatar_url
+
     def get_users_paid_info(self, usernames: List[str]) -> Dict[str, List[PaidInfo]]:
         username2paid_info = {username: [] for username in usernames}
 
