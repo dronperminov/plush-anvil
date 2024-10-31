@@ -225,7 +225,7 @@ class AlbumDatabase:
 
     def get_last_albums(self, top_count: int = 13) -> List[Album]:
         album_ids = [quiz["album_id"] for quiz in self.database.quizzes.find({"album_id": {"$ne": None}}, {"album_id"})]
-        query = {"photo_ids.2": {"$exists": True}, "album_id": {"$in": album_ids}}
+        query = {"photo_ids.2": {"$exists": True}, "album_id": {"$in": album_ids}, "cover_id": {"$ne": None}}
         return [Album.from_dict(album) for album in self.database.albums.find(query).sort({"date": -1}).limit(top_count)]
 
     def search_albums(self, params: AlbumSearch) -> Tuple[int, List[Album]]:

@@ -98,7 +98,7 @@ class QuizDatabase:
 
     def get_users(self) -> List[User]:
         username2score = self.get_activity_scores()
-        users = sorted([User.from_dict(user) for user in self.database.users.find({})], key=lambda user: -username2score[user.username])
+        users = sorted([User.from_dict(user) for user in self.database.users.find({})], key=lambda user: -username2score.get(user.username, 0))
         return users
 
     def get_activity_scores(self) -> Dict[str, float]:
