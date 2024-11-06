@@ -1,7 +1,10 @@
 {% set title = "%s (@%s) | Плюшевая наковальня" % (user.full_name, user.username) %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/utils/filter_table.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/utils/image_cropper.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/plots/year_grid.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/profile/profile.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/common/analytics.css?v={{version}}">
 </head>
 <body ondragstart="return false">
     {% include "components/menu.html" %}
@@ -31,19 +34,79 @@
             {% endfor %}
         </div>
         {% endif %}
+
+        <h2>АНАЛИТИКА</h2>
+        <p class="description">В этом блоке показана информация о посещённых играх.</p>
+
+        <div class="analytics">
+            <h3>АКТИВНОСТЬ</h3>
+
+            <div id="my-activity">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="analytics">
+            <h3>РЕЗУЛЬТАТЫ ИГР</h3>
+
+            <div id="games-result">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="analytics">
+            <h3>ИГРЫ</h3>
+
+            <div id="games">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
+
+        <div class="analytics">
+            <h3>АНАЛИТИКА ПО МЕСЯЦАМ</h3>
+
+            <div id="month-analytics">
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+                <div></div>
+            </div>
+        </div>
     </div>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>
     <script src="/js/utils/image_cropper.js?v={{version}}"></script>
+    <script src="/js/utils/content_loader.js?v={{version}}"></script>
+    <script src="/js/utils/filter_table.js?v={{version}}"></script>
 
+    <script src="/js/plots/year_grid.js?v={{version}}"></script>
+    <script src="/js/plots/bar_chart.js?v={{version}}"></script>
+    <script src="/js/plots/chart.js?v={{version}}"></script>
+    <script src="/js/plots/plot_chart.js?v={{version}}"></script>
+
+    <script src="/js/entities/category.js?v={{version}}"></script>
     <script src="/js/entities/user.js?v={{version}}"></script>
+
+    <script src="/js/about/analytics.js?v={{version}}"></script>
     <script src="/js/profile/profile.js?v={{version}}"></script>
     <script>
         let user = new User({{jsonable_encoder(user)|tojson}})
         let profile = document.getElementById("profile")
 
         user.BuildProfile(profile, {{user.birth_date.get_days() if user.birth_date else None}})
+
+        let loaderConfigs = [
+            {blockId: "my-activity", url: "/team-activity-analytics", getParams: GetUserParams, onLoad: LoadTeamActivity, load: true},
+            {blockId: "games-result", url: "/games-result-analytics", getParams: GetUserParams, onLoad: LoadGamesResult, load: true},
+            {blockId: "games", url: "/games-analytics", getParams: GetUserParams, onLoad: LoadGames, load: true},
+            {blockId: "month-analytics", url: "/month-analytics", getParams: GetUserParams, onLoad: LoadMonthAnalytics, load: true}
+        ]
+
+        let loaders = []
+        for (let config of loaderConfigs)
+            loaders.push(new ContentLoader(config))
     </script>
     {% include "components/footer.html" %}
 </body>

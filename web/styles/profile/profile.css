@@ -43,6 +43,7 @@
     max-width: 100%;
     grid-auto-flow: column;
     grid-gap: 1em;
+    margin-bottom: 4em;
 }
 
 .photos .photo img {

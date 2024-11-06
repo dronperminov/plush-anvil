@@ -104,6 +104,11 @@ h2 {
     margin-bottom: 1em;
 }
 
+h3 {
+    font-size: 1.3em;
+    margin-bottom: 1em;
+}
+
 ul {
     margin-left: 20px;
 }
@@ -463,6 +468,10 @@ ul {
 
     h2 {
         font-size: 1.2em;
+    }
+
+    h3 {
+        font-size: 1.1em;
     }
 
     #notifications {

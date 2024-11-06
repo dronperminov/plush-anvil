@@ -262,7 +262,7 @@ function LoadGames(response, block) {
         {name: "СОСТАВ", build: (quiz, cell) => {BuildGamesParticipants(quiz.participants, response.username2avatar_url, response.username2score, cell)}, type: "other", visible: false, sortable: false, wrap: false},
         {name: "КОМАНДЫ", build: (quiz, cell) => {cell.innerText = quiz.result.teams}, type: "number", visible: false, sortable: true, wrap: false},
         {name: "МЕСТО ПРОВЕДЕНИЯ", build: (quiz, cell) => {cell.innerText = response.place_id2place[quiz.place_id].name}, type: "text", visible: false, sortable: true, wrap: false, filter: (value) => placeFilter.value === "all" || value == placeFilter.value},
-        {name: "ФОТОАЛЬБОМ", build: (quiz, cell) => {BuildGamesPhotoAlbum(quiz.album_id, cell)}, type: "text", visible: false, sortable: false, wrap: false, filter: (value) => placeFilter.value === "all" || value == placeFilter.value},
+        {name: "ФОТОАЛЬБОМ", build: (quiz, cell) => {BuildGamesPhotoAlbum(quiz.album_id, cell)}, type: "text", visible: false, sortable: false, wrap: false},
     ]
 
     let table = new FilterTable(games, columns)
@@ -362,7 +362,7 @@ function LoadMonthAnalytics(response, block) {
         {label: "prizes", color: "#ed9ddc", text: "Вхождение в тройку", type: "bar-chart"}
     ]
 
-    if (response.month_analytics[0].year >= 2024)
+    if (response.month_analytics[0].year >= 2024 && response.profile === null)
         gamesConfigs.push({label: "smuzi_rating", color: "#fddc81", text: "Смузи рейтинг", type: "bar-chart"})
 
     let meanConfigs = [
@@ -372,5 +372,7 @@ function LoadMonthAnalytics(response, block) {
 
     BuildMonthGroup(block, response.month_analytics, gamesConfigs)
     BuildMonthGroup(block, response.month_analytics, meanConfigs)
-    BuildMonthTopPlayers(block, response.month_analytics, response.username)
+
+    if (response.profile === null)
+        BuildMonthTopPlayers(block, response.month_analytics, response.username)
 }

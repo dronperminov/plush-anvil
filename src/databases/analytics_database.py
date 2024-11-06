@@ -11,7 +11,7 @@ from src.entities.analytics.top_player import TopPlayer
 from src.entities.quiz import Quiz
 from src.entities.user import User
 from src.enums import Category
-from src.query_params.analytics.period import Period
+from src.query_params.analytics.user_period import UserPeriod
 from src.utils.smuzi_rating import SmuziRating
 
 
@@ -22,17 +22,17 @@ class AnalyticsDatabase:
         self.logger = logger
         self.alpha = 0.98
 
-    def get_team_activity(self, period: Period) -> Dict[datetime, int]:
+    def get_team_activity(self, user_period: UserPeriod) -> Dict[datetime, int]:
         date2count = defaultdict(int)
-        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"datetime": 1}):
+        for quiz in self.database.quizzes.find(self.__quizzes_query(user_period=user_period), {"datetime": 1}):
             date2count[quiz["datetime"].date()] += 1
 
         return date2count
 
-    def get_games_result(self, period: Period) -> GamesResult:
+    def get_games_result(self, user_period: UserPeriod) -> GamesResult:
         wins, top3, top10, games = 0, 0, 0, 0
 
-        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"result": 1}):
+        for quiz in self.database.quizzes.find(self.__quizzes_query(user_period=user_period), {"result": 1}):
             position = quiz["result"]["position"]
 
             if position == 1:
@@ -46,15 +46,15 @@ class AnalyticsDatabase:
 
         return GamesResult(wins=wins, top3=top3, top10=top10, games=games)
 
-    def get_positions(self, period: Period, max_position: int = 15) -> Tuple[Dict[int, int], float]:
-        quizzes = self.database.quizzes.find(self.__quizzes_query(period=period), {"result": 1})
-        positions, mean_position = self.__get_positions(quizzes=quizzes)
+    def get_positions(self, user_period: UserPeriod, max_position: int = 15) -> Tuple[Dict[int, int], float]:
+        quizzes = self.database.quizzes.find(self.__quizzes_query(user_period=user_period), {"result": 1})
+        positions, mean_position = self.__get_positions(quizzes=quizzes, max_position=max_position)
         return positions, mean_position
 
-    def get_categories(self, period: Period) -> List[CategoryAnalytics]:
+    def get_categories(self, user_period: UserPeriod) -> List[CategoryAnalytics]:
         category2quizzes: Dict[Category, list] = defaultdict(list)
 
-        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period), {"category": 1, "result": 1}):
+        for quiz in self.database.quizzes.find(self.__quizzes_query(user_period=user_period), {"category": 1, "result": 1}):
             category2quizzes[Category(quiz["category"])].append(quiz)
 
         analytics = []
@@ -74,16 +74,16 @@ class AnalyticsDatabase:
 
         return sorted(analytics, key=lambda item: (item.category == Category.OTHER, -item.games))
 
-    def get_top_players(self, period: Period) -> List[TopPlayer]:
-        return self.__get_top_players(quizzes=self.database.quizzes.find(self.__quizzes_query(period=period), {"participants": 1, "datetime": 1, "category": 1}))
+    def get_top_players(self, user_period: UserPeriod) -> List[TopPlayer]:
+        return self.__get_top_players(quizzes=self.database.quizzes.find(self.__quizzes_query(user_period=user_period), {"participants": 1, "datetime": 1, "category": 1}))
 
-    def get_games(self, period: Period) -> List[Quiz]:
-        return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(self.__quizzes_query(period=period)).sort({"datetime": -1})]
+    def get_games(self, user_period: UserPeriod) -> List[Quiz]:
+        return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(self.__quizzes_query(user_period=user_period)).sort({"datetime": -1})]
 
-    def get_month_analytics(self, period: Period) -> List[MonthAnalytics]:
+    def get_month_analytics(self, user_period: UserPeriod) -> List[MonthAnalytics]:
         month2quizzes: Dict[tuple, list] = defaultdict(list)
 
-        for quiz in self.database.quizzes.find(self.__quizzes_query(period=period)):
+        for quiz in self.database.quizzes.find(self.__quizzes_query(user_period=user_period)):
             month2quizzes[(quiz["datetime"].year, quiz["datetime"].month)].append(quiz)
 
         month_analytics = []
@@ -116,8 +116,8 @@ class AnalyticsDatabase:
 
         return sorted(list(category2score), key=lambda category: -category2score[category])
 
-    def __quizzes_query(self, period: Period) -> dict:
-        return {**period.to_query("datetime"), "result.position": {"$gt": 0}}
+    def __quizzes_query(self, user_period: UserPeriod) -> dict:
+        return {**user_period.to_query(username_key="participants.username", period_key="datetime"), "result.position": {"$gt": 0}}
 
     def __get_top_players(self, quizzes: List[dict]) -> List[TopPlayer]:
         username2dates = defaultdict(list)
