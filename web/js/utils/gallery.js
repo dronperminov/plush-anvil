@@ -100,6 +100,8 @@ Gallery.prototype.Show = function() {
     this.SetPhoto(this.leftImage, this.showIndex - 1)
     this.SetPhoto(this.image, this.showIndex)
     this.SetPhoto(this.rightImage, this.showIndex + 1)
+
+    this.albumLink.setAttribute("href", `/albums/${this.photos[this.showIndex].albumId}`)
 }
 
 Gallery.prototype.Open = function() {
@@ -215,8 +217,6 @@ Gallery.prototype.SetPhoto = function(image, index) {
 
     if (image.getAttribute("src") !== this.photos[index].url)
         image.setAttribute("src", this.photos[index].url)
-
-    this.albumLink.setAttribute("href", `/albums/${this.photos[index].albumId}`)
 }
 
 Gallery.prototype.TranslatePhotos = function(dx) {
