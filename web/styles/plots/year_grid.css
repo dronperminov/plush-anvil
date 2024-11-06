@@ -66,3 +66,9 @@
     aspect-ratio: 1;
     border-radius: 4px;
 }
+
+.year-grid-week-count-cell {
+    font-size: 0.5em;
+    text-align: right;
+    align-content: center;
+}

@@ -89,6 +89,7 @@ YearGrid.prototype.ShowYear = function(year) {
     let lastMonth = startDate.getMonth()
     let weekCount = 0
     let weekCells = []
+    let week2count = [0, 0, 0, 0, 0, 0, 0]
 
     for (let date = new Date(startDate), index = startSkip; date <= endDate; date.setDate(date.getDate() + 1), index++) {
         if (date.getMonth() != lastMonth && index % 7 == 0) {
@@ -101,6 +102,7 @@ YearGrid.prototype.ShowYear = function(year) {
         MakeElement("year-grid-day-cell", this.cells, {title: `${dateKey}: ${count}`, style: `background: ${this.GetColor(count, maxCount)}`})
 
         weekCount += count
+        week2count[index % 7] += count
 
         if (index % 7 == 6) {
             weekCells.push(this.AddWeekCell(weekCount))
@@ -113,6 +115,7 @@ YearGrid.prototype.ShowYear = function(year) {
     if (endSkip > 0)
         weekCells.push(this.AddWeekCell(weekCount))
 
+    this.AddWeekCountCells(week2count)
     this.UpdateWeekCells(weekCells)
 }
 
@@ -135,6 +138,10 @@ YearGrid.prototype.AddWeekCell = function(count) {
     let cell = MakeElement("year-grid-day-cell", this.cells, {title: count})
 
     return {cell, count}
+}
+
+YearGrid.prototype.AddWeekCountCell = function(count) {
+    MakeElement("year-grid-week-count-cell", this.cells, {innerText: count > 0 ? count : ""})
 }
 
 YearGrid.prototype.GetMonths = function(startDate, endDate, skip) {
@@ -177,4 +184,16 @@ YearGrid.prototype.UpdateWeekCells = function(weekCells) {
 
     for (let cell of weekCells)
         cell.cell.style.background = this.GetColor(cell.count, max)
+}
+
+YearGrid.prototype.AddWeekCountCells = function(week2count) {
+    let maxCount = Math.max(...week2count)
+
+    this.AddSkipCells(1)
+    for (let i = 0; i < 7; i++)
+        this.AddWeekCountCell(week2count[i])
+
+    this.AddSkipCells(3)
+    for (let i = 0; i < 7; i++)
+        MakeElement("year-grid-day-cell", this.cells, {style: `background: ${this.GetColor(week2count[i], maxCount)}`})
 }
