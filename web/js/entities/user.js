@@ -5,14 +5,17 @@ function User(user) {
     this.birthDate = user.birth_date
 }
 
-User.prototype.BuildProfile = function(parent, days) {
+User.prototype.BuildProfile = function(parent, days, editable = false) {
     let profileImage = MakeElement("profile-image", parent)
     let image = MakeElement("", profileImage, {src: this.avatarUrl}, "img")
-    let imageInput = MakeElement("", profileImage, {type: "file", accept: "image/*"}, "input")
-    let imageCropper = new ImageCropper(imageInput)
 
-    image.addEventListener("click", () => imageInput.click())
-    imageCropper.onselect = (buttons) => this.UploadAvatar(imageCropper, imageInput, image, buttons)
+    if (editable) {
+        let imageInput = MakeElement("", profileImage, {type: "file", accept: "image/*"}, "input")
+        let imageCropper = new ImageCropper(imageInput)
+
+        image.addEventListener("click", () => imageInput.click())
+        imageCropper.onselect = (buttons) => this.UploadAvatar(imageCropper, imageInput, image, buttons)
+    }
 
     let profileName = MakeElement("profile-name", parent)
     let name = MakeElement("basic-input text-input", profileName, {type: "text", id: "full-name", value: this.fullname}, "input")
@@ -26,22 +29,27 @@ User.prototype.BuildProfile = function(parent, days) {
         MakeElement("", profileBirthday, {innerText: ` ${day} ${months[this.birthDate.month - 1]}`}, "span")
     }
     else {
-        MakeElement("", profileBirthday, {innerText: "не указан"}, "span")
+        MakeElement("", profileBirthday, {innerText: " не указан"}, "span")
     }
 
-    name.addEventListener("change", () => this.ChangeFullName(name))
-    name.addEventListener("focus", () => {
-        name.classList.remove("text-input")
-    })
+    if (editable) {
+        name.addEventListener("change", () => this.ChangeFullName(name))
+        name.addEventListener("focus", () => {
+            name.classList.remove("text-input")
+        })
 
-    name.addEventListener("blur", () => {
-        if (name.value.trim() === "") {
-            name.value = this.fullname
-            name.classList.remove("error-input")
-        }
+        name.addEventListener("blur", () => {
+            if (name.value.trim() === "") {
+                name.value = this.fullname
+                name.classList.remove("error-input")
+            }
 
-        name.classList.add("text-input")
-    })
+            name.classList.add("text-input")
+        })
+    }
+    else {
+        name.setAttribute("readonly", "true")
+    }
 
     return profile
 }

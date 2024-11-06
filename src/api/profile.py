@@ -1,8 +1,8 @@
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import HTMLResponse, JSONResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 
 from src import achievement_database, album_database, database, quiz_database
 from src.api import authorized_action, login_redirect, templates
@@ -18,13 +18,21 @@ router = APIRouter()
 
 
 @router.get("/profile")
-def get_profile(user: Optional[User] = Depends(get_user)) -> Response:
+def get_profile(user: Optional[User] = Depends(get_user), username: str = Query("")) -> Response:
     if not user:
         return login_redirect(back_url="/profile")
 
-    user_photos = album_database.get_user_photos(username=user.username)
+    show_user = database.get_user(username=username) if username else user
+
+    if show_user is None or username.lower() == user.username.lower():
+        return RedirectResponse(url="/profile")
+
+    if show_user != user and show_user.username != username:
+        return RedirectResponse(url=f"/profile?username={show_user.username}")
+
+    user_photos = album_database.get_user_photos(username=show_user.username)
     template = templates.get_template("profile/profile.html")
-    content = template.render(version=get_static_hash(), user=user, user_photos=user_photos, jsonable_encoder=jsonable_encoder)
+    content = template.render(version=get_static_hash(), user=user, show_user=show_user, user_photos=user_photos, jsonable_encoder=jsonable_encoder)
     return HTMLResponse(content=content)
 
 

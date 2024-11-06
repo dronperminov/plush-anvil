@@ -1,4 +1,4 @@
-{% set title = "%s (@%s) | Плюшевая наковальня" % (user.full_name, user.username) %}
+{% set title = "%s (@%s) | Плюшевая наковальня" % (show_user.full_name, show_user.username) %}
 {% include "components/header.html" %}
     <link rel="stylesheet" type="text/css" href="/styles/utils/filter_table.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/utils/image_cropper.css?v={{version}}">
@@ -16,20 +16,22 @@
             <span class="bread-crumbs-current">Профиль</span>
         </div>
 
-        <h1>Мой профиль</h1>
+        <h1>{{"Мой профиль" if show_user == user else "Профиль"}}</h1>
 
         <div class="profile" id="profile"></div>
 
         {% if user_photos %}
+        {% set photos_url = 'photos-with-me' if show_user == user else 'photos-with-users?usernames=%s' % show_user.username %}
+
         <div class="link-header">
             <h2>ФОТО СО МНОЙ</h2>
-            <a class="arrow-link" href="/photos-with-me"><span class="text">ЕЩЁ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+            <a class="arrow-link" href="/{{photos_url}}"><span class="text">ЕЩЁ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
         </div>
 
         <div class="photos">
             {% for photo in user_photos %}
             <div class="photo">
-                <a href="/photos-with-me"><img src="{{photo.preview_url}}"></a>
+                <a href="/{{photos_url}}"><img src="{{photo.preview_url}}"></a>
             </div>
             {% endfor %}
         </div>
@@ -39,7 +41,7 @@
         <p class="description">В этом блоке показана информация о посещённых играх.</p>
 
         <div class="analytics">
-            <h3>АКТИВНОСТЬ</h3>
+            <h3>МОЯ АКТИВНОСТЬ</h3>
 
             <div id="my-activity">
                 <div class="loader hidden"><img src="/images/loader.svg"></div>
@@ -57,7 +59,7 @@
         </div>
 
         <div class="analytics">
-            <h3>ИГРЫ</h3>
+            <h3>МОИ ИГРЫ</h3>
 
             <div id="games">
                 <div class="loader hidden"><img src="/images/loader.svg"></div>
@@ -92,10 +94,10 @@
     <script src="/js/about/analytics.js?v={{version}}"></script>
     <script src="/js/profile/profile.js?v={{version}}"></script>
     <script>
-        let user = new User({{jsonable_encoder(user)|tojson}})
+        let user = new User({{jsonable_encoder(show_user)|tojson}})
         let profile = document.getElementById("profile")
 
-        user.BuildProfile(profile, {{user.birth_date.get_days() if user.birth_date else None}})
+        user.BuildProfile(profile, {{show_user.birth_date.get_days() if show_user.birth_date else "null"}}, {{"true" if user == show_user else "false"}})
 
         let loaderConfigs = [
             {blockId: "my-activity", url: "/team-activity-analytics", getParams: GetUserParams, onLoad: LoadTeamActivity, load: true},
