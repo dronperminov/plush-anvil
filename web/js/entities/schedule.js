@@ -125,13 +125,13 @@ Schedule.prototype.BuildCalendarCell = function(block, day) {
     let quizzes = MakeElement("schedule-calendar-quizzes", cell)
     for (let quiz of this.day2quizzes[day]) {
         let place = this.placeId2place[quiz.place_id]
+        let organizer = this.organizerId2organizer[quiz.organizer_id]
         let color = place.color
 
-        let text = quiz.short_name
-        if (quiz.result)
-            text += ` ${quiz.result.position} / ${quiz.result.teams}`
-
-        let quizBlock = MakeElement("schedule-calendar-quiz", quizzes, {innerText: text, style: `background-color: ${color};`})
+        let quizBlock = MakeElement("schedule-calendar-quiz", quizzes, {style: `background-color: ${color};`})
+        MakeElement("schedule-calendar-quiz-name", quizBlock, {innerText: quiz.short_name})
+        MakeElement("schedule-calendar-quiz-icon", quizBlock, {src: organizer.image_url}, "img")
+        MakeElement("schedule-calendar-quiz-time", quizBlock, {innerText: FormatTime(new Date(quiz.datetime))})
         this.BuildQuizPopup(quiz, quizBlock)
     }
 }

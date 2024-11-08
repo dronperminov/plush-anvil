@@ -155,6 +155,12 @@ function FormatDate(datetime) {
     return `${day}.${month}.${year}`
 }
 
+function FormatTime(datetime) {
+    let hours = `${datetime.getHours()}`.padStart(2, "0")
+    let minutes = `${datetime.getMinutes()}`.padStart(2, "0")
+    return `${hours}:${minutes}`
+}
+
 function FormatDatetime(datetime) {
     let day = `${datetime.getDate()}`.padStart(2, "0")
     let month = `${datetime.getMonth() + 1}`.padStart(2, "0")

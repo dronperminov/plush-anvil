@@ -117,12 +117,23 @@
     font-size: 0.8em;
     border-radius: 12px;
     display: grid;
+    grid-template-columns: 1fr 14px 32px;
+    grid-gap: 2px;
     align-items: center;
     padding: 5px;
 }
 
 .schedule-calendar-quiz:first-child {
     padding-top: 1em;
+}
+
+.schedule-calendar-quiz-icon {
+    width: 100%;
+    border-radius: 100%;
+}
+
+.schedule-calendar-quiz-time {
+    font-size: 12px;
 }
 
 .schedule-analytics {
