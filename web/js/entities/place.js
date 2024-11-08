@@ -205,3 +205,13 @@ Place.prototype.GetNameText = function() {
 
     return text
 }
+
+Place.prototype.GetLocationText = function() {
+    let text = `<b>${this.name}</b>`
+
+    if (this.metroStation !== "")
+        text += `, м. ${this.metroStation}`
+
+    text += `<br><a class="link" href="${this.yandexMapLink}">${this.address}</a>`
+    return text
+}

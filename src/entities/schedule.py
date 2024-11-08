@@ -13,5 +13,6 @@ class Schedule:
     year: int
     places: List[Place]
     organizers: List[Organizer]
+    username2avatar: Dict[str, str]
     analytics: TeamAnalytics
     day2quizzes: Dict[int, List[Quiz]]

@@ -159,6 +159,113 @@
     text-align: center;
 }
 
+.schedule-popups {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #e79ded33;
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.schedule-popups-open {
+    opacity: 1;
+    transition: opacity 0.2s;
+    pointer-events: all;
+}
+
+.schedule-popup {
+    opacity: 0;
+    pointer-events: none;
+    padding: 2em 2em 3em;
+
+    position: absolute;
+    max-width: 520px;
+    max-height: calc(100dvh - 20px);
+    overflow-y: auto;
+
+    background: #f1f1f1;
+    box-shadow: 0px 0px 2em #e79ded99;
+    border-radius: 2em;
+    margin: 10px;
+}
+
+.schedule-popup .close-icon {
+    top: 0.7em;
+    right: 1em;
+}
+
+.schedule-popup-category .circle {
+    border-radius: 0.25em;
+    width: 1em;
+    height: 1em;
+}
+
+.schedule-popup-category {
+    display: grid;
+    grid-template-columns: 1em 1fr;
+    align-items: center;
+    grid-gap: 0.25em;
+}
+
+.schedule-popup-name {
+    font-size: 2.2em;
+    font-weight: bold;
+}
+
+.schedule-popup-description {
+    font-size: 1.1em;
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+.schedule-popup-icon {
+    display: grid;
+    grid-template-columns: 1.2em 1fr;
+    align-items: center;
+    grid-gap: 0.5em;
+    font-size: 1.1em;
+    margin-top: 1em;
+}
+
+.schedule-popup-icon img {
+    width: 100%;
+}
+
+.schedule-popup-participants {
+    display: inline-grid;
+    max-width: 100%;
+    grid-gap: 0.5em;
+    grid-auto-flow: column;
+    overflow-x: auto;
+    padding-left: 1.7em;
+    margin-top: 0.5em;
+}
+
+.schedule-popup-participants img {
+    padding: 1px;
+    width: 25px;
+    border-radius: 5px;
+}
+
+.schedule-popup-participants a:hover img {
+    padding: 0;
+    border: 1px solid var(--main-color);
+}
+
+.schedule-popup-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
 @media (max-width: 767px) {
     .schedule-calendar {
         grid-gap: 5px;
@@ -174,6 +281,10 @@
 
     .schedule-analytics {
         grid-template-columns: 1fr;
+    }
+
+    .schedule-popup {
+        width: calc(100vw - 20px);
     }
 }
 

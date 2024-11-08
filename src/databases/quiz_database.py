@@ -158,6 +158,7 @@ class QuizDatabase:
 
         places = self.place_database.get_quiz_places(quizzes=quizzes, only_used=True)
         organizers = self.organizer_database.get_quiz_organizers(quizzes=quizzes, only_used=True)
+        username2avatar = self.database.get_user_avatar_urls(usernames=list({participant.username for quiz in quizzes for participant in quiz.participants}))
 
         day2quizzes: Dict[int, list] = defaultdict(list)
 
@@ -169,6 +170,7 @@ class QuizDatabase:
             year=params.year,
             places=places,
             organizers=organizers,
+            username2avatar=username2avatar,
             analytics=TeamAnalytics.evaluate(quizzes=quizzes),
             day2quizzes={day: day_quizzes for day, day_quizzes in day2quizzes.items()}
         )
