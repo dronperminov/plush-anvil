@@ -309,8 +309,10 @@ function BuildMonthTopPlayers(block, data, username, topCount = 7) {
         for (let i = item.top_players.length; i < topCount; i++)
             MakeElement("", profiles)
 
-        for (let i = 0; i < item.top_players.length && i < topCount; i++)
-            MakeElement(item.top_players[i].username == username ? "months-top-players-profile-current" : "", profiles, {src: item.top_players[i].avatar_url}, "img")
+        for (let topPlayer of item.top_players.slice(0, topCount)) {
+            let link = MakeElement("link", profiles, {href: `/profile?username=${topPlayer.username}`, title: topPlayer.full_name}, "a")
+            MakeElement(topPlayer.username == username ? "months-top-players-profile-current" : "", link, {src: topPlayer.avatar_url}, "img")
+        }
 
         MakeElement("months-top-players-date", players, {innerHTML: item.label.replace("\n", "<br>")})
     }
