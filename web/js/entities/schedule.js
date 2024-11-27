@@ -68,34 +68,35 @@ Schedule.prototype.BuildQuizPopupParticipants = function(popup, quiz) {
     }
 }
 
-Schedule.prototype.BuildQuizPopup = function(quiz, block) {
+Schedule.prototype.BuildQuizPopup = function(quiz, place, organizer, block) {
     let popup = MakeElement("schedule-popup", this.popups)
-    let place = new Place(this.placeId2place[quiz.place_id])
-    let organizer = new Organizer(this.organizerId2organizer[quiz.organizer_id])
-    let category = new Category(quiz.category)
 
     let closeIcon = MakeElement("close-icon", popup, {title: "Закрыть"})
 
-    category.Build(MakeElement("schedule-popup-category", popup))
+    let adminIcons = MakeElement("admin-block icons", popup)
+    let removeIcon = MakeElement("image-icon", adminIcons, {src: "/images/icons/trash.svg", title: "Удалить"}, "img")
+
+    quiz.category.Build(MakeElement("schedule-popup-category", popup))
     MakeElement("schedule-popup-name", popup, {innerText: quiz.name})
 
-    if (quiz.description.length > 0)
+    if (quiz.HaveDescription())
         MakeElement("schedule-popup-description", popup, {innerText: quiz.description})
 
-    this.BuildQuizPopupIcon(popup, "/images/icons/schedule/calendar.svg", FormatDatetime(new Date(quiz.datetime)))
+    this.BuildQuizPopupIcon(popup, "/images/icons/schedule/calendar.svg", quiz.FormatDatetime())
     this.BuildQuizPopupIcon(popup, "/images/icons/schedule/location.svg", place.GetLocationText())
-    this.BuildQuizPopupIcon(popup, "/images/icons/schedule/cost.svg", `${quiz.cost} руб.`)
+    this.BuildQuizPopupIcon(popup, "/images/icons/schedule/cost.svg", quiz.FormatCost())
     this.BuildQuizPopupIcon(popup, organizer.imageUrl, organizer.name)
 
-    if (quiz.result !== null && quiz.result.position > 0)
-        this.BuildQuizPopupIcon(popup, "/images/icons/schedule/position.svg", `${quiz.result.position} место из ${quiz.result.teams}`)
+    if (quiz.HavePosition())
+        this.BuildQuizPopupIcon(popup, "/images/icons/schedule/position.svg", quiz.FormatPosition())
 
-    if (quiz.result !== null && quiz.result.players > 0) {
-        this.BuildQuizPopupIcon(popup, "/images/icons/schedule/players.svg", GetWordForm(quiz.result.players, ["игрок", "игрока", "игроков"]))
+    if (quiz.HavePlayers()) {
+        this.BuildQuizPopupIcon(popup, "/images/icons/schedule/players.svg", quiz.FormatPlayers())
         this.BuildQuizPopupParticipants(popup, quiz)
     }
 
     closeIcon.addEventListener("click", () => this.ClosePopup())
+    removeIcon.addEventListener("click", () => this.RemoveQuiz(quiz, block))
     block.addEventListener("click", () => this.OpenPopup(popup))
 }
 
@@ -117,6 +118,18 @@ Schedule.prototype.ClosePopup = function() {
     body.classList.remove("no-overflow")
 }
 
+Schedule.prototype.RemoveQuiz = function(quiz, block) {
+    if (!confirm(`Вы уверены, что хотите удалить квиз "${quiz.name}"?`))
+        return
+
+    quiz.Remove().then(result => {
+        if (result) {
+            this.ClosePopup()
+            block.remove()
+        }
+    })
+}
+
 Schedule.prototype.BuildCalendarCell = function(block, day) {
     let cell = MakeElement("schedule-calendar-cell", block)
     MakeElement("schedule-calendar-cell-day", cell, {innerText: day})
@@ -127,15 +140,17 @@ Schedule.prototype.BuildCalendarCell = function(block, day) {
     let quizzes = MakeElement("schedule-calendar-quizzes", cell)
 
     for (let quiz of this.day2quizzes[day]) {
-        let place = this.placeId2place[quiz.place_id]
-        let organizer = this.organizerId2organizer[quiz.organizer_id]
-        let color = place.color
+        quiz = new Quiz(quiz)
 
-        let quizBlock = MakeElement("schedule-calendar-quiz", quizzes, {style: `background-color: ${color};`})
-        MakeElement("schedule-calendar-quiz-name", quizBlock, {innerText: quiz.short_name})
-        MakeElement("schedule-calendar-quiz-icon", quizBlock, {src: organizer.image_url}, "img")
-        MakeElement("schedule-calendar-quiz-time", quizBlock, {innerText: FormatTime(new Date(quiz.datetime))})
-        this.BuildQuizPopup(quiz, quizBlock)
+        let place = new Place(this.placeId2place[quiz.placeId])
+        let organizer = new Organizer(this.organizerId2organizer[quiz.organizerId])
+
+        let quizBlock = MakeElement("schedule-calendar-quiz", quizzes, {style: `background-color: ${place.color};`})
+        MakeElement("schedule-calendar-quiz-name", quizBlock, {innerText: quiz.shortName})
+        MakeElement("schedule-calendar-quiz-icon", quizBlock, {src: organizer.imageUrl}, "img")
+        MakeElement("schedule-calendar-quiz-time", quizBlock, {innerText: quiz.FormatTime()})
+
+        this.BuildQuizPopup(quiz, place, organizer, quizBlock)
     }
 
     this.cells.push(quizzes)

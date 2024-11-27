@@ -221,6 +221,18 @@ ul {
     border-radius: 100%;
 }
 
+.image-icon {
+    border-radius: 100%;
+    width: 1em;
+    height: 1em;
+    text-align: center;
+    cursor: pointer;
+}
+
+.image-icon:hover {
+    background: #fddc81;
+}
+
 /* faq */
 .faq {
     padding: 1.2em;

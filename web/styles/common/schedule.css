@@ -121,6 +121,8 @@
     grid-gap: 2px;
     align-items: center;
     padding: 5px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .schedule-calendar-quiz:first-child {
@@ -212,6 +214,22 @@
 .schedule-popup .close-icon {
     top: 0.7em;
     right: 1em;
+}
+
+.schedule-popup .icons {
+    position: absolute;
+    top: 0.7em;
+    right: 3.5em;
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-gap: 0.5em;
+    align-items: center;
+}
+
+.schedule-popup .image-icon {
+    width: 1.75em;
+    height: 1.75em;
 }
 
 .schedule-popup-category .circle {
