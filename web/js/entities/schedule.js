@@ -24,6 +24,8 @@ function Schedule(schedule) {
         if (e.target === this.popups)
             this.ClosePopup()
     })
+
+    this.cells = []
 }
 
 Schedule.prototype.Build = function(block) {
@@ -123,6 +125,7 @@ Schedule.prototype.BuildCalendarCell = function(block, day) {
         return
 
     let quizzes = MakeElement("schedule-calendar-quizzes", cell)
+
     for (let quiz of this.day2quizzes[day]) {
         let place = this.placeId2place[quiz.place_id]
         let organizer = this.organizerId2organizer[quiz.organizer_id]
@@ -134,12 +137,16 @@ Schedule.prototype.BuildCalendarCell = function(block, day) {
         MakeElement("schedule-calendar-quiz-time", quizBlock, {innerText: FormatTime(new Date(quiz.datetime))})
         this.BuildQuizPopup(quiz, quizBlock)
     }
+
+    this.cells.push(quizzes)
 }
 
 Schedule.prototype.BuildCalendar = function(block) {
     let calendar = MakeElement("schedule-calendar", block)
 
     this.popups.innerHTML = ""
+    this.cells = []
+
     this.BuildCalendarWeekdays(calendar)
 
     let startDate = new Date(this.year, this.month - 1, 1)
@@ -150,6 +157,8 @@ Schedule.prototype.BuildCalendar = function(block) {
 
     for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1))
         this.BuildCalendarCell(calendar, date.getDate())
+
+    this.Resize()
 }
 
 Schedule.prototype.BuildAnalyticsItem = function(block, value, label) {
@@ -176,4 +185,21 @@ Schedule.prototype.BuildAnalytics = function(block) {
         this.BuildAnalyticsItem(analyticsItemsBlock, this.analytics.top3, GetWordForm(this.analytics.top3, ["раз вошли в тройку", "раза вошли в тройку", "раз вошли в тройку"], true))
 
     this.BuildAnalyticsItem(analyticsItemsBlock, Round(this.analytics.mean_position, 10), "средняя позиция")
+}
+
+Schedule.prototype.Resize = function() {
+    for (let cell of this.cells) {
+        let bbox = cell.getBoundingClientRect()
+        let last = cell.children[cell.children.length - 1].getBoundingClientRect()
+
+        let fontSize = 1
+
+        while (bbox.y + bbox.height < last.y + last.height && fontSize > 0.2) {
+            fontSize *= 0.9
+            cell.setAttribute("style", `font-size: ${fontSize}em;`)
+
+            bbox = cell.getBoundingClientRect()
+            last = cell.children[cell.children.length - 1].getBoundingClientRect()
+        }
+    }
 }
