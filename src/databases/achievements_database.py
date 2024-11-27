@@ -140,11 +140,12 @@ class AchievementDatabase:
             HardyAchievement(title="Выносливый", description="участвовать в двух играх в один день", image="6.png", min_count=2, max_count=2),
             HardyAchievement(title="Очень выносливый", description="участвовать в трёх и более играх в один день", image="7.png", min_count=3, max_count=100),
             PositionDaysAchievement(title="7 дней игр", description="участвовать в играх 7 дней подряд", image="8.png", target_count=7, max_position=100),
+            PositionDaysAchievement(title="14 дней игр", description="участвовать в играх 14 дней подряд", image="9.png", target_count=14, max_position=100),
 
-            PositionCountAchievement(title="Призёр", description="посетить игру и войти в тройку", image="9.png", target_count=1, max_position=3),
-            PositionCountAchievement(title="Призёр-50", description="посетить 50 игр и войти в тройку", image="10.png", target_count=50, max_position=3),
-            PositionCountAchievement(title="Победитель", description="посетить победную игру", image="11.png", target_count=1, max_position=1),
-            PositionCountAchievement(title="Победитель-50", description="посетить 50 победных игр", image="12.png", target_count=50, max_position=1),
+            PositionCountAchievement(title="Призёр", description="посетить игру и войти в тройку", image="10.png", target_count=1, max_position=3),
+            PositionCountAchievement(title="Призёр-50", description="посетить 50 игр и войти в тройку", image="11.png", target_count=50, max_position=3),
+            PositionCountAchievement(title="Победитель", description="посетить победную игру", image="12.png", target_count=1, max_position=1),
+            PositionCountAchievement(title="Победитель-50", description="посетить 50 победных игр", image="13.png", target_count=50, max_position=1)
         ]
 
         for achievement in achievements:

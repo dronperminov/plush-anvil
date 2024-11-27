@@ -27,7 +27,7 @@ class PositionDaysAchievement(Achievement):
                 self.increment(date)
 
         if self.count == 0 and 0 < count < self.target_count and prev_date == quizzes[-1].datetime.date() and (datetime.now().date() - prev_date).days <= 1:
-            self.label_date = f'ещё {get_word_form(self.target_count - count, ["дней", "дня", "день"])}'
+            self.label_date = f'ещё {get_word_form(self.target_count - count, ["день", "дня", "дней"])}'
 
     def set_label_date(self) -> None:
         if self.label_date is not None:
