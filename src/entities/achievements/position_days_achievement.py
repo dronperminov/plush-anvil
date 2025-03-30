@@ -15,6 +15,9 @@ class PositionDaysAchievement(Achievement):
         self.max_position = max_position
 
     def analyze(self, quizzes: List[Quiz]) -> None:
+        if not quizzes:
+            return
+
         dates = sorted({quiz.datetime.date() for quiz in quizzes if quiz.result.position <= self.max_position})
         prev_date = dates[0]
         count = 0

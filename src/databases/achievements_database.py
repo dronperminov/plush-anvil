@@ -93,7 +93,7 @@ class AchievementDatabase:
             achievement.analyze(quizzes=quizzes)
             achievement.set_label_date()
 
-        achievements = sorted(achievements, key=lambda achievement: achievement.count == 0)
+        achievements = sorted(achievements, key=lambda achievement: -achievement.count)
         return len(achievements), achievements[params.skip:params.skip + params.page_size]
 
     def get_user_achievements(self, params: PageQuery, username: str) -> Tuple[int, List[Achievement]]:
@@ -106,7 +106,7 @@ class AchievementDatabase:
         for achievement in achievements:
             achievement.set_label_date()
 
-        achievements = sorted(achievements, key=lambda achievement: achievement.count == 0)
+        achievements = sorted(achievements, key=lambda achievement: -achievement.count)
         return len(achievements), achievements[params.skip:params.skip + params.page_size]
 
     def __get_user_handle_achievements(self, username: str) -> List[Achievement]:
