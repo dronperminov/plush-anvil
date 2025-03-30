@@ -45,7 +45,7 @@ def album_response(album: Album, user: User, album_type: str = "", **kwargs) -> 
     if not album:
         return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
 
-    users = album_database.get_users()
+    users = album_database.get_users(album_id=album.album_id)
     template = templates.get_template("photos/album.html")
     content = template.render(
         version=get_static_hash(),

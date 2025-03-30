@@ -233,7 +233,7 @@ class AlbumDatabase:
         albums = self.database.albums.find(params.to_query()).sort({params.order: params.order_type, "_id": 1}).skip(params.skip).limit(params.page_size)
         return total, [Album.from_dict(album) for album in albums]
 
-    def get_users(self) -> List[User]:
+    def get_users(self, album_id: Union[int, str]) -> List[User]:
         username2score = defaultdict(float)
 
         quizzes = list(self.database.quizzes.find({"album_id": {"$ne": None}}))
@@ -246,8 +246,11 @@ class AlbumDatabase:
             quiz = album_id2quiz[photo_id2album_id[markup["photo_id"]]]
             username2score[markup["username"]] += self.markup_score_alpha ** (end_date - quiz["datetime"]).days
 
-        users = sorted([User.from_dict(user) for user in self.database.users.find({})], key=lambda user: -username2score[user.username])
-        return users
+        users = [User.from_dict(user) for user in self.database.users.find({})]
+
+        album_quiz = self.database.quizzes.find_one({"album_id": album_id})
+        album_usernames = set(album_quiz["participants"]) if album_quiz else set()
+        return sorted(users, key=lambda user: (user.username not in album_usernames, -username2score[user.username]))
 
     def get_user_photos(self, username: str, max_count: int = 10) -> List[Photo]:
         photo_ids = [markup["photo_id"] for markup in self.database.markup.find({"username": username}, {"photo_id": 1})]
