@@ -63,6 +63,10 @@ Gallery.prototype.BuildImageView = function(view) {
 Gallery.prototype.BuildImage = function(addEvent = false) {
     let imageBlock = MakeElement("gallery-image", this.imageView)
     let image = MakeElement("", imageBlock, {}, "img")
+    let loader = MakeElement("gallery-image-loader", imageBlock)
+    MakeElement("", loader, {"src": "/images/loader.svg"}, "img")
+
+    image.addEventListener("load", () => loader.classList.add("gallery-image-loader-hidden"))
 
     if (addEvent) {
         imageBlock.addEventListener("transitionend", () => this.Show())
@@ -97,8 +101,8 @@ Gallery.prototype.Show = function() {
     if (this.photos.length == 0)
         return
 
-    this.SetPhoto(this.leftImage, this.showIndex - 1)
     this.SetPhoto(this.image, this.showIndex)
+    this.SetPhoto(this.leftImage, this.showIndex - 1)
     this.SetPhoto(this.rightImage, this.showIndex + 1)
 
     this.albumLink.setAttribute("href", `/albums/${this.photos[this.showIndex].albumId}`)
@@ -215,8 +219,25 @@ Gallery.prototype.SetPhoto = function(image, index) {
         return
     }
 
-    if (image.getAttribute("src") !== this.photos[index].url)
-        image.setAttribute("src", this.photos[index].url)
+    if (image.getAttribute("src") === this.photos[index].url)
+        return
+
+    let needLoader = true
+
+    if (image === this.image)
+        needLoader = !this.CheckLoader(this.leftImage, this.photos[index].url) && !this.CheckLoader(this.rightImage, this.photos[index].url)
+
+    if (needLoader) {
+        let loader = image.parentNode.querySelector(".gallery-image-loader")
+        loader.classList.remove("gallery-image-loader-hidden")
+    }
+
+    image.setAttribute("src", this.photos[index].url)
+}
+
+Gallery.prototype.CheckLoader = function(image, url) {
+    let loader = image.parentNode.querySelector(".gallery-image-loader")
+    return loader.classList.contains("gallery-image-loader-hidden") && url === image.getAttribute("src")
 }
 
 Gallery.prototype.TranslatePhotos = function(dx) {
