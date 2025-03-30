@@ -49,7 +49,8 @@ def transliterate(name: str) -> str:
         "х": "h", "ц": "ts", "ч": "ch", "ш": "sh", "щ": "sch", "ъ": "", "ы": "y", "ь": "", "э": "e", "ю": "y", "я": "ya",
     }
 
-    name = "".join(lower_case_letters.get(c, c) for c in name.lower())
+    name = name.lower().replace("квиз", "quiz")
+    name = "".join(lower_case_letters.get(c, c) for c in name)
     name = re.sub(r"[^a-z]+", "_", name)
     return re.sub(r"_+", "_", name).strip("_")
 

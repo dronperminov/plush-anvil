@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 
-from src import achievement_database, album_database, database, quiz_database
+from src import achievement_database, album_database, database
 from src.api import authorized_action, login_redirect, templates
 from src.entities.user import User
 from src.query_params.avatar_change import AvatarChange
@@ -12,7 +12,7 @@ from src.query_params.full_name_change import FullNameChange
 from src.query_params.page_query import PageQuery
 from src.query_params.password_change import PasswordChange
 from src.utils.auth import get_password_hash, get_user, validate_password
-from src.utils.common import get_static_hash, get_word_form
+from src.utils.common import get_static_hash
 
 router = APIRouter()
 
@@ -43,17 +43,6 @@ def get_achievements(user: Optional[User] = Depends(get_user)) -> Response:
 
     template = templates.get_template("profile/achievements.html")
     content = template.render(version=get_static_hash(), user=user)
-    return HTMLResponse(content=content)
-
-
-@router.get("/my-stickers")
-def get_stickers(user: Optional[User] = Depends(get_user)) -> Response:
-    if not user:
-        return login_redirect(back_url="/my-stickers")
-
-    paid_games, stickers = quiz_database.get_user_stickers(username=user.username)
-    template = templates.get_template("profile/stickers.html")
-    content = template.render(version=get_static_hash(), user=user, paid_games=paid_games, stickers=stickers, get_word_form=get_word_form)
     return HTMLResponse(content=content)
 
 

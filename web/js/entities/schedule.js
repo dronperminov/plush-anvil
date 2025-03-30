@@ -63,8 +63,8 @@ Schedule.prototype.BuildQuizPopupParticipants = function(popup, quiz) {
     let participants = MakeElement("schedule-popup-participants", popup)
 
     for (let participant of quiz.participants) {
-        let link = MakeElement("", participants, {href: `/profile?username=${participant.username}`}, "a")
-        MakeElement("", link, {src: this.username2avatar[participant.username]}, "img")
+        let link = MakeElement("", participants, {href: `/profile?username=${participant}`}, "a")
+        MakeElement("", link, {src: this.username2avatar[participant]}, "img")
     }
 }
 

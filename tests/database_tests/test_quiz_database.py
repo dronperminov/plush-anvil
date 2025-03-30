@@ -1,9 +1,8 @@
 from datetime import datetime
 
 from src.entities.quiz import Quiz
-from src.entities.quiz_participant import QuizParticipant
 from src.entities.quiz_result import QuizResult
-from src.enums import Category, PaidType
+from src.enums import Category
 from tests.database_tests.abstract_database_test import AbstractDatabaseTest
 
 
@@ -25,7 +24,7 @@ class TestQuizDatabaseReal(AbstractDatabaseTest):
             category=Category.ABOUT_EVERYTHING,
             album_id=None,
             ignore_rating=False,
-            participants=[QuizParticipant(username="user1", paid_type=PaidType.PAID)],
+            participants=["user1"],
             result=None
         )
 

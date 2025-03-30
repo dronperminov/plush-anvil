@@ -1,4 +1,5 @@
 import logging
+import re
 from collections import defaultdict
 from datetime import datetime
 from typing import Dict, List, Optional
@@ -47,6 +48,10 @@ class OrganizerDatabase:
 
     def get_organizer(self, organizer_id: int) -> Optional[Organizer]:
         organizer = self.database.organizers.find_one({"organizer_id": organizer_id})
+        return Organizer.from_dict(organizer) if organizer else None
+
+    def get_organizer_by_name(self, name: str) -> Optional[Organizer]:
+        organizer = self.database.organizers.find_one({"name": {"$regex": re.escape(name), "$options": "i"}})
         return Organizer.from_dict(organizer) if organizer else None
 
     def get_organizers(self, organizer_ids: List[int]) -> Dict[int, Organizer]:

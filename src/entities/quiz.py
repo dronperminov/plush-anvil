@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
-from src.entities.quiz_participant import QuizParticipant
 from src.entities.quiz_result import QuizResult
 from src.enums import Category
 
@@ -21,7 +20,7 @@ class Quiz:
 
     album_id: Optional[int]
     ignore_rating: Optional[bool]
-    participants: List[QuizParticipant]
+    participants: List[str]
     result: Optional[QuizResult]
 
     def to_dict(self) -> dict:
@@ -37,7 +36,7 @@ class Quiz:
             "category": self.category.value,
             "album_id": self.album_id,
             "ignore_rating": self.ignore_rating,
-            "participants": [participant.to_dict() for participant in self.participants],
+            "participants": self.participants,
             "result": self.result.to_dict() if self.result else None
         }
 
@@ -55,7 +54,7 @@ class Quiz:
             category=Category(data["category"]),
             album_id=data["album_id"],
             ignore_rating=data["ignore_rating"],
-            participants=[QuizParticipant.from_dict(participant) for participant in data["participants"]],
+            participants=data["participants"],
             result=QuizResult.from_dict(data["result"]) if data["result"] else None
         )
 

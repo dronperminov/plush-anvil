@@ -59,65 +59,6 @@
     width: 80px;
 }
 
-.info .user-stickers-info, .info .user-achievements-info {
-    text-align: center;
-    margin-bottom: 1em;
-}
-
-.info .user-stickers {
-    display: grid;
-    grid-template-columns: auto auto;
-    align-items: center;
-    max-height: 300px;
-    overflow-y: auto;
-    border-top: 1px solid var(--border-color);
-    font-size: 0.9em;
-}
-
-.info .user-sticker-date {
-    text-align: center;
-}
-
-.info .user-sticker-date, .info .user-sticker-type {
-    border-left: 1px solid var(--border-color);
-    border-right: 1px solid var(--border-color);
-    border-bottom: 1px solid var(--border-color);
-    padding: 5px 10px;
-}
-
-.info .user-sticker-type {
-    border-left: none;
-    padding: 5px 10px;
-    display: grid;
-    grid-template-columns: 1em 1fr;
-    grid-gap: 0.5em;
-    align-items: center;
-}
-
-.info .user-sticker-type-icon {
-    width: 1em;
-    height: 1em;
-    border: 2px solid var(--text-color);
-    border-radius: 100%;
-    display: inline-block;
-}
-
-.info .user-sticker-type-icon-extra {
-    background-color: #ff9800;
-    border-color: #ffc107;
-}
-
-.info .user-sticker-type-icon-stickers {
-    background-color: #c238a2;
-    border-color: #c2229c;
-}
-
-.info .user-sticker-header {
-    display: block;
-    font-weight: bold;
-    text-align: center;
-}
-
 .info .user-achievements {
     display: table;
     border-collapse: collapse;

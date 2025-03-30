@@ -4,19 +4,17 @@ from unittest import TestCase
 from src.entities.achievements.handle_achievement import HandleAchievement
 from src.entities.album import Album
 from src.entities.birth_date import BirthDate
-from src.entities.history_action import AddAchievementAction, AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPaidDateAction, AddPhotoAction, AddPlaceAction, \
-    AddQuizAction, EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAchievementAction, RemoveAlbumAction, \
-    RemoveMarkupAction, RemoveOrganizerAction, RemovePaidDateAction, RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
+from src.entities.history_action import AddAchievementAction, AddAlbumAction, AddMarkupAction, AddOrganizerAction, AddPhotoAction, AddPlaceAction, AddQuizAction, \
+    EditAlbumAction, EditOrganizerAction, EditPhotoAction, EditPlaceAction, EditQuizAction, HistoryAction, RemoveAchievementAction, RemoveAlbumAction, RemoveMarkupAction, \
+    RemoveOrganizerAction, RemovePhotoAction, RemovePlaceAction, RemoveQuizAction, SignUpAction
 from src.entities.markup import Markup
 from src.entities.organizer import Organizer
-from src.entities.paid_date import PaidDate
 from src.entities.photo import Photo
 from src.entities.place import Place
 from src.entities.quiz import Quiz
-from src.entities.quiz_participant import QuizParticipant
 from src.entities.quiz_result import QuizResult
 from src.entities.user import User
-from src.enums import Category, HandleAchievementType, PaidType, UserRole
+from src.enums import Category, HandleAchievementType, UserRole
 
 
 class TestSerialization(TestCase):
@@ -94,8 +92,7 @@ class TestSerialization(TestCase):
             full_name="user full name",
             role=UserRole.ADMIN,
             avatar_url="url to avatar",
-            birth_date=BirthDate(day=5, month=12),
-            stickers_start_date=datetime(2024, 4, 1)
+            birth_date=BirthDate(day=5, month=12)
         )
 
         user_dict = user.to_dict()
@@ -113,22 +110,7 @@ class TestSerialization(TestCase):
         quiz_result_from_dict = QuizResult.from_dict(quiz_result_dict)
         self.assertEqual(quiz_result, quiz_result_from_dict)
 
-    def test_quiz_participant_serialization(self) -> None:
-        participant = QuizParticipant(
-            username="user_1",
-            paid_type=PaidType.PAID
-        )
-
-        participant_dict = participant.to_dict()
-        participant_from_dict = QuizParticipant.from_dict(participant_dict)
-        self.assertEqual(participant, participant_from_dict)
-
     def test_quiz_serialization(self) -> None:
-        participants = [
-            QuizParticipant(username="user_1", paid_type=PaidType.PAID),
-            QuizParticipant(username="user_2", paid_type=PaidType.PAID),
-        ]
-
         quiz = Quiz(
             quiz_id=1,
             name="Quiz 1",
@@ -141,19 +123,13 @@ class TestSerialization(TestCase):
             category=Category.MUSIC,
             album_id=5,
             ignore_rating=True,
-            participants=participants,
+            participants=["user1", "user2"],
             result=QuizResult(position=1, teams=15, players=5)
         )
 
         quiz_dict = quiz.to_dict()
         quiz_from_dict = Quiz.from_dict(quiz_dict)
         self.assertEqual(quiz, quiz_from_dict)
-
-    def test_paid_date_serialization(self) -> None:
-        paid_date = PaidDate(username="user_1", date=datetime(2024, 9, 29))
-        paid_date_dict = paid_date.to_dict()
-        paid_date_from_dict = PaidDate.from_dict(paid_date_dict)
-        self.assertEqual(paid_date, paid_date_from_dict)
 
     def test_handle_achievement_serialization(self) -> None:
         achievement = HandleAchievement(
@@ -193,9 +169,6 @@ class TestSerialization(TestCase):
 
             AddMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
             RemoveMarkupAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), markup_id=1),
-
-            AddPaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28))),
-            RemovePaidDateAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), paid_date=PaidDate(username="user", date=datetime(2024, 9, 28))),
 
             AddAchievementAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), achievement_id=1),
             RemoveAchievementAction(username="user", timestamp=datetime(2024, 1, 1, 20, 23, 51), achievement_id=1)

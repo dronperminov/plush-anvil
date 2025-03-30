@@ -47,6 +47,10 @@ def update_organizer(organizer: Organizer, user: Optional[User] = Depends(get_us
     if not original_organizer:
         return JSONResponse({"status": "error", "message": "не удалось найти организатора, возможно он уже удалён"})
 
+    name_organizer = organizer_database.get_organizer_by_name(name=organizer.name)
+    if name_organizer and name_organizer.organizer_id != organizer.organizer_id:
+        return JSONResponse({"status": "error", "message": "организатор с таким названием уже есть"})
+
     organizer_database.update_organizer(organizer_id=organizer.organizer_id, diff=original_organizer.get_diff(organizer.to_dict()), username=user.username)
     return JSONResponse({"status": "success", "organizer": jsonable_encoder(organizer_database.get_organizer(organizer_id=organizer.organizer_id))})
 
@@ -84,6 +88,9 @@ def remove_organizer(params: OrganizerRemove, user: Optional[User] = Depends(get
 def add_organizer(organizer: Organizer, user: Optional[User] = Depends(get_user)) -> JSONResponse:
     if response := admin_action(user=user):
         return response
+
+    if organizer_database.get_organizer_by_name(name=organizer.name):
+        return JSONResponse({"status": "error", "message": "организатор с таким названием уже есть"})
 
     organizer.organizer_id = database.get_identifier("organizers")
     organizer_database.add_organizer(organizer=organizer, username=user.username)

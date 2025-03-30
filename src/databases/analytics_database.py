@@ -117,7 +117,7 @@ class AnalyticsDatabase:
         return sorted(list(category2score), key=lambda category: -category2score[category])
 
     def __quizzes_query(self, user_period: UserPeriod) -> dict:
-        return {**user_period.to_query(username_key="participants.username", period_key="datetime"), "result.position": {"$gt": 0}}
+        return {**user_period.to_query(username_key="participants", period_key="datetime"), "result.position": {"$gt": 0}}
 
     def __get_top_players(self, quizzes: List[dict]) -> List[TopPlayer]:
         username2dates = defaultdict(list)
@@ -126,8 +126,8 @@ class AnalyticsDatabase:
 
         for quiz in quizzes:
             for participant in quiz["participants"]:
-                username2dates[participant["username"]].append(quiz["datetime"])
-                username2categories[participant["username"]].append(Category(quiz["category"]))
+                username2dates[participant].append(quiz["datetime"])
+                username2categories[participant].append(Category(quiz["category"]))
 
             dates.append(quiz["datetime"])
 

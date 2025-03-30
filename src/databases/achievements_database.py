@@ -130,7 +130,7 @@ class AchievementDatabase:
         return handle_achievements
 
     def __get_user_automatic_achievements(self, username: str) -> List[Achievement]:
-        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}, "participants.username": username}).sort("datetime")]
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}, "participants": username}).sort("datetime")]
         achievements = [
             SoloAchievement(title="Одиночка", description="участвовать в соло", image="1.png"),
             GamesCountAchievement(title="Частый гость", description="посетить 100 игр", image="2.png", target_count=100),
@@ -155,7 +155,7 @@ class AchievementDatabase:
 
     def __get_user_photos_achievement(self, username: str) -> Achievement:
         achievement = Achievement(title="Невидимка", description="не попасть на фото с игры", image_url="/images/achievements/1.png", count=0, first_date=None)
-        album_ids = [quiz["album_id"] for quiz in self.database.quizzes.find({"participants.username": username, "album_id": {"$ne": None}}, {"album_id": 1})]
+        album_ids = [quiz["album_id"] for quiz in self.database.quizzes.find({"participants": username, "album_id": {"$ne": None}}, {"album_id": 1})]
 
         for album in self.database.albums.find({"album_id": {"$in": album_ids}}):
             if not self.database.markup.find_one({"photo_id": {"$in": album["photo_ids"]}, "username": username}):

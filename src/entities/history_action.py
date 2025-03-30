@@ -1,8 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.entities.paid_date import PaidDate
-
 
 @dataclass
 class HistoryAction:
@@ -34,12 +32,8 @@ class HistoryAction:
             AddAlbumAction, EditAlbumAction, RemoveAlbumAction,
             AddPhotoAction, EditPhotoAction, RemovePhotoAction,
             AddMarkupAction, RemoveMarkupAction,
-            AddPaidDateAction, RemovePaidDateAction,
             AddAchievementAction, RemoveAchievementAction
         ]
-
-        if name in [AddPaidDateAction.name, RemovePaidDateAction.name]:
-            data["paid_date"] = PaidDate.from_dict(data["paid_date"])
 
         for action in actions:
             if name == action.name:
@@ -209,24 +203,6 @@ class RemoveMarkupAction(HistoryAction):
 
     def to_dict(self) -> dict:
         return {**super().to_dict(), "markup_id": self.markup_id}
-
-
-@dataclass
-class AddPaidDateAction(HistoryAction):
-    name = "add_paid_date"
-    paid_date: PaidDate
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "paid_date": self.paid_date.to_dict()}
-
-
-@dataclass
-class RemovePaidDateAction(HistoryAction):
-    name = "remove_paid_date"
-    paid_date: PaidDate
-
-    def to_dict(self) -> dict:
-        return {**super().to_dict(), "paid_date": self.paid_date.to_dict()}
 
 
 @dataclass

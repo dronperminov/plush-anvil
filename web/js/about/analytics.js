@@ -202,12 +202,12 @@ function BuildGamesOrganizer(organizer, cell) {
 }
 
 function BuildGamesParticipants(participants, username2avatar, username2score, cell) {
-    participants.sort((a, b) => username2score[b.username] - username2score[a.username])
+    participants.sort((a, b) => username2score[b] - username2score[a])
 
     let block = MakeElement("games-participants", cell)
 
     for (let participant of participants)
-        MakeElement("", block, {src: username2avatar[participant.username]}, "img")
+        MakeElement("", block, {src: username2avatar[participant]}, "img")
 }
 
 function BuildGamesPhotoAlbum(albumId, cell) {

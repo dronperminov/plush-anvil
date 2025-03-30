@@ -6,9 +6,7 @@ from typing import Dict, List, Optional, Tuple
 from pymongo import ASCENDING, DESCENDING, MongoClient
 
 from src.entities.history_action import SignUpAction
-from src.entities.paid_info import PaidInfo
 from src.entities.user import User
-from src.enums import PaidType
 from src.query_params.page_query import PageQuery
 
 
@@ -25,7 +23,6 @@ class Database:
     photos = None
     markup = None
 
-    paid_dates = None
     achievements = None
     metro_stations = None
     history = None
@@ -71,9 +68,6 @@ class Database:
         self.markup.create_index([("markup_id", DESCENDING)], unique=True)
         self.markup.create_index([("photo_id", DESCENDING)])
 
-        self.paid_dates = database["paid_dates"]
-        self.paid_dates.create_index([("username", ASCENDING)])
-
         self.achievements = database["achievements"]
         self.achievements.create_index([("achievement_id", ASCENDING)], unique=True)
         self.achievements.create_index([("username", ASCENDING)])
@@ -98,17 +92,6 @@ class Database:
             username2avatar_url[user["username"]] = user["avatar_url"]
 
         return username2avatar_url
-
-    def get_users_paid_info(self, usernames: List[str]) -> Dict[str, List[PaidInfo]]:
-        username2paid_info = {username: [] for username in usernames}
-
-        for paid_date in self.paid_dates.find({"username": {"$in": usernames}}):
-            username2paid_info[paid_date["username"]].append(PaidInfo(date=paid_date["date"], paid_type=PaidType.PAID, extra=True))
-
-        return username2paid_info
-
-    def get_user_paid_info(self, username: str) -> List[PaidInfo]:
-        return [PaidInfo(date=paid_date["date"], paid_type=PaidType.PAID, extra=True) for paid_date in self.paid_dates.find({"username": username})]
 
     def get_identifier(self, collection_name: str) -> int:
         identifier = self.identifiers.find_one_and_update({"_id": collection_name}, {"$inc": {"value": 1}}, return_document=True)

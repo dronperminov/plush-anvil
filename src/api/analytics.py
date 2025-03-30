@@ -64,7 +64,7 @@ def get_games(params: UserPeriod) -> JSONResponse:
     place_id2place = place_database.get_places(place_ids=list({game.place_id for game in games}))
     places = place_database.get_quiz_places(quizzes=games, only_used=True)
 
-    username2avatar_url = database.get_user_avatar_urls(usernames=list({participant.username for game in games for participant in game.participants}))
+    username2avatar_url = database.get_user_avatar_urls(usernames=list({participant for game in games for participant in game.participants}))
     username2score = quiz_database.get_activity_scores()
 
     return JSONResponse({

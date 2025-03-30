@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Optional
 
 from src.entities.birth_date import BirthDate
@@ -22,6 +21,5 @@ class SignUp:
             full_name=self.full_name,
             role=UserRole.USER,
             avatar_url="/images/profiles/default.png",
-            birth_date=self.birth_date,
-            stickers_start_date=datetime.now()
+            birth_date=self.birth_date
         )
