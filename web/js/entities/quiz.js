@@ -10,7 +10,6 @@ function Quiz(quiz) {
     this.category = new Category(quiz.category)
 
     this.albumId = quiz.album_id
-    this.ignoreRating = quiz.ignore_rating
     this.participants = quiz.participants
     this.result = quiz.result
 }

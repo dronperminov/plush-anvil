@@ -19,7 +19,6 @@ class Quiz:
     category: Category
 
     album_id: Optional[int]
-    ignore_rating: Optional[bool]
     participants: List[str]
     result: Optional[QuizResult]
 
@@ -35,7 +34,6 @@ class Quiz:
             "organizer_id": self.organizer_id,
             "category": self.category.value,
             "album_id": self.album_id,
-            "ignore_rating": self.ignore_rating,
             "participants": self.participants,
             "result": self.result.to_dict() if self.result else None
         }
@@ -53,7 +51,6 @@ class Quiz:
             organizer_id=data["organizer_id"],
             category=Category(data["category"]),
             album_id=data["album_id"],
-            ignore_rating=data["ignore_rating"],
             participants=data["participants"],
             result=QuizResult.from_dict(data["result"]) if data["result"] else None
         )
@@ -64,7 +61,7 @@ class Quiz:
 
         fields = [
             "name", "short_name", "description", "datetime", "cost", "place_id", "organizer_id",
-            "category", "album_id", "ignore_rating", "participants", "result"
+            "category", "album_id", "participants", "result"
         ]
 
         for field in fields:

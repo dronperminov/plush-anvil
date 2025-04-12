@@ -364,9 +364,6 @@ function LoadMonthAnalytics(response, block) {
         {label: "prizes", color: "#ed9ddc", text: "Вхождение в тройку", type: "bar-chart"}
     ]
 
-    if (response.month_analytics[0].year >= 2024 && response.profile === null)
-        gamesConfigs.push({label: "smuzi_rating", color: "#fddc81", text: "Смузи рейтинг", type: "bar-chart"})
-
     let meanConfigs = [
         {label: "mean_position", color: "#9cc2ff", text: "Средняя позиция", type: "plot-chart"},
         {label: "mean_players", color: "#9cc2ff", text: "Среднее число игроков", type: "plot-chart"},

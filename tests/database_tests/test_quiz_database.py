@@ -23,7 +23,6 @@ class TestQuizDatabaseReal(AbstractDatabaseTest):
             organizer_id=1,
             category=Category.ABOUT_EVERYTHING,
             album_id=None,
-            ignore_rating=False,
             participants=["user1"],
             result=None
         )

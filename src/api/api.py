@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 
-from src import album_database, database, organizer_database, place_database, quiz_database, smuzi_rating
+from src import album_database, database, organizer_database, place_database, quiz_database
 from src.api import admin_redirect, templates
 from src.entities.user import User
 from src.query_params.page_query import PageQuery

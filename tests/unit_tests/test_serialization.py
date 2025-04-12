@@ -122,7 +122,6 @@ class TestSerialization(TestCase):
             organizer_id=1,
             category=Category.MUSIC,
             album_id=5,
-            ignore_rating=True,
             participants=["user1", "user2"],
             result=QuizResult(position=1, teams=15, players=5)
         )

@@ -12,13 +12,11 @@ from src.entities.quiz import Quiz
 from src.entities.user import User
 from src.enums import Category
 from src.query_params.analytics.user_period import UserPeriod
-from src.utils.smuzi_rating import SmuziRating
 
 
 class AnalyticsDatabase:
-    def __init__(self, database: Database, smuzi_rating: SmuziRating, logger: logging.Logger) -> None:
+    def __init__(self, database: Database, logger: logging.Logger) -> None:
         self.database = database
-        self.smuzi_rating = smuzi_rating
         self.logger = logger
         self.alpha = 0.98
 
@@ -87,11 +85,8 @@ class AnalyticsDatabase:
             month2quizzes[(quiz["datetime"].year, quiz["datetime"].month)].append(quiz)
 
         month_analytics = []
-        smuzi_id = self.database.get_smuzi_id()
 
         for (year, month), quizzes in month2quizzes.items():
-            smuzi_quizzes = [quiz for quiz in quizzes if quiz["organizer_id"] == smuzi_id]
-
             month_analytics.append(MonthAnalytics(
                 month=month,
                 year=year,
@@ -101,8 +96,7 @@ class AnalyticsDatabase:
                 top3=sum(1 for quiz in quizzes if 2 <= quiz["result"]["position"] <= 3),
                 mean_position=round(sum(quiz["result"]["position"] for quiz in quizzes) / len(quizzes), 1),
                 mean_players=round(sum(len(quiz["participants"]) for quiz in quizzes) / len(quizzes), 1),
-                top_players=self.__get_top_players(quizzes=quizzes),
-                smuzi_rating=sum([self.smuzi_rating.get_rating(quiz["result"]["position"], quiz["datetime"]) for quiz in smuzi_quizzes if not quiz["ignore_rating"]])
+                top_players=self.__get_top_players(quizzes=quizzes)
             ))
 
         return sorted(month_analytics, key=lambda data: (data.year, data.month), reverse=True)

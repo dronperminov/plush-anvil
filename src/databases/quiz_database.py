@@ -57,15 +57,6 @@ class QuizDatabase:
         quiz = self.database.quizzes.find_one({"quiz_id": quiz_id})
         return Quiz.from_dict(quiz) if quiz else None
 
-    def get_rating_quizzes(self) -> List[Quiz]:
-        query = {
-            "datetime": {"$gte": datetime(2024, 1, 1)},
-            "result.position": {"$gt": 0},
-            "organizer_id": self.database.get_smuzi_id(),
-            "ignore_rating": {"$ne": True}
-        }
-        return [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find(query).sort("datetime", 1)]
-
     def get_nearest_quizzes(self) -> List[Quiz]:
         quizzes = self.database.quizzes.find({"datetime": {"$gte": datetime.now()}}).sort({"datetime": 1}).limit(2)
         return [Quiz.from_dict(quiz) for quiz in quizzes]

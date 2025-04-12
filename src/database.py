@@ -105,10 +105,6 @@ class Database:
     def get_metro_stations(self) -> List[str]:
         return [metro_station["name"] for metro_station in self.metro_stations.find({}).sort({"name": 1})]
 
-    def get_smuzi_id(self) -> int:
-        organizer = self.organizers.find_one({"name": "Смузи"}, {"organizer_id": 1})
-        return organizer["organizer_id"]
-
     def sign_up(self, user: User) -> None:
         action = SignUpAction(username=user.username, timestamp=datetime.now())
         self.users.insert_one(user.to_dict())
