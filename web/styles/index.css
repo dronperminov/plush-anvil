@@ -1,10 +1,16 @@
 html {
     background-color: #ffffff;
+    overflow-x: hidden;
 }
 
 :root {
     --menu-background: #ffffff;
     --submenu-background: #fafafa;
+}
+
+.content {
+    position: relative;
+    z-index: 3;
 }
 
 .first-screen {
@@ -13,7 +19,8 @@ html {
     border-radius: 1.4em;
     padding: 4em;
     position: relative;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
+    min-height: 600px;
 }
 
 .first-screen .team {
@@ -27,38 +34,6 @@ html {
     max-width: 660px;
 }
 
-.first-screen .rating {
-    margin-top: 3em;
-}
-
-.first-screen .rating-curr {
-    display: grid;
-    grid-template-columns: min-content 1fr;
-    grid-gap: 0.7em;
-    align-items: center;
-    margin-bottom: 0.8em;
-}
-
-.first-screen .rating-curr-value {
-    font-size: 2.2em;
-    font-weight: bold;
-    background-color: var(--circle-color);
-    border-radius: 0.5em;
-    padding: 0.25em 0.5em;
-}
-
-.first-screen .rating-curr-text {
-    font-size: 1.1em;
-}
-
-.first-screen .rating-next {
-    margin-bottom: 1em;
-}
-
-.first-screen .rating-next-date {
-    font-size: 0.9em;
-}
-
 .first-screen .anvil {
     position: absolute;
     right: -3em;
@@ -67,7 +42,43 @@ html {
 }
 
 .first-screen .anvil img {
-    max-width: 600px;
+    max-width: 786px;
+}
+
+.top-left-image {
+    position: absolute;
+    left: 0;
+    width: 1654px;
+    height: 1654px;
+    top: -133px;
+    left: -714px;
+}
+
+.top-right-image {
+    position: absolute;
+    width: 1259px;
+    height: 1112px;
+    top: 735px;
+    right: -928px;
+}
+
+.bottom-left-image {
+    position: absolute;
+    width: 1430px;
+    height: 1112px;
+    top: 2155px;
+    left: -535px;
+}
+
+.bottom-right-image {
+    position: absolute;
+    width: 1827px;
+    top: 2941px;
+    right: -943px;
+}
+
+.arrow-link-mobile {
+    display: none;
 }
 
 .nearest-quizzes {
@@ -84,6 +95,7 @@ html {
     backdrop-filter: blur(10px);
     padding: 1.5em 1.5em 3.5em 1.5em;
     position: relative;
+    min-height: 300px;
 }
 
 .nearest-quiz:first-child {
@@ -155,6 +167,7 @@ html {
     padding: 2em 1em;
     backdrop-filter: blur(10px);
     border-radius: 1.2em;
+    min-height: 224px;
 }
 
 .about-team-block:nth-child(1) {
@@ -230,8 +243,12 @@ html {
 }
 
 @media (max-width: 1023px) {
+    .first-screen .anvil {
+        position: unset;
+    }
+
     .first-screen .anvil img {
-        max-width: 58vw;
+        max-width: 100%;
     }
 
     .about-team {
@@ -261,28 +278,80 @@ html {
         font-size: 2em;
     }
 
+    .top-left-image {
+        width: 692px;
+        height: 692px;
+        top: 296px;
+        left: -305px;
+    }
+
+    .top-right-image {
+        width: 531px;
+        height: 469px;
+        top: 1034px;
+        right: -316px;
+    }
+
+    .bottom-left-image {
+        width: 1218px;
+        top: 2155px;
+        left: -600px;
+    }
+
+    .bottom-right-image {
+        width: 809px;
+        top: 4153px;
+        right: -423px;
+    }
+
+    .arrow-link-mobile {
+        display: block;
+        margin-bottom: 2em;
+    }
+
+    .arrow-link-mobile .arrow-link {
+        width: 100%;
+    }
+
+    .arrow-link-mobile .arrow-link {
+        grid-template-columns: 1fr 3em;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        height: 100%;
+    }
+
+    .arrow-link-mobile .arrow-link .arrow {
+        height: 3em;
+        width: 3em;
+        aspect-ratio: 1;
+    }
+
     .first-screen {
         padding: 2em;
+        min-height: unset;
     }
 
     .first-screen .team-name {
-        font-size: 2.8em;
+        font-size: 3em;
         max-width: 320px;
     }
 
-    .first-screen .anvil {
-        top: 0;
-        right: -10px;
+    .link-header {
+        grid-template-columns: 1fr;
     }
 
-    .first-screen .anvil img {
-        max-width: 50vw;
+    .link-header .arrow-link {
+        display: none;
     }
 
     .nearest-quizzes {
         display: grid;
         grid-template-columns: 1fr;
         grid-auto-flow: row;
+    }
+
+    .nearest-quiz {
+        min-height: unset;
     }
 
     .nearest-quiz .quiz-header {
@@ -302,7 +371,7 @@ html {
     }
 
     .about-team {
-        grid-template-areas: "area1 area2" "area3 area4" "area5 .";
+        grid-template-areas: "area1 area2 area3" "area4 area5 .";
     }
 
     .top-albums {
@@ -322,6 +391,10 @@ html {
 }
 
 @media (max-width: 419px) {
+    .about-team {
+        grid-template-areas: "area1 area2" "area3 area4" "area5 .";
+    }
+
     .top-albums {
         grid-auto-rows: 100px;
         grid-template-areas:

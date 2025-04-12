@@ -130,7 +130,7 @@ ul {
 .content {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 1em 75px;
+    padding: 2em 75px 1em 75px;
     min-height: calc(100dvh - 70px);
 }
 

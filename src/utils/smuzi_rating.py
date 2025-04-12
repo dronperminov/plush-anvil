@@ -1,10 +1,6 @@
 from datetime import datetime
-from typing import List
 
-from src.entities.quiz import Quiz
-from src.entities.smuzi_rating.next_level_info import NextLevelInfo
 from src.entities.smuzi_rating.smuzi_level import SmuziLevel
-from src.entities.smuzi_rating.smuzi_rating import RatingInfo
 
 
 class SmuziRating:
@@ -29,26 +25,3 @@ class SmuziRating:
 
     def get_rating(self, position: int, date: datetime) -> int:
         return 0 if date < datetime(2024, 1, 1) else self.position2score.get(position, 50)
-
-    def get_info(self, quizzes: List[Quiz]) -> RatingInfo:
-        rating = 0
-        level = -1
-
-        for quiz in quizzes:
-            rating += self.get_rating(position=quiz.result.position, date=quiz.datetime)
-
-            if level < len(self.levels) - 1 and rating >= self.levels[level + 1].score:
-                level += 1
-
-        next_level = None
-
-        if level < len(self.levels) - 1:
-            next_level = NextLevelInfo.evaluate(rating=rating, games=len(quizzes), start_date=quizzes[0].datetime, next_level=self.levels[level + 1])
-
-        return RatingInfo(
-            rating=rating,
-            mean_rating=rating / max(len(quizzes), 1),
-            games=len(quizzes),
-            curr_level=self.levels[level],
-            next_level=next_level
-        )

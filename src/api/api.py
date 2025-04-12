@@ -19,7 +19,6 @@ router = APIRouter()
 
 @router.get("/")
 def index(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
-    rating_info = smuzi_rating.get_info(quiz_database.get_rating_quizzes())
     nearest_quizzes = quiz_database.get_nearest_quizzes()
     team_analytics = quiz_database.get_team_analytics()
     last_albums = album_database.get_last_albums(top_count=13)
@@ -34,7 +33,6 @@ def index(user: Optional[User] = Depends(get_user)) -> HTMLResponse:
     content = template.render(
         version=get_static_hash(),
         user=user,
-        rating_info=rating_info,
         nearest_quizzes=nearest_quizzes,
         team_analytics=team_analytics,
         last_albums=last_albums,
