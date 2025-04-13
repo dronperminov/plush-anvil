@@ -5,6 +5,32 @@
     margin: 0 auto;
 }
 
+.left-image, .right-image {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.left-image {
+    background-image: url("/images/login/left.png");
+    background-position-x: max(-24.5vw, -350px);
+    background-position-y: min(28vw, 400px);
+    width: min(72.5vw, 1004px);
+    height: min(68.5vw, 983px);
+    left: 0;
+    bottom: 0;
+}
+
+.right-image {
+    background-image: url("/images/login/right.png");
+    background-position-x: min(5.5vw, 80px);
+    background-position-y: 0px;
+    width: min(61.5vw, 973px);
+    height: min(63vw, 995px);
+    right: 0;
+    top: 0;
+}
+
 .sign-form {
     background: #ffffff4d;
     border: 1px solid var(--border-color);

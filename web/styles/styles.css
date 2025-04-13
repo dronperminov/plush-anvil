@@ -16,7 +16,7 @@
     --border-color: #d9d9d9;
 
     --max-width: 1440px;
-    --menu-height: 70px;
+    --menu-height: 90px;
 
     /* status */
     --error-color: #f44336;
@@ -88,6 +88,9 @@ html {
     font-family: var(--text-font);
     color: var(--text-color);
     background-color: var(--background-color);
+    text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
 }
 
 html:not([data-user-role="admin"]) .admin-block {
@@ -131,7 +134,7 @@ ul {
     max-width: var(--max-width);
     margin: 0 auto;
     padding: 2em 75px 1em 75px;
-    min-height: calc(100dvh - 70px);
+    min-height: calc(100dvh - var(--menu-height));
 }
 
 .link {

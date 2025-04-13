@@ -1,6 +1,8 @@
-html {
+html, body {
     background-color: #ffffff;
     overflow-x: hidden;
+    width: 100vw;
+    max-width: 100vw;
 }
 
 :root {
@@ -10,17 +12,31 @@ html {
 
 .content {
     position: relative;
-    z-index: 3;
+    z-index: 1;
+}
+
+.content-block {
+    position: relative;
+    margin-bottom: 5em;
+    z-index: 1;
+    scrollbar-width: none;
+}
+
+.content-block:has(.first-screen) {
+    min-height: 600px;
 }
 
 .first-screen {
-    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, rgba(255, 161, 166, 0.6) 0%, rgba(237, 157, 220, 0) 100%), rgba(238, 157, 220, 0.5);
-    backdrop-filter: blur(0.6em);
     border-radius: 1.4em;
     padding: 4em;
-    position: relative;
-    margin-bottom: 2em;
-    min-height: 600px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, rgba(255, 161, 166, 0.6) 0%, rgba(237, 157, 220, 0) 100%), rgba(238, 157, 220, 0.5);
+    backdrop-filter: blur(0.6em);
+    z-index: 1;
 }
 
 .first-screen .team {
@@ -45,35 +61,43 @@ html {
     max-width: 786px;
 }
 
-.top-left-image {
+.top-left-image, .top-right-image, .bottom-left-image, .bottom-right-image {
+    background-size: contain;
+    background-repeat: no-repeat;
     position: absolute;
+    z-index: -1;
+}
+
+.top-left-image {
+    background-image: url("/images/index/top_left.png");
     left: 0;
     width: 1654px;
     height: 1654px;
-    top: -133px;
-    left: -714px;
+    top: -283px;
+    left: -816px;
 }
 
 .top-right-image {
-    position: absolute;
+    background-image: url("/images/index/top_right.png");
     width: 1259px;
     height: 1112px;
-    top: 735px;
+    top: -68px;
     right: -928px;
 }
 
 .bottom-left-image {
-    position: absolute;
+    background-image: url("/images/index/bottom_left.png");
     width: 1430px;
     height: 1112px;
-    top: 2155px;
+    top: -280px;
     left: -535px;
 }
 
 .bottom-right-image {
-    position: absolute;
+    background-image: url("/images/index/bottom_right.png");
     width: 1827px;
-    top: 2941px;
+    height: 1827px;
+    top: 50px;
     right: -943px;
 }
 
@@ -87,7 +111,6 @@ html {
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
     grid-gap: 1em;
-    margin-bottom: 4em;
 }
 
 .nearest-quiz {
@@ -281,27 +304,29 @@ html {
     .top-left-image {
         width: 692px;
         height: 692px;
-        top: 296px;
+        top: 200px;
         left: -305px;
     }
 
     .top-right-image {
         width: 531px;
         height: 469px;
-        top: 1034px;
+        top: 227px;
         right: -316px;
     }
 
     .bottom-left-image {
-        width: 1218px;
-        top: 2155px;
-        left: -600px;
+        width: 542px;
+        height: 421px;
+        top: -50px;
+        left: -265px;
     }
 
     .bottom-right-image {
-        width: 809px;
-        top: 4153px;
-        right: -423px;
+        width: 726px;
+        height: 726px;
+        top: 450px;
+        right: -365px;
     }
 
     .arrow-link-mobile {
@@ -348,6 +373,7 @@ html {
         display: grid;
         grid-template-columns: 1fr;
         grid-auto-flow: row;
+        grid-auto-rows: 1fr;
     }
 
     .nearest-quiz {
@@ -371,7 +397,21 @@ html {
     }
 
     .about-team {
-        grid-template-areas: "area1 area2 area3" "area4 area5 .";
+        grid-template-areas: "area1 area2 area3" ". area4 area5";
+        margin-bottom: 4em;
+    }
+
+    .about-team-name {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+    .about-team-value {
+        font-size: 30px;
+    }
+
+    .about-team-block {
+        min-height: 110px;
     }
 
     .top-albums {
@@ -391,10 +431,6 @@ html {
 }
 
 @media (max-width: 419px) {
-    .about-team {
-        grid-template-areas: "area1 area2" "area3 area4" "area5 .";
-    }
-
     .top-albums {
         grid-auto-rows: 100px;
         grid-template-areas:
@@ -407,10 +443,4 @@ html {
 
     .top-album:nth-child(7) { display: none; }
     .top-album:nth-child(8) { display: none; }
-}
-
-@media (max-width: 359px) {
-    .about-team {
-        grid-template-areas: "area1" "area2" "area3" "area4" "area5";
-    }
 }
