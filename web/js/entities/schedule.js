@@ -68,7 +68,7 @@ Schedule.prototype.BuildQuizPopupParticipants = function(popup, quiz) {
     }
 }
 
-Schedule.prototype.BuildQuizPopup = function(quiz, place, organizer, block) {
+Schedule.prototype.BuildQuizPopup = function(quiz, place, organizer, block, arrow) {
     let popup = MakeElement("schedule-popup", this.popups)
 
     let closeIcon = MakeElement("close-icon", popup, {title: "Закрыть"})
@@ -96,8 +96,10 @@ Schedule.prototype.BuildQuizPopup = function(quiz, place, organizer, block) {
     }
 
     closeIcon.addEventListener("click", () => this.ClosePopup())
-    removeIcon.addEventListener("click", () => this.RemoveQuiz(quiz, block))
-    return popup
+    removeIcon.addEventListener("click", () => this.RemoveQuiz(quiz, block, arrow.parentNode))
+
+    block.addEventListener("click", () => this.OpenPopup(popup))
+    arrow.addEventListener("click", () => this.OpenPopup(popup))
 }
 
 Schedule.prototype.OpenPopup = function(popup) {
@@ -118,7 +120,7 @@ Schedule.prototype.ClosePopup = function() {
     body.classList.remove("no-overflow")
 }
 
-Schedule.prototype.RemoveQuiz = function(quiz, block) {
+Schedule.prototype.RemoveQuiz = function(quiz, block, event) {
     if (!confirm(`Вы уверены, что хотите удалить квиз "${quiz.name}"?`))
         return
 
@@ -126,6 +128,7 @@ Schedule.prototype.RemoveQuiz = function(quiz, block) {
         if (result) {
             this.ClosePopup()
             block.remove()
+            event.remove()
         }
     })
 }
@@ -143,7 +146,6 @@ Schedule.prototype.BuildQuizEvent = function(quiz, place, organizer, block) {
 
     let arrow = MakeElement("schedule-event-arrow", event, {})
     MakeElement("", arrow, {src: "/images/icons/arrow-right.svg"}, "img")
-
     return arrow
 }
 
@@ -154,7 +156,7 @@ Schedule.prototype.BuildCalendarCell = function(block, eventsBlock, day) {
     if (!(day in this.day2quizzes))
         return
 
-    let quizzes = MakeElement(`schedule-calendar-quizzes schedule-calendar-quizzes-${this.day2quizzes[day].length}`, cell)
+    let quizzes = MakeElement("schedule-calendar-quizzes", cell)
     let events = MakeElement("schedule-events hidden", eventsBlock)
 
     cellDay.addEventListener("click", () => {
@@ -180,10 +182,7 @@ Schedule.prototype.BuildCalendarCell = function(block, eventsBlock, day) {
         MakeElement("schedule-calendar-quiz-time", quizBlock, {innerText: quiz.FormatTime()})
 
         let arrow = this.BuildQuizEvent(quiz, place, organizer, events)
-        let popup = this.BuildQuizPopup(quiz, place, organizer, quizBlock)
-
-        quizBlock.addEventListener("click", () => this.OpenPopup(popup))
-        arrow.addEventListener("click", () => this.OpenPopup(popup))
+        this.BuildQuizPopup(quiz, place, organizer, quizBlock, arrow)
     }
 
     this.cells.push(quizzes)
