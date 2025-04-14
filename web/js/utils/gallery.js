@@ -32,17 +32,17 @@ Gallery.prototype.BuildTopControls = function(view) {
     let controls = MakeElement("gallery-top-controls", view)
     let leftControls = MakeElement("gallery-top-controls-left", controls)
 
-    let downloadIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/download.svg", title: "Скачать"}, "img")
+    let downloadIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/gallery/download.svg", title: "Скачать"}, "img")
     this.downloadLink = MakeElement("", null, {download: ""}, "a")
     downloadIcon.addEventListener("click", () => this.Download())
 
-    this.markupIcon = MakeElement("gallery-icon markup-icon admin-block", leftControls, {src: "/images/icons/markup.svg", title: "Отметить пользователя"}, "img")
+    this.markupIcon = MakeElement("gallery-icon markup-icon admin-block", leftControls, {src: "/images/icons/gallery/markup.svg", title: "Отметить пользователя"}, "img")
     this.markupIcon.addEventListener("click", () => this.ToggleMarkupMode())
 
-    let infoIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/info.svg", title: "Информация"}, "img")
+    let infoIcon = MakeElement("gallery-icon", leftControls, {src: "/images/icons/gallery/info.svg", title: "Информация"}, "img")
     infoIcon.addEventListener("click", () => this.ShowInfo())
 
-    let closeIcon = MakeElement("gallery-icon", controls, {src: "/images/icons/close.svg", title: "Закрыть"}, "img")
+    let closeIcon = MakeElement("gallery-icon", controls, {src: "/images/icons/gallery/close.svg", title: "Закрыть"}, "img")
     closeIcon.addEventListener("click", () => this.Close())
 }
 
@@ -53,8 +53,8 @@ Gallery.prototype.BuildImageView = function(view) {
     this.image = this.BuildImage(true)
     this.rightImage = this.BuildImage()
 
-    let prev = MakeElement("gallery-icon gallery-prev-icon", this.imageView, {src: "/images/icons/arrow-left.svg"}, "img")
-    let next = MakeElement("gallery-icon gallery-next-icon", this.imageView, {src: "/images/icons/arrow-right.svg"}, "img")
+    let prev = MakeElement("gallery-icon gallery-prev-icon", this.imageView, {src: "/images/icons/gallery/arrow-left.svg"}, "img")
+    let next = MakeElement("gallery-icon gallery-next-icon", this.imageView, {src: "/images/icons/gallery/arrow-right.svg"}, "img")
 
     prev.addEventListener("click", () => this.Prev())
     next.addEventListener("click", () => this.Next())

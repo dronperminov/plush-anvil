@@ -1,0 +1,256 @@
+.header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: var(--menu-background);
+    padding: 0 75px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr max-content;
+    align-items: center;
+    z-index: 5;
+}
+
+.header .logo {
+    height: 70px;
+    text-align: left;
+}
+
+.header .logo img {
+    height: 100%;
+}
+
+.header input[type=checkbox] {
+    display: none;
+}
+
+.menu {
+    height: 100%;
+}
+
+.menu-items {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    grid-gap: 3em;
+    align-items: center;
+    height: 100%;
+}
+
+.menu a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.menu a:hover {
+    color: var(--main-color);
+}
+
+.menu-item {
+    position: relative;
+    display: grid;
+    align-items: center;
+    height: 100%;
+}
+
+.menu-item, .menu-item a, .menu-item label {
+    font-size: 18px;
+}
+
+.menu-item .profile img {
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    vertical-align: middle;
+}
+
+.menu-subitem {
+    position: absolute;
+    left: -10px;
+    top: 60px;
+
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: 1fr;
+    align-items: center;
+
+    width: max-content;
+    background-color: var(--menu-background);
+    border-radius: 0 0 1em 1em;
+}
+
+.menu-subitem a {
+    padding: 1em 10px;
+}
+
+@media (min-width: 1440px) {
+    .header {
+        padding: 0 calc(50vw - var(--max-width) / 2 + 75px);
+    }
+}
+
+@media (max-width: 1023px) {
+    .menu-items {
+        grid-gap: 3vw;
+    }
+}
+
+@media (min-width: 768px) {
+    .menu {
+        text-align: right;
+    }
+
+    .menu-item {
+        text-align: left;
+    }
+
+    .menu-subitem {
+        pointer-events: none;
+        opacity: 0;
+        transition: 0.2s opacity;
+    }
+
+    .menu-item:hover .menu-subitem {
+        opacity: 1;
+        pointer-events: all;
+        transition: 0.2s opacity;
+    }
+
+    .menu-item, .menu-item a, .menu-item label {
+        cursor: pointer;
+    }
+
+    .menu-item:last-child .menu-subitem {
+        left: unset;
+        right: 0;
+        text-align: right;
+    }
+
+    .mobile-item {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    .hamb {
+        cursor: pointer;
+        padding: 10px 0 10px 10px;
+    }
+
+    .hamb-line {
+        display: block;
+        height: 3px;
+        position: relative;
+        width: 38px;
+        background: var(--menu-hamb-color);
+    }
+
+    .hamb-line:before, .hamb-line:after {
+        background: var(--menu-hamb-color);
+        content: "";
+        display: block;
+        height: 100%;
+        position: absolute;
+        transition: all .2s ease-out;
+        width: 100%;
+    }
+
+    .hamb-line:before {
+        top: 10px;
+    }
+
+    .hamb-line:after {
+        top: -10px;
+    }
+
+    .side-menu:checked ~ .hamb .hamb-line {
+        background: transparent;
+    }
+
+    .side-menu:checked ~ .hamb .hamb-line::before {
+        transform: rotate(-45deg);
+        top: 0;
+    }
+
+    .side-menu:checked ~ .hamb .hamb-line::after {
+        transform: rotate(45deg);
+        top: 0;
+    }
+
+    .header {
+        padding: 0 16px;
+    }
+
+    .header .logo {
+        height: 60px;
+    }
+
+    .menu {
+        position: fixed;
+        top: 60px;
+        z-index: 9999;
+        background-color: var(--menu-background);
+
+        max-height: 0;
+        overflow: hidden;
+
+        width: 100%;
+        transition: 0.2s max-height;
+    }
+
+    .menu-items {
+        display: grid;
+        grid-auto-flow: row;
+        grid-template-columns: 1fr;
+        grid-gap: 0;
+        height: unset;
+    }
+
+    .side-menu:checked ~ .menu {
+        height: calc(100dvh - 60px);
+        max-height: calc(100dvh - 60px);
+        overflow-y: auto;
+        transition: 0.2s max-height;
+    }
+
+    .menu-subitem {
+        position: initial;
+        max-height: 0;
+        overflow: hidden;
+        transition: 0.2s max-height;
+        width: 100%;
+        border-radius: 0 0 0.5em 0.5em;
+    }
+
+    .menu-item label {
+        padding: 1em 10px;
+    }
+
+    .menu-subitem a {
+        padding: 1em 0;
+    }
+
+    .menu-item > a {
+        padding: 10px 0;
+    }
+
+    .subnav-checkbox:checked ~ label {
+        font-weight: bold;
+        background-color: var(--submenu-background);
+    }
+
+    .subnav-checkbox:checked ~ .menu-subitem {
+        max-height: 100dvh;
+        transition: 0.2s max-height;
+        margin-top: -0.5em;
+        background-color: var(--submenu-background);
+    }
+
+    .menu-item .profile img {
+        margin-right: 0.5em;
+    }
+
+    .mobile-item {
+        display: inline;
+    }
+}

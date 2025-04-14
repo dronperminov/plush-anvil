@@ -1,209 +1,427 @@
 {% set title = "Плюшевая наковальня" %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/components/faq.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/common/schedule.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/index.css?v={{version}}">
 </head>
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
-        <div class="content-block">
-            <div class="top-left-image"></div>
-
-            <div class="first-screen">
-                <div class="team">КОМАНДА</div>
-                <div class="team-name">ПЛЮШЕВАЯ НАКОВАЛЬНЯ</div>
-
-                <div class="anvil">
-                    <img src="/images/index/anvil.png">
-                </div>
-            </div>
+    <main>
+        <div class="background-layer">
+            <img src="/images/index/blob1.png" class="background-blob blob-1" />
+            <img src="/images/index/blob2.png" class="background-blob blob-2" />
+            <img src="/images/index/blob3.png" class="background-blob blob-3" />
+            <img src="/images/index/blob4.png" class="background-blob blob-4" />
         </div>
 
-        {% if nearest_quizzes %}
-        <div class="content-block">
-            <div class="top-right-image"></div>
+        <div class="content">
+            <div class="section team">
+                <p>КОМАНДА</p>
+                <h1>ПЛЮШЕВАЯ<br>НАКОВАЛЬНЯ</h1>
+                <img class="anvil" src="/images/index/anvil.png">
+            </div>
 
-            <div class="nearest-quizzes">
+            {% if nearest_quizzes %}
+            <div class="section nearest-quizzes">
                 {% for quiz in nearest_quizzes %}
                 {% set place = place_id2place[quiz.place_id] %}
                 {% set organizer = organizer_id2organizer[quiz.organizer_id] %}
                 <div class="nearest-quiz">
-                    <div class="quiz-header">БЛИЖАЙШИЙ КВИЗ</div>
-                    <div class="quiz-name">
-                        <img src="{{organizer.image_url}}">
-                        <div>{{quiz.name.upper()}}</div>
-                    </div>
-                    <div class="quiz-description">{{quiz.description[:200]}}{% if quiz.description|length > 200 %}...{% endif %}</div>
-                    <div class="quiz-date-address">
-                        <div class="quiz-date"><img src="/images/icons/calendar.svg"> <span>{{quiz.datetime.strftime("%d.%m.%Y %H:%M")}}</span></div>
-                        <div class="quiz-address"><img src="/images/icons/location.svg"> <span><a class="link" target="_blank" href="{{place.yandex_map_link}}">{{place.name}}</a></span></div>
+                    <p class="nearest-quiz-title">БЛИЖАЙШИЙ КВИЗ</p>
+                    <img src="{{organizer.image_url}}">
+                    <div>
+                        <p class="nearest-quiz-name">{{quiz.name.upper()}}</p>
+                        <p class="nearest-quiz-description">{{quiz.description[:200]}}{% if quiz.description|length > 200 %}...{% endif %}</p>
+                        <div class="nearest-quiz-info">
+                            <img src="/images/icons/calendar.svg"> <p>{{quiz.datetime.strftime("%d.%m.%Y %H:%M")}}</p>
+                            <img src="/images/icons/location.svg"> <p><a class="link" target="_blank" href="{{place.yandex_map_link}}">{{place.name}}</a></p>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-        {% endif %}
+            {% endif %}
 
-        <div class="content-block">
-            <h2>РАСПИСАНИЕ</h2>
+            <div class="section">
+                <h2>РАСПИСАНИЕ</h2>
 
-            <div class="schedule">
-                <div class="schedule-date" id="schedule-date">
-                    <div class="schedule-date-controls">
-                        <div class="schedule-date-prev" onclick="StepSchedule(-1)">
-                            <img src="/images/icons/angle-left.svg">
+                <div class="schedule">
+                    <div class="schedule-month">
+                        <img src="/images/icons/angle-left.svg" onclick="StepSchedule(-1)">
+                        <span><span id="schedule-date-month">{{get_rus_month(today)|upper}}</span> <span id="schedule-date-year">{{today.year}}</span></span>
+                        <img src="/images/icons/angle-right.svg" onclick="StepSchedule(1)">
+                    </div>
+
+                    <div class="schedule-places">
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #ed9c9c"></span>
+                            <span class="schedule-place-name">Золберг</span>
                         </div>
 
-                        <div class="schedule-date-value"><span id="schedule-date-month">{{get_rus_month(today)|upper}}</span> <span id="schedule-date-year">{{today.year}}</span></div>
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #9cbced"></span>
+                            <span class="schedule-place-name">1929</span>
+                        </div>
 
-                        <div class="schedule-date-next" onclick="StepSchedule(1)">
-                            <img src="/images/icons/angle-right.svg">
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #bced9c"></span>
+                            <span class="schedule-place-name">[цурцум]кафе</span>
+                        </div>
+
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #edbc9c"></span>
+                            <span class="schedule-place-name">Пицунда</span>
+                        </div>
+
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #74c261"></span>
+                            <span class="schedule-place-name">Ramen Ten</span>
+                        </div>
+
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #d5d908"></span>
+                            <span class="schedule-place-name">Beer Harbor</span>
+                        </div>
+
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #adcff5"></span>
+                            <span class="schedule-place-name">Travel</span>
+                        </div>
+
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #ea529d"></span>
+                            <span class="schedule-place-name">ГОГЕН_КАФЕ</span>
+                        </div>
+
+                        <div class="schedule-place">
+                            <span class="schedule-place-color" style="background-color: #397521"></span>
+                            <span class="schedule-place-name">Nudles by Ivleeva</span>
+                        </div>
+                    </div>
+
+                    <div class="schedule-calendar">
+                        <div class="schedule-calendar-weekday">ПН</div>
+                        <div class="schedule-calendar-weekday">ВТ</div>
+                        <div class="schedule-calendar-weekday">СР</div>
+                        <div class="schedule-calendar-weekday">ЧТ</div>
+                        <div class="schedule-calendar-weekday">ПТ</div>
+                        <div class="schedule-calendar-weekday">СБ</div>
+                        <div class="schedule-calendar-weekday">ВС</div>
+
+                        <div class="schedule-calendar-cell"></div>
+                        <div class="schedule-calendar-cell"></div>
+                        <div class="schedule-calendar-cell"></div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">1</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">2</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">3</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">4</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">5</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">6</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">7</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">8</div>
+                            <div class="schedule-calendar-quizzes">
+                                <div class="schedule-calendar-quiz" style="background-color: #ed9c9c;">
+                                    <div class="schedule-calendar-quiz-name">УМ: ХИТЫ 2000-х</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/smuzi.png">
+                                    <div class="schedule-calendar-quiz-time">19:00</div>
+                                </div>
+
+                                <div class="schedule-calendar-quiz" style="background-color: #adcff5;">
+                                    <div class="schedule-calendar-quiz-name">Чисто попеть [00-е]</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/shejker.png">
+                                    <div class="schedule-calendar-quiz-time">22:00</div>
+                                </div>
+
+                                <div class="schedule-calendar-quiz" style="background-color: #2290ab;">
+                                    <div class="schedule-calendar-quiz-name">УМ Тупо хиты</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/myau_quiz.png">
+                                    <div class="schedule-calendar-quiz-time">22:30</div>
+                                </div>
+
+                                <div class="schedule-calendar-quiz" style="background-color: #2290ab;">
+                                    <div class="schedule-calendar-quiz-name">УМ Тупо хиты</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/myau_quiz.png">
+                                    <div class="schedule-calendar-quiz-time">22:30</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">9</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">10</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">11</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">12</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">13</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">14</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">15</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">16</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">17</div>
+                            <div class="schedule-calendar-quizzes">
+                                <div class="schedule-calendar-quiz" style="background-color: #ed9c9c;">
+                                    <div class="schedule-calendar-quiz-name">УМ: ХИТЫ 2000-х</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/smuzi.png">
+                                    <div class="schedule-calendar-quiz-time">19:00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">18</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">19</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">20</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">21</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">22</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">23</div>
+                            <div class="schedule-calendar-quizzes">
+                                <div class="schedule-calendar-quiz" style="background-color: #ed9c9c;">
+                                    <div class="schedule-calendar-quiz-name">УМ: ХИТЫ 2000-х</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/smuzi.png">
+                                    <div class="schedule-calendar-quiz-time">19:00</div>
+                                </div>
+
+                                <div class="schedule-calendar-quiz" style="background-color: #adcff5;">
+                                    <div class="schedule-calendar-quiz-name">Чисто попеть [00-е]</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/shejker.png">
+                                    <div class="schedule-calendar-quiz-time">22:00</div>
+                                </div>
+
+                                <div class="schedule-calendar-quiz" style="background-color: #2290ab;">
+                                    <div class="schedule-calendar-quiz-name">УМ Тупо хиты</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/myau_quiz.png">
+                                    <div class="schedule-calendar-quiz-time">22:30</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">24</div>
+
+                            <div class="schedule-calendar-quizzes">
+                                <div class="schedule-calendar-quiz" style="background-color: #ed9c9c;">
+                                    <div class="schedule-calendar-quiz-name">УМ: ХИТЫ 2000-х</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/smuzi.png">
+                                    <div class="schedule-calendar-quiz-time">19:00</div>
+                                </div>
+
+                                <div class="schedule-calendar-quiz" style="background-color: #adcff5;">
+                                    <div class="schedule-calendar-quiz-name">Чисто попеть [00-е]</div>
+                                    <img class="schedule-calendar-quiz-icon" src="/images/organizers/shejker.png">
+                                    <div class="schedule-calendar-quiz-time">22:00</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">25</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">26</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">27</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">28</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">29</div>
+                        </div>
+
+                        <div class="schedule-calendar-cell">
+                            <div class="schedule-calendar-day">30</div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div id="schedule">
-                    <div class="loader hidden"><img src="/images/loader.svg"></div>
-                    <div></div>
+            <div class="section">
+                <div class="link-header">
+                    <h2>О КОМАНДЕ</h2>
+                    <a class="arrow-link" href="/analytics">ПОДРОБНЕЕ <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+                </div>
+
+                <div class="about">
+                    <div class="about-item">
+                        <div class="about-value">{{team_analytics.games}}</div>
+                        <div class="about-name">{{get_word_form(team_analytics.games, ["игру", "игры", "игр"], True)}} сыграли</div>
+                    </div>
+
+                    <div class="about-item">
+                        <div class="about-value">{{team_analytics.wins}}</div>
+                        <div class="about-name">{{get_word_form(team_analytics.wins, ["раз", "раза", "раз"], True)}} выиграли</div>
+                    </div>
+
+                    <div class="about-item">
+                        <div class="about-value">{{team_analytics.top3}}</div>
+                        <div class="about-name">{{get_word_form(team_analytics.top3, ["раз", "раза", "раз"], True)}} вошли в тройку</div>
+                    </div>
+
+                    <div class="about-item">
+                        <div class="about-value">{{team_analytics.mean_position|round(1)}}</div>
+                        <div class="about-name">средняя позиция</div>
+                    </div>
+
+                    <div class="about-item">
+                        <div class="about-value">{{team_analytics.mean_players|round(1)}}</div>
+                        <div class="about-name">игроков в среднем</div>
+                    </div>
+                </div>
+
+                <a class="arrow-link arrow-link-full" href="/analytics">ПОДРОБНЕЕ <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+            </div>
+
+            <div class="section">
+                <div class="link-header">
+                    <h2>BEST OF THE BEST</h2>
+                    <a class="arrow-link" href="/photos">ПОДРОБНЕЕ <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+                </div>
+
+                <div class="photos">
+                    {% for album in last_albums %}
+                    <div class="photo"><a href="/albums/{{album.album_id}}"><img src="{{photo_id2photo[album.cover_id].url}}" loading="lazy"></a></div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>FAQ</h2>
+
+                <div class="faq">
+                    <input type="checkbox" id="faq-1">
+                    <div class="faq-question">
+                        <label for="faq-1">ЧТО ЗА УМ, КМС, ГП, КАРАОКЕ-КВИЗ И Т.Д?</label>
+                        <label class="faq-circle" for="faq-1"><img src="/images/icons/arrow-right.svg"></label>
+                    </div>
+
+                    <div class="faq-answer">
+                        <p>Так мы сокращаем названия некоторых типов игр, а именно:</p>
+                        <ul>
+                            <li><span class="term">УМ</span> – угадай мелодию. Необходимо определять исполнителя трека по аудио-отрывку.</li>
+                            <li><span class="term">Караоке-квиз</span> – вопросы на знание текста песен: продолжить строчку, назвать пропущенное слово, посчитать что-то и т.д. Бывает версия <span class="term">только припевы</span> – аналогичные вопросы, но только про припевы.</li>
+                            <li><span class="term">Танцуем и поём</span> – сочетание механик <span class="term">УМ</span> и <span class="term">караоке-квиза</span>. В турах фигурируют как вопросы на знание исполнителя, так и на знание текстов песен.</li>
+                            <li><span class="term">Музыкальный мега-квиз</span> – сочетание механик <span class="term">УМ</span>, <span class="term">караоке-квиза</span> и текстовых вопросов (ребусы, видеоклипы и т.д.).</li>
+                            <li><span class="term">КМС</span> – кино, мультфильмы и сериалы. Вопросы на знание названий, сюжета, актёров и т.д. по различным видам кинематографа.</li>
+                            <li><span class="term">Медиа-микс</span> – то же, что и <span class="term">КМС</span>, но с музыкальными вопросами.</li>
+                            <li><span class="term">ГП</span> – игры по Гарри Поттеру (бывают как только по фильмам, только по книгам, так и по всему сразу).</li>
+                            <li><span class="term">Телеквиз</span> – каждый тур игры имеет механику схожую с одной из телевизионных игр: кто хочет стать миллионером – даны четыре варианта ответов, поле чудес – открыта какая-то буква ответа, угадай мелодию – вопросы из <span class="term">УМ</span> квизов и т.д.</li>
+                            <li><span class="term">Обо всём</span> – классические квизы с вопросами на самые различные общие темы.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="faq">
+                    <input type="checkbox" id="faq-2">
+                    <div class="faq-question">
+                        <label for="faq-2">КАК ВЫ СОСТАВЛЯЕТЕ РАСПИСАНИЕ КВИЗОВ?</label>
+                        <label class="faq-circle" for="faq-2"><img src="/images/icons/arrow-right.svg"></label>
+                    </div>
+
+                    <div class="faq-answer">
+                        <p>В конце месяца, когда организаторы составляют своё расписание игр, мы выбираем интересующие нас игры и пишем о своих пожеланиях капитану команды (Соболева Юля). Она формирует опросы с выбранными квизами и  игроки голосуют за те, на которые хотят пойти.</p>
+
+                        <p>Если в результате опроса оказывается, что какие-то игры всё-таки не так интересны другим игрокам, они отбрасываются, а на остальные Юля регистрирует команду.</p>
+
+                        <p>Затем за один-два дня до квиза создаются опросы про конкретный квиз, где игроки окончательно решают, пойдут они на квиз или нет. Аналогично, если в итоге не идёт никто, регистрация на квиз отменяется.</p>
+                    </div>
+                </div>
+
+                <div class="faq">
+                    <input type="checkbox" id="faq-3">
+                    <div class="faq-question">
+                        <label for="faq-3">НА КАКИЕ КВИЗЫ ВЫ ХОДИТЕ?</label>
+                        <label class="faq-circle" for="faq-3"><img src="/images/icons/arrow-right.svg"></label>
+                    </div>
+
+                    <div class="faq-answer">
+                        <p>В основном нас интересуют квизы по кино, мультфильмам и сериалам (<span class="term">КМС</span>), музыкальные (<span class="term">УМ</span>, <span class="term">караоке-квиз</span>, ...), <span class="term">обо всём</span>, <span class="term">ГП</span> и некоторые тематические вроде квиза по Сумеркам, по сериалу "Как я встретил вашу маму" и т.д.</p>
+
+                        <p>Если же есть желание пойти на что-то ещё, не стоит стесняться, а можно предложить команде сходить на что-то новое.</p>
+                    </div>
+                </div>
+
+                <div class="faq">
+                    <input type="checkbox" id="faq-4">
+                    <div class="faq-question">
+                        <label for="faq-4">К КАКИМ ОРГАНИЗАТОРАМ КВИЗОВ ВЫ ХОДИТЕ?</label>
+                        <label class="faq-circle" for="faq-4"><img src="/images/icons/arrow-right.svg"></label>
+                    </div>
+
+                    <div class="faq-answer">
+                        <p>В основном мы ходим на квизы к <a class="link" href="https://smuzi-quiz.com/" target="_blank">Смузи</a>. Раньше ходили на <a class="link" href="https://peacequizmsk.ru/" target="_blank">Пис-квиз</a>, но, кажется, это было давно и неправда.</p>
+
+                        <p>Ещё мы бываем у <a class="link" href="https://bubo-quiz.com/" target="_blank">Bubo</a>, <a class="link" href="https://sheikerq.ru/" target="_blank">Шейкера</a> и <a class="link" href="https://vk.com/capybara_msk" target="_blank">Капибары</a>.</p>
+                    </div>
                 </div>
             </div>
         </div>
-
-        <div class="content-block">
-            <div class="bottom-left-image"></div>
-
-            <div class="link-header">
-                <h2>О КОМАНДЕ</h2>
-                <a class="arrow-link" href="/analytics"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
-            </div>
-
-            <div class="about-team">
-                <div class="about-team-block">
-                    <div class="about-team-value">{{team_analytics.games}}</div>
-                    <div class="about-team-name">{{get_word_form(team_analytics.games, ["игру", "игры", "игр"], True)}} сыграли</div>
-                </div>
-
-                <div class="about-team-block">
-                    <div class="about-team-value">{{team_analytics.wins}}</div>
-                    <div class="about-team-name">{{get_word_form(team_analytics.wins, ["раз", "раза", "раз"], True)}} выиграли</div>
-                </div>
-
-                <div class="about-team-block">
-                    <div class="about-team-value">{{team_analytics.top3}}</div>
-                    <div class="about-team-name">{{get_word_form(team_analytics.top3, ["раз", "раза", "раз"], True)}} вошли в тройку</div>
-                </div>
-
-                <div class="about-team-block">
-                    <div class="about-team-value">{{team_analytics.mean_position|round(1)}}</div>
-                    <div class="about-team-name">позиция в среднем</div>
-                </div>
-
-                <div class="about-team-block">
-                    <div class="about-team-value">{{team_analytics.mean_players|round(1)}}</div>
-                    <div class="about-team-name">игроков в среднем</div>
-                </div>
-            </div>
-
-            <div class="arrow-link-mobile">
-                <a class="arrow-link" href="/analytics"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <div class="bottom-right-image"></div>
-
-            <div class="link-header">
-                <h2>BEST OF THE BEST</h2>
-                <a class="arrow-link" href="/albums"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
-            </div>
-
-            <div class="top-albums">
-                {% for album in last_albums %}
-                <div class="top-album">
-                    <a href="/albums/{{album.album_id}}">
-                        <img src="{{photo_id2photo[album.cover_id].url}}" loading="lazy">
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
-
-            <div class="arrow-link-mobile">
-                <a class="arrow-link" href="/albums"><span class="text">ПОДРОБНЕЕ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
-            </div>
-        </div>
-
-        <div class="content-block">
-            <h2>FAQ</h2>
-
-            <div class="faq">
-                <input type="checkbox" id="faq-1">
-                <div class="faq-question">
-                    <label for="faq-1">ЧТО ЗА УМ, КМС, ГП, КАРАОКЕ-КВИЗ И Т.Д?</label>
-                    <label class="faq-circle" for="faq-1"><img src="/images/icons/arrow-right.svg"></label>
-                </div>
-
-                <div class="faq-answer">
-                    <p>Так мы сокращаем названия некоторых типов игр, а именно:</p>
-                    <ul>
-                        <li><span class="term">УМ</span> – угадай мелодию. Необходимо определять исполнителя трека по аудио-отрывку.</li>
-                        <li><span class="term">Караоке-квиз</span> – вопросы на знание текста песен: продолжить строчку, назвать пропущенное слово, посчитать что-то и т.д. Бывает версия <span class="term">только припевы</span> – аналогичные вопросы, но только про припевы.</li>
-                        <li><span class="term">Танцуем и поём</span> – сочетание механик <span class="term">УМ</span> и <span class="term">караоке-квиза</span>. В турах фигурируют как вопросы на знание исполнителя, так и на знание текстов песен.</li>
-                        <li><span class="term">Музыкальный мега-квиз</span> – сочетание механик <span class="term">УМ</span>, <span class="term">караоке-квиза</span> и текстовых вопросов (ребусы, видеоклипы и т.д.).</li>
-                        <li><span class="term">КМС</span> – кино, мультфильмы и сериалы. Вопросы на знание названий, сюжета, актёров и т.д. по различным видам кинематографа.</li>
-                        <li><span class="term">Медиа-микс</span> – то же, что и <span class="term">КМС</span>, но с музыкальными вопросами.</li>
-                        <li><span class="term">ГП</span> – игры по Гарри Поттеру (бывают как только по фильмам, только по книгам, так и по всему сразу).</li>
-                        <li><span class="term">Телеквиз</span> – каждый тур игры имеет механику схожую с одной из телевизионных игр: кто хочет стать миллионером – даны четыре варианта ответов, поле чудес – открыта какая-то буква ответа, угадай мелодию – вопросы из <span class="term">УМ</span> квизов и т.д.</li>
-                        <li><span class="term">Обо всём</span> – классические квизы с вопросами на самые различные общие темы.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="faq">
-                <input type="checkbox" id="faq-2">
-                <div class="faq-question">
-                    <label for="faq-2">КАК ВЫ СОСТАВЛЯЕТЕ РАСПИСАНИЕ КВИЗОВ?</label>
-                    <label class="faq-circle" for="faq-2"><img src="/images/icons/arrow-right.svg"></label>
-                </div>
-
-                <div class="faq-answer">
-                    <p>В конце месяца, когда организаторы составляют своё расписание игр, мы выбираем интересующие нас игры и пишем о своих пожеланиях капитану команды (Соболева Юля). Она формирует опросы с выбранными квизами и  игроки голосуют за те, на которые хотят пойти.</p>
-
-                    <p>Если в результате опроса оказывается, что какие-то игры всё-таки не так интересны другим игрокам, они отбрасываются, а на остальные Юля регистрирует команду.</p>
-
-                    <p>Затем за один-два дня до квиза создаются опросы про конкретный квиз, где игроки окончательно решают, пойдут они на квиз или нет. Аналогично, если в итоге не идёт никто, регистрация на квиз отменяется.</p>
-                </div>
-            </div>
-
-            <div class="faq">
-                <input type="checkbox" id="faq-3">
-                <div class="faq-question">
-                    <label for="faq-3">НА КАКИЕ КВИЗЫ ВЫ ХОДИТЕ?</label>
-                    <label class="faq-circle" for="faq-3"><img src="/images/icons/arrow-right.svg"></label>
-                </div>
-
-                <div class="faq-answer">
-                    <p>В основном нас интересуют квизы по кино, мультфильмам и сериалам (<span class="term">КМС</span>), музыкальные (<span class="term">УМ</span>, <span class="term">караоке-квиз</span>, ...), <span class="term">обо всём</span>, <span class="term">ГП</span> и некоторые тематические вроде квиза по Сумеркам, по сериалу "Как я встретил вашу маму" и т.д.</p>
-
-                    <p>Если же есть желание пойти на что-то ещё, не стоит стесняться, а можно предложить команде сходить на что-то новое.</p>
-                </div>
-            </div>
-
-            <div class="faq">
-                <input type="checkbox" id="faq-4">
-                <div class="faq-question">
-                    <label for="faq-4">К КАКИМ ОРГАНИЗАТОРАМ КВИЗОВ ВЫ ХОДИТЕ?</label>
-                    <label class="faq-circle" for="faq-4"><img src="/images/icons/arrow-right.svg"></label>
-                </div>
-
-                <div class="faq-answer">
-                    <p>В основном мы ходим на квизы к <a class="link" href="https://smuzi-quiz.com/" target="_blank">Смузи</a>. Раньше ходили на <a class="link" href="https://peacequizmsk.ru/">Пис-квиз</a>, но, кажется, это было давно и неправда.</p>
-
-                    <p>Ещё мы бываем у <a class="link" href="https://bubo-quiz.com/" target="_blank">Bubo</a>, <a class="link" href="https://sheikerq.ru/" target="_blank">Шейкера</a> и <a class="link" href="https://vk.com/capybara_msk" target="_blank">Капибары</a>.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>
@@ -217,8 +435,8 @@
 
     <script src="/js/index.js?v={{version}}"></script>
     <script>
-        let scheduleConfig = {blockId: "schedule", url: "/schedule", getParams: GetScheduleParams, onLoad: LoadSchedule, load: true, clearBeforeLoad: true}
-        let scheduleLoader = new ContentLoader(scheduleConfig)
+        /*let scheduleConfig = {blockId: "schedule", url: "/schedule", getParams: GetScheduleParams, onLoad: LoadSchedule, load: true, clearBeforeLoad: true}
+        let scheduleLoader = new ContentLoader(scheduleConfig)*/
     </script>
     {% include "components/footer.html" %}
 </body>
