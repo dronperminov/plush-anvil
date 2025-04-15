@@ -194,6 +194,7 @@ ul {
 .circle-link {
     width: 2em;
     height: 2em;
+    padding: 4px;
     border-radius: 100%;
     background-color: var(--circle-color);
     display: inline-block;

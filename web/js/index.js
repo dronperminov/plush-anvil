@@ -26,9 +26,6 @@ function StepSchedule(step) {
         params.year--
     }
 
-    let dateBlock = document.getElementById("schedule-date")
-    dateBlock.classList.add("schedule-date-disabled")
-
     SetScheduleParams(params)
     scheduleLoader.Load()
 }
@@ -36,11 +33,6 @@ function StepSchedule(step) {
 function LoadSchedule(response, block) {
     SetScheduleParams(response.schedule)
 
-    console.log(response)
-
-    let schedule = new Schedule(response.schedule)
-    schedule.Build(block)
-
-    let dateBlock = document.getElementById("schedule-date")
-    dateBlock.classList.remove("schedule-date-disabled")
+    schedule.Build(block, response.schedule)
+    schedule.Resize()
 }

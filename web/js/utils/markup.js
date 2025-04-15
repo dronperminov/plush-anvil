@@ -32,7 +32,7 @@ Markup.prototype.BuildMarkup = function(markup) {
         markup.block.classList.add("markup-finished")
         MakeElement("markup-name", markup.block, {innerText: `${this.username2user[markup.username].fullname}`})
 
-        let icon = MakeElement("markup-icon", markup.block, {src: "/images/icons/close.svg"}, "img")
+        let icon = MakeElement("markup-icon", markup.block, {src: "/images/icons/gallery/close.svg"}, "img")
         icon.addEventListener("click", () => this.RemoveMarkup(markup))
     }
     else {

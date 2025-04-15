@@ -57,8 +57,9 @@
 /*************************** CALENDAR ***************************/
 .schedule-calendar {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-gap: 20px;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-gap: 19px;
+    margin-bottom: 3em;
 }
 
 .schedule-calendar-weekday {
@@ -72,10 +73,13 @@
 .schedule-calendar-cell {
     aspect-ratio: 1;
     border-radius: 10px;
-/*    border: 1px solid #888;*/
+    position: relative;
 }
 
 .schedule-calendar-day {
+    position: absolute;
+    left: 0;
+    top: 0;
     background-color: #fddc81;
     border-radius: 10px;
     width: 30px;
@@ -87,42 +91,217 @@
 
 /*********************** CALENDAR QUIZZES ***********************/
 .schedule-calendar-quizzes {
-    height: 100%;
+    min-height: 100%;
     display: grid;
+    grid-gap: 3px;
+    font-size: 14px;
 }
 
-@media (max-width: 767px) {
-    /**************************** MONTH ****************************/
-    .schedule-month {
-        height: 30px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-    }
+.schedule-calendar-quiz {
+    border-radius: 10px;
+    display: grid;
+    grid-gap: 3px;
+    grid-template-rows: 14px minmax(0, 1fr);
+    grid-template-columns: 1fr max-content max-content;
+    grid-template-areas:
+        ". icon time"
+        "name name name";
+    justify-items: center;
+    align-items: center;
+    padding: 3px;
+    cursor: pointer;
+}
 
-    .schedule-month img {
-        width: 16px;
-    }
+.schedule-calendar-quiz:first-child {
+    grid-template-rows: 21px minmax(0, 1fr);
+}
 
-    .schedule-month span {
+.schedule-calendar-quiz-name {
+    grid-area: name;
+    text-align: center;
+}
+
+.schedule-calendar-quiz-name {
+    grid-area: name;
+    font-size: 1em;
+}
+
+.schedule-calendar-quiz-icon {
+    grid-area: icon;
+    width: 14px;
+    border-radius: 100%;
+    vertical-align: middle;
+    align-self: start;
+}
+
+.schedule-calendar-quiz-time {
+    grid-area: time;
+    font-size: 12px;
+    align-self: start;
+}
+
+/*********************** EVENTS QUIZZES ************************/
+.schedule-events {
+    display: none;
+}
+
+/************************** ANALYTICS **************************/
+.schedule-analytics {
+    display: grid;
+    grid-template-columns: 16em 1fr;
+    grid-gap: 4em;
+    font-size: 20px;
+}
+
+.schedule-analytics-header {
+    font-size: 2em;
+}
+
+.schedule-analytics-items {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    grid-gap: 1em;
+    justify-items: center;
+}
+
+.schedule-analytics-item {
+    width: 100%;
+}
+
+.schedule-analytics-value {
+    background: #fddc81;
+    font-size: 2em;
+    font-weight: bold;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    text-align: center;
+    width: 3.85em;
+    margin: 0 auto;
+}
+
+.schedule-analytics-label {
+    font-size: 0.9em;
+    text-align: center;
+}
+
+/*************************** POPUPS ****************************/
+.schedule-popups {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #e79ded33;
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.schedule-popups-open {
+    opacity: 1;
+    transition: opacity 0.2s;
+    pointer-events: all;
+}
+
+body:has(.schedule-popups-open) {
+    overflow: hidden;
+}
+
+.schedule-popup {
+    opacity: 0;
+    pointer-events: none;
+    font-size: 20px;
+    padding: 1em 1.5em 2em 1.5em;
+    position: absolute;
+    overflow-y: auto;
+    border-radius: 2em;
+    max-width: 520px;
+    max-height: calc(100dvh - 2em);
+    background: #f1f1f1;
+}
+
+.schedule-popup-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.schedule-popup-close {
+    text-align: right;
+}
+
+.schedule-popup-close img {
+    width: 24px;
+    cursor: pointer;
+}
+
+.schedule-popup-category {
+    font-size: 0.7em;
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    grid-gap: 8px;
+    align-items: center;
+}
+
+.schedule-popup-category-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.schedule-popup-name {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+.schedule-popup-description {
+    font-size: 0.9em;
+    margin-bottom: 5em;
+}
+
+.schedule-popup-icons {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    grid-gap: 1em 0.5em;
+    align-items: center;
+}
+
+.schedule-popup-icons-icon {
+    width: 100%;
+}
+
+.schedule-popup-icons-text {
+    font-size: 0.9em;
+}
+
+.schedule-popup-participants {
+    display: inline-grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 24px;
+    max-width: 100%;
+    overflow-x: auto;
+    grid-gap: 8px;
+    margin-top: 8px;
+}
+
+.schedule-popup-participants img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+@media (max-width: 1279px) {
+    .schedule-analytics {
         font-size: 16px;
     }
+}
 
-    /*************************** PLACES ****************************/
-    .schedule-places {
-        font-size: 14px;
-        grid-gap: 6px;
-    }
-
-    .schedule-place {
-        grid-gap: 3px;
-    }
-
-    .schedule-place-color {
-        width: 10px;
-        height: 8px;
-        border-radius: 3px;
-    }
-
+@media (max-width: 1023px) {
     /*************************** CALENDAR ***************************/
     .schedule-calendar {
         grid-gap: 4px;
@@ -136,13 +315,9 @@
 
     .schedule-calendar-cell {
         border-radius: 5px;
-        position: relative;
     }
 
     .schedule-calendar-day {
-        position: absolute;
-        lefT: 0;
-        top: 0;
         background-color: transparent;
         border-radius: 5px;
         width: 100%;
@@ -150,6 +325,11 @@
         display: grid;
         align-items: center;
         justify-items: center;
+    }
+
+    .schedule-calendar-day-selected {
+        border: 2px solid #c239a3;
+        cursor: pointer;
     }
 
     /*********************** CALENDAR QUIZZES ***********************/
@@ -187,5 +367,124 @@
 
     .schedule-calendar-quiz * {
         display: none;
+    }
+
+    /*********************** EVENTS QUIZZES ************************/
+    .schedule-events {
+        display: block;
+        margin-top: -2em;
+    }
+
+    .schedule-events-quizzes {
+        display: grid;
+        grid-auto-flow: row;
+        grid-gap: 10px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.1s;
+    }
+
+    .schedule-events-quizzes-open {
+        transition: max-height 0.3s;
+        max-height: 500px;
+    }
+
+    .schedule-events-quiz {
+        border-radius: 20px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 20px 1fr 26px;
+        grid-gap: 10px;
+        align-items: center;
+    }
+
+    .schedule-events-quiz:last-child {
+        margin-bottom: 2em;
+    }
+
+    .schedule-events-quiz-icon {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .schedule-events-quiz-time {
+        font-size: 12px;
+        margin-bottom: 5px;
+        display: grid;
+        align-items: center;
+        grid-template-columns: 14px 1fr;
+        grid-gap: 5px;
+    }
+
+    .schedule-events-quiz-time img {
+        width: 100%;
+    }
+
+    .schedule-events-quiz-name {
+        font-size: 14px;
+    }
+
+    /************************** ANALYTICS **************************/
+    .schedule-analytics {
+        display: block;
+    }
+}
+
+@media (max-width: 767px) {
+    /**************************** MONTH ****************************/
+    .schedule-month {
+        height: 30px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+
+    .schedule-month img {
+        width: 16px;
+    }
+
+    .schedule-month span {
+        font-size: 16px;
+    }
+
+    /*************************** PLACES ****************************/
+    .schedule-places {
+        font-size: 14px;
+        grid-gap: 10px;
+    }
+
+    .schedule-place {
+        grid-gap: 3px;
+    }
+
+    .schedule-place-color {
+        width: 14px;
+        height: 12px;
+        border-radius: 3px;
+    }
+
+    /*************************** POPUPS ****************************/
+    .schedule-popup {
+        font-size: 15px;
+        max-width: calc(100vw - 2em);
+    }
+
+    .schedule-popup-description {
+        font-size: 0.9em;
+        margin-bottom: 2em;
+    }
+
+    /************************** ANALYTICS **************************/
+    .schedule-analytics {
+        font-size: 14px;
+    }
+
+    .schedule-analytics-items {
+        grid-auto-flow: row;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1.5em 3em;
+    }
+
+    .schedule-analytics-value {
+        width: 100%;
     }
 }

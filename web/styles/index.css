@@ -218,13 +218,14 @@ main {
 .photos {
     display: grid;
     grid-gap: 20px;
-    grid-template-areas: 
+    grid-template-areas:
         "a a b b c c d d"
         "a a b b c c d d"
         "e f g g h h d d"
         "i j g g h h d d"
         "k k g g l l m m"
         "k k g g l l m m";
+    margin-bottom: 2em;
 }
 
 .photo img {
@@ -249,7 +250,7 @@ main {
 .photo:nth-child(13) { grid-area: m; }
 
 
-@media (max-width: 1280px) {
+@media (max-width: 1279px) {
     /****************** TEAM *******************/
     .team {
         min-height: 433px;
@@ -383,7 +384,7 @@ main {
 
     /****************** TEAM *******************/
     .team {
-        min-height: 646px;
+        min-height: 656px;
         padding: 10px;
         display: block;
     }
