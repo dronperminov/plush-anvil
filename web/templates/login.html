@@ -5,138 +5,144 @@
 <body>
     {% include "components/menu.html" %}
 
-    <div class="left-image"></div>
-    <div class="right-image"></div>
+    <main>
+        <div class="background-layer">
+            <img src="/images/login/blob1.png" class="background-blob blob-1" />
+            <img src="/images/login/blob2.png" class="background-blob blob-2" />
+        </div>
 
-    <div class="content">
-        <div class="sign-form">
-            <input type="checkbox" id="sign-type">
+        <div class="content">
+            <div class="sign-form">
+                <input type="checkbox" id="sign-type">
 
-            <div class="sign-in">
-                <div class="login-header">ВХОД В АККАУНТ</div>
-            </div>
-
-            <div class="sign-up">
-                <div class="login-header">РЕГИСТРАЦИЯ</div>
-            </div>
-
-            <div class="icon-input">
-                <div></div>
-                <div class="icon-input-name" id="username-name">логин</div>
-                <label class="icon-input-icon" id="username-icon" for="username">
-                    <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12,1a11,11,0,0,0,0,22,1,1,0,0,0,0-2,9,9,0,1,1,9-9v2.857a1.857,1.857,0,0,1-3.714,0V7.714a1,1,0,1,0-2,0v.179A5.234,5.234,0,0,0,12,6.714a5.286,5.286,0,1,0,3.465,9.245A3.847,3.847,0,0,0,23,14.857V12A11.013,11.013,0,0,0,12,1Zm0,14.286A3.286,3.286,0,1,1,15.286,12,3.29,3.29,0,0,1,12,15.286Z"/>
-                    </svg>
-                </label>
-                <div class="icon-input-input">
-                    <input class="basic-input" type="text" placeholder="Имя пользователя" id="username" oninput="ClearInputError('username')">
+                <div class="sign-in">
+                    <div class="login-header">ВХОД В АККАУНТ</div>
                 </div>
-            </div>
 
-            <div class="icon-input sign-up">
-                <div></div>
-                <div class="icon-input-name" id="full-name-name">имя</div>
-                <label class="icon-input-icon" id="full-name-icon" for="full-name">
-                    <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C8.96243 1 6.5 3.46243 6.5 6.5C6.5 9.53757 8.96243 12 12 12C15.0376 12 17.5 9.53757 17.5 6.5C17.5 3.46243 15.0376 1 12 1ZM8.5 6.5C8.5 4.567 10.067 3 12 3C13.933 3 15.5 4.567 15.5 6.5C15.5 8.433 13.933 10 12 10C10.067 10 8.5 8.433 8.5 6.5Z" />
-                        <path d="M8 14C4.68629 14 2 16.6863 2 20V22C2 22.5523 2.44772 23 3 23C3.55228 23 4 22.5523 4 22V20C4 17.7909 5.79086 16 8 16H16C18.2091 16 20 17.7909 20 20V22C20 22.5523 20.4477 23 21 23C21.5523 23 22 22.5523 22 22V20C22 16.6863 19.3137 14 16 14H8Z" />
-                    </svg>
-                </label>
-                <div class="icon-input-input">
-                    <input class="basic-input" type="text" placeholder="Ваше полное имя (имя фамилия)" id="full-name" oninput="ClearInputError('full-name')">
+                <div class="sign-up">
+                    <div class="login-header">РЕГИСТРАЦИЯ</div>
                 </div>
-            </div>
 
-            <div class="icon-input sign-up">
-                <div></div>
-                <div class="icon-input-name" id="birth-date-day-name">день рождения</div>
-                <label class="icon-input-icon" id="birth-date-day-icon" for="birth-date-day">
-                    <svg width="1.2em" height="1.2em" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M495.304,478.609h-22.261v-116.87c0-27.619-22.468-50.087-50.087-50.087h-16.696v-116.87
-                            c0-27.619-22.468-50.087-50.087-50.087h-83.478v-14.207c19.391-6.914,33.391-25.273,33.391-47.01
-                            c0-8.761-2.304-17.397-6.674-24.973c0,0-0.011-0.006-0.011-0.011L270.456,8.348C267.478,3.184,261.967,0,256,0
-                            c-5.967,0-11.479,3.184-14.456,8.348l-28.957,50.157c-4.37,7.576-6.674,16.213-6.674,24.973c0,21.737,14,40.096,33.391,47.01
-                            v14.207h-83.478c-27.619,0-50.087,22.468-50.087,50.087v116.87H89.044c-27.619,0-50.087,22.468-50.087,50.087
-                            c0,4.084,0,81.834,0,116.87H16.696C7.479,478.609,0,486.082,0,495.304C0,504.527,7.479,512,16.696,512h478.609
-                            c9.217,0,16.696-7.473,16.696-16.696C512,486.082,504.521,478.609,495.304,478.609z M241.51,75.191L256,50.093l14.49,25.098
-                            c1.467,2.543,2.206,5.331,2.206,8.288c0,9.206-7.49,16.696-16.696,16.696c-9.206,0-16.696-7.49-16.696-16.696
-                            C239.304,80.522,240.055,77.728,241.51,75.191z M139.13,194.783c0-9.206,7.49-16.696,16.696-16.696h200.348
-                            c9.206,0,16.696,7.49,16.696,16.696v48.058c-1.582-1.594-3.207-3.28-5.13-5.374c-9.685-10.533-22.945-24.962-45.696-24.962
-                            c-22.739,0-35.989,14.424-45.674,24.951c-9.25,10.071-13.751,14.168-21.109,14.168c-7.586,0-12.467-4.875-21.152-14.222
-                            c-9.761-10.505-23.119-24.897-45.63-24.897c-22.739,0-35.989,14.424-45.663,24.951c-1.355,1.475-2.493,2.645-3.685,3.892V194.783z
-                             M439.652,382.125c-13.433,4.644-22.563,14.512-29.717,22.289c-9.25,10.071-13.751,14.168-21.109,14.168
-                            c-7.348,0-11.837-4.098-21.087-14.158c-9.685-10.533-22.945-24.962-45.696-24.962c-22.739,0-35.989,14.424-45.674,24.951
-                            c-9.25,10.071-13.751,14.168-21.109,14.168c-7.586,0-12.467-4.875-21.152-14.222c-9.761-10.505-23.119-24.897-45.63-24.897
-                            c-22.739,0-35.989,14.424-45.674,24.951c-9.25,10.071-13.75,14.168-21.109,14.168c-7.946,0-14.609-6.685-24.642-17.695
-                            c-7.03-7.712-14.771-16.112-24.706-21.68v-17.466c0-9.206,7.49-16.696,16.696-16.696h333.913c9.206,0,16.696,7.49,16.696,16.696
-                            V382.125z"/>
-                    </svg>
-                </label>
-                <div class="icon-input-inputs">
-                    <select class="basic-select" placeholder="День" id="birth-date-day" oninput="ClearInputError('birth-date-day')">
-                        {% for day in range(31) %}<option value="{{day + 1}}">{{day + 1}}</option>{% endfor %}
-                    </select>
-                    <select class="basic-select" placeholder="Месяц" id="birth-date-month" oninput="ClearInputError('birth-date-day')">
-                        <option value="1">января</option>
-                        <option value="2">февраля</option>
-                        <option value="3">марта</option>
-                        <option value="4">апреля</option>
-                        <option value="5">мая</option>
-                        <option value="6">июня</option>
-                        <option value="7">июля</option>
-                        <option value="8">августа</option>
-                        <option value="9">сентября</option>
-                        <option value="10">октября</option>
-                        <option value="11">ноября</option>
-                        <option value="12">декабря</option>
-                    </select>
+                <div class="icon-input">
+                    <div></div>
+                    <div class="icon-input-name" id="username-name">логин</div>
+                    <label class="icon-input-icon" id="username-icon" for="username">
+                        <svg width="19" height="18" viewBox="0 0 19 18" xmlns="http://www.w3.org/2000/svg" fill="#c239a3">
+                            <path opacity="0.3" fill-rule="evenodd" clip-rule="evenodd" d="M9.71625 0C12.2411 0 14.288 2.04683 14.288 4.57172C14.288 7.09661 12.2411 9.14343 9.71625 9.14343C7.19136 9.14343 5.14453 7.09661 5.14453 4.57172C5.14453 2.04683 7.19136 0 9.71625 0Z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.3966 11.6086C11.7238 10.2968 7.7101 10.2968 4.03726 11.6086C2.97014 11.9897 2.25781 13.0005 2.25781 14.1336V15.3997C2.25781 16.9819 3.65911 18.1972 5.22536 17.9735L6.14395 17.8422C8.51391 17.5037 10.9199 17.5037 13.2899 17.8422L14.2085 17.9735C15.7747 18.1972 17.176 16.9819 17.176 15.3997V14.1336C17.176 13.0005 16.4637 11.9897 15.3966 11.6086Z"/>
+                        </svg>
+                    </label>
+                    <div class="icon-input-input">
+                        <input class="basic-input" type="text" placeholder="Имя пользователя" id="username" oninput="ClearInputError('username')">
+                    </div>
                 </div>
-            </div>
 
-            <div class="icon-input">
-                <div></div>
-                <div class="icon-input-name" id="password-name">пароль</div>
-                <label class="icon-input-icon" id="password-icon" for="password">
-                    <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.5907 10.348 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.40931 10.348 4.13525 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8ZM14 16C14 17.1046 13.1046 18 12 18C10.8954 18 10 17.1046 10 16C10 14.8954 10.8954 14 12 14C13.1046 14 14 14.8954 14 16Z"/>
-                    </svg>
-                </label>
-                <div class="icon-input-input">
-                    <input class="basic-input" type="password" placeholder="Пароль" id="password" oninput="ClearInputError('password')">
+                <div class="icon-input sign-up">
+                    <div></div>
+                    <div class="icon-input-name" id="full-name-name">имя</div>
+                    <label class="icon-input-icon" id="full-name-icon" for="full-name">
+                        <svg width="19" height="18" viewBox="0 0 19 18" fill="#c239a3" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M11.6242 0.439786C12.2096 -0.146444 13.159 -0.146804 13.7447 0.438982L17.1465 3.84072C17.7273 4.42151 17.7333 5.36174 17.16 5.94994L14.8855 8.28356L9.33474 2.73275L11.6242 0.439786ZM8.53984 3.52884L14.1003 9.08926L6.91267 16.4638C6.48935 16.8981 5.90876 17.143 5.3025 17.143L1.62552 17.1428C0.9859 17.1428 0.475093 16.6096 0.501992 15.9701L0.65797 12.2618C0.68167 11.6984 0.915837 11.1644 1.31414 10.7655L8.53984 3.52884ZM17.9383 17.6297C18.2489 17.6297 18.5006 17.3778 18.5006 17.067C18.5006 16.7562 18.2489 16.5043 17.9383 16.5043H11.5777C11.2671 16.5043 11.0154 16.7562 11.0154 17.067C11.0154 17.3778 11.2671 17.6297 11.5777 17.6297H17.9383Z"/>
+                        </svg>
+                    </label>
+                    <div class="icon-input-input">
+                        <input class="basic-input" type="text" placeholder="Ваше полное имя (имя фамилия)" id="full-name" oninput="ClearInputError('full-name')">
+                    </div>
                 </div>
-            </div>
 
-            <div class="icon-input sign-up">
-                <div></div>
-                <div class="icon-input-name" id="password-confirm-name">подтверждение пароля</div>
-                <label class="icon-input-icon" id="password-confirm-icon" for="password-confirm">
-                    <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.25 10.0546V8C5.25 4.27208 8.27208 1.25 12 1.25C15.7279 1.25 18.75 4.27208 18.75 8V10.0546C19.8648 10.1379 20.5907 10.348 21.1213 10.8787C22 11.7574 22 13.1716 22 16C22 18.8284 22 20.2426 21.1213 21.1213C20.2426 22 18.8284 22 16 22H8C5.17157 22 3.75736 22 2.87868 21.1213C2 20.2426 2 18.8284 2 16C2 13.1716 2 11.7574 2.87868 10.8787C3.40931 10.348 4.13525 10.1379 5.25 10.0546ZM6.75 8C6.75 5.10051 9.10051 2.75 12 2.75C14.8995 2.75 17.25 5.10051 17.25 8V10.0036C16.867 10 16.4515 10 16 10H8C7.54849 10 7.13301 10 6.75 10.0036V8ZM14 16C14 17.1046 13.1046 18 12 18C10.8954 18 10 17.1046 10 16C10 14.8954 10.8954 14 12 14C13.1046 14 14 14.8954 14 16Z"/>
-                    </svg>
-                </label>
-                <div class="icon-input-input">
-                    <input class="basic-input" type="password" placeholder="Повторите пароль" id="password-confirm" oninput="ClearInputError('password-confirm')">
+                <div class="icon-input sign-up">
+                    <div></div>
+                    <div class="icon-input-name" id="birth-date-day-name">день рождения</div>
+                    <label class="icon-input-icon" id="birth-date-day-icon" for="birth-date-day">
+                        <svg width="1.2em" height="1.2em" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M495.304,478.609h-22.261v-116.87c0-27.619-22.468-50.087-50.087-50.087h-16.696v-116.87
+                                c0-27.619-22.468-50.087-50.087-50.087h-83.478v-14.207c19.391-6.914,33.391-25.273,33.391-47.01
+                                c0-8.761-2.304-17.397-6.674-24.973c0,0-0.011-0.006-0.011-0.011L270.456,8.348C267.478,3.184,261.967,0,256,0
+                                c-5.967,0-11.479,3.184-14.456,8.348l-28.957,50.157c-4.37,7.576-6.674,16.213-6.674,24.973c0,21.737,14,40.096,33.391,47.01
+                                v14.207h-83.478c-27.619,0-50.087,22.468-50.087,50.087v116.87H89.044c-27.619,0-50.087,22.468-50.087,50.087
+                                c0,4.084,0,81.834,0,116.87H16.696C7.479,478.609,0,486.082,0,495.304C0,504.527,7.479,512,16.696,512h478.609
+                                c9.217,0,16.696-7.473,16.696-16.696C512,486.082,504.521,478.609,495.304,478.609z M241.51,75.191L256,50.093l14.49,25.098
+                                c1.467,2.543,2.206,5.331,2.206,8.288c0,9.206-7.49,16.696-16.696,16.696c-9.206,0-16.696-7.49-16.696-16.696
+                                C239.304,80.522,240.055,77.728,241.51,75.191z M139.13,194.783c0-9.206,7.49-16.696,16.696-16.696h200.348
+                                c9.206,0,16.696,7.49,16.696,16.696v48.058c-1.582-1.594-3.207-3.28-5.13-5.374c-9.685-10.533-22.945-24.962-45.696-24.962
+                                c-22.739,0-35.989,14.424-45.674,24.951c-9.25,10.071-13.751,14.168-21.109,14.168c-7.586,0-12.467-4.875-21.152-14.222
+                                c-9.761-10.505-23.119-24.897-45.63-24.897c-22.739,0-35.989,14.424-45.663,24.951c-1.355,1.475-2.493,2.645-3.685,3.892V194.783z
+                                 M439.652,382.125c-13.433,4.644-22.563,14.512-29.717,22.289c-9.25,10.071-13.751,14.168-21.109,14.168
+                                c-7.348,0-11.837-4.098-21.087-14.158c-9.685-10.533-22.945-24.962-45.696-24.962c-22.739,0-35.989,14.424-45.674,24.951
+                                c-9.25,10.071-13.751,14.168-21.109,14.168c-7.586,0-12.467-4.875-21.152-14.222c-9.761-10.505-23.119-24.897-45.63-24.897
+                                c-22.739,0-35.989,14.424-45.674,24.951c-9.25,10.071-13.75,14.168-21.109,14.168c-7.946,0-14.609-6.685-24.642-17.695
+                                c-7.03-7.712-14.771-16.112-24.706-21.68v-17.466c0-9.206,7.49-16.696,16.696-16.696h333.913c9.206,0,16.696,7.49,16.696,16.696
+                                V382.125z"/>
+                        </svg>
+                    </label>
+                    <div class="icon-input-inputs">
+                        <select class="basic-select" placeholder="День" id="birth-date-day" oninput="ClearInputError('birth-date-day')">
+                            {% for day in range(31) %}<option value="{{day + 1}}">{{day + 1}}</option>{% endfor %}
+                        </select>
+                        <select class="basic-select" placeholder="Месяц" id="birth-date-month" oninput="ClearInputError('birth-date-day')">
+                            <option value="1">января</option>
+                            <option value="2">февраля</option>
+                            <option value="3">марта</option>
+                            <option value="4">апреля</option>
+                            <option value="5">мая</option>
+                            <option value="6">июня</option>
+                            <option value="7">июля</option>
+                            <option value="8">августа</option>
+                            <option value="9">сентября</option>
+                            <option value="10">октября</option>
+                            <option value="11">ноября</option>
+                            <option value="12">декабря</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="sign-in sign-button">
-                <span class="arrow-link" onclick="SignIn()"><span class="text">ВОЙТИ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></span>
-            </div>
+                <div class="icon-input">
+                    <div></div>
+                    <div class="icon-input-name" id="password-name">пароль</div>
+                    <label class="icon-input-icon" id="password-icon" for="password">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="#c239a3" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 9.94523C0.5 7.53031 2.59751 5.57263 5.18493 5.57263H13.0753C15.6628 5.57263 17.7603 7.53031 17.7603 9.94523V13.6274C17.7603 16.0423 15.6628 18 13.0753 18H5.18493C2.59751 18 0.5 16.0423 0.5 13.6274V9.94523ZM9.86985 10.8658C9.86985 10.4572 9.53867 10.126 9.13013 10.126C8.72159 10.126 8.3904 10.4572 8.3904 10.8658V12.7068C8.3904 13.1154 8.72159 13.4466 9.13013 13.4466C9.53867 13.4466 9.86985 13.1154 9.86985 12.7068V10.8658Z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.44531 4.68493C4.44531 2.09751 6.54283 0 9.13024 0C11.7177 0 13.8152 2.09751 13.8152 4.68493V6.26301H12.3357V4.68493C12.3357 2.91459 10.9006 1.47945 9.13024 1.47945C7.35991 1.47945 5.92476 2.91459 5.92476 4.68493V6.26301H4.44531V4.68493Z"/>
+                        </svg>
+                    </label>
+                    <div class="icon-input-input">
+                        <input class="basic-input" type="password" placeholder="Пароль" id="password" oninput="ClearInputError('password')">
+                    </div>
+                </div>
 
-            <div class="captcha-block sign-up" id="captcha-block">
-                <div class="g-recaptcha" id="captcha" data-sitekey="6LfodbsoAAAAAMlLezsg5BvOgdpiDZzpS4DLen2g"></div>
-            </div>
+                <div class="icon-input sign-up">
+                    <div></div>
+                    <div class="icon-input-name" id="password-confirm-name">подтверждение пароля</div>
+                    <label class="icon-input-icon" id="password-confirm-icon" for="password-confirm">
+                        <svg width="18" height="18" viewBox="0 0 18 18" fill="#c239a3" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 9.94523C0.5 7.53031 2.59751 5.57263 5.18493 5.57263H13.0753C15.6628 5.57263 17.7603 7.53031 17.7603 9.94523V13.6274C17.7603 16.0423 15.6628 18 13.0753 18H5.18493C2.59751 18 0.5 16.0423 0.5 13.6274V9.94523ZM9.86985 10.8658C9.86985 10.4572 9.53867 10.126 9.13013 10.126C8.72159 10.126 8.3904 10.4572 8.3904 10.8658V12.7068C8.3904 13.1154 8.72159 13.4466 9.13013 13.4466C9.53867 13.4466 9.86985 13.1154 9.86985 12.7068V10.8658Z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.44531 4.68493C4.44531 2.09751 6.54283 0 9.13024 0C11.7177 0 13.8152 2.09751 13.8152 4.68493V6.26301H12.3357V4.68493C12.3357 2.91459 10.9006 1.47945 9.13024 1.47945C7.35991 1.47945 5.92476 2.91459 5.92476 4.68493V6.26301H4.44531V4.68493Z"/>
+                        </svg>
+                    </label>
+                    <div class="icon-input-input">
+                        <input class="basic-input" type="password" placeholder="Повторите пароль" id="password-confirm" oninput="ClearInputError('password-confirm')">
+                    </div>
+                </div>
 
-            <div class="sign-up sign-button">
-                <span class="arrow-link" onclick="SignUp()"><span class="text">СОЗДАТЬ АККАУНТ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></span>
-            </div>
+                <div class="sign-in sign-button">
+                    <span class="arrow-link arrow-link-full" onclick="SignIn()"><span class="text">ВОЙТИ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></span>
+                </div>
 
-            <div class="sign-up sign-option">
-                Уже есть аккаунт? Тогда просто <label class="link" for="sign-type">войдите</label> в него!
-            </div>
+                <div class="captcha-block sign-up" id="captcha-block">
+                    <div class="g-recaptcha" id="captcha" data-sitekey="6LfodbsoAAAAAMlLezsg5BvOgdpiDZzpS4DLen2g"></div>
+                </div>
 
-            <div class="sign-in sign-option">
-                Нет аккаунта? <label class="link" for="sign-type">Зарегистрируйте</label> новый!
+                <div class="sign-up sign-button">
+                    <span class="arrow-link arrow-link-full" onclick="SignUp()"><span class="text">СОЗДАТЬ АККАУНТ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></span>
+                </div>
+
+                <div class="sign-up sign-option">
+                    Уже есть аккаунт? Тогда просто <label class="link" for="sign-type">войдите</label> в него!
+                </div>
+
+                <div class="sign-in sign-option">
+                    Нет аккаунта? <label class="link" for="sign-type">Зарегистрируйте</label> новый!
+                </div>
             </div>
         </div>
     </div>
