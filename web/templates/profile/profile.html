@@ -9,82 +9,86 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
-        <div class="bread-crumbs">
-            <span><a href="/">Главная</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Профиль</span>
-        </div>
+    <main>
+        {% include "components/gradients.html" %}
 
-        <h1>{{"Мой профиль" if show_user == user else "Профиль"}}</h1>
-
-        <div class="profile" id="profile"></div>
-
-        {% if user_photos %}
-        {% set photos_url = 'photos-with-me' if show_user == user else 'photos-with-users?usernames=%s' % show_user.username %}
-
-        <div class="link-header">
-            <h2>ФОТО СО МНОЙ</h2>
-            <a class="arrow-link" href="/{{photos_url}}"><span class="text">ЕЩЁ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
-        </div>
-
-        <div class="photos">
-            {% for photo in user_photos %}
-            <div class="photo">
-                <a href="/{{photos_url}}"><img src="{{photo.preview_url}}"></a>
+        <div class="content">
+            <div class="bread-crumbs">
+                <span><a href="/">Главная</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span class="bread-crumbs-current">Профиль</span>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
 
-        <h2>АНАЛИТИКА</h2>
-        <p class="description">В этом блоке показана информация о посещённых играх.</p>
+            <h1>{{"Мой профиль" if show_user == user else "Профиль"}}</h1>
 
-        <div class="analytics">
-            <h3>МОЯ АКТИВНОСТЬ</h3>
+            <div class="profile" id="profile"></div>
 
-            <div id="my-activity">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
+            {% if user_photos %}
+            {% set photos_url = 'photos-with-me' if show_user == user else 'photos-with-users?usernames=%s' % show_user.username %}
+
+            <div class="link-header">
+                <h2>ФОТО СО МНОЙ</h2>
+                <a class="arrow-link" href="/{{photos_url}}"><span class="text">ЕЩЁ</span> <span class="arrow"><img src="/images/icons/arrow-right.svg"></span></a>
+            </div>
+
+            <div class="photos">
+                {% for photo in user_photos %}
+                <div class="photo">
+                    <a href="/{{photos_url}}"><img src="{{photo.preview_url}}"></a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <h2>АНАЛИТИКА</h2>
+            <p class="description">В этом блоке показана информация о посещённых играх.</p>
+
+            <div class="analytics">
+                <h3>МОЯ АКТИВНОСТЬ</h3>
+
+                <div id="my-activity">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h3>РЕЗУЛЬТАТЫ ИГР</h3>
+
+                <div id="games-result">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>КАТЕГОРИИ ИГР</h2>
+
+                <div id="games-categories">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h3>МОИ ИГРЫ</h3>
+
+                <div id="games">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h3>АНАЛИТИКА ПО МЕСЯЦАМ</h3>
+
+                <div id="month-analytics">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
             </div>
         </div>
-
-        <div class="analytics">
-            <h3>РЕЗУЛЬТАТЫ ИГР</h3>
-
-            <div id="games-result">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h2>КАТЕГОРИИ ИГР</h2>
-
-            <div id="games-categories">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h3>МОИ ИГРЫ</h3>
-
-            <div id="games">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h3>АНАЛИТИКА ПО МЕСЯЦАМ</h3>
-
-            <div id="month-analytics">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>

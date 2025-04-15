@@ -29,8 +29,6 @@
 /***************** SECTION *****************/
 .section {
     margin-bottom: 3em;
-    z-index: 1;
-    position: relative;
 }
 
 .section:last-child {

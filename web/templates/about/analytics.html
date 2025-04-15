@@ -8,93 +8,97 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
-        <div class="bread-crumbs">
-            <span><a href="/">Главная</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span><a href="/">О нас</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Аналитика</span>
-        </div>
+    <main>
+        {% include "components/gradients.html" %}
 
-        <h1>Аналитика</h1>
+        <div class="content">
+            <div class="bread-crumbs">
+                <span><a href="/">Главная</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span><a href="/">О нас</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span class="bread-crumbs-current">Аналитика</span>
+            </div>
 
-        <div class="analytics">
-            <label>Показать данные за <select class="basic-select" id="period" onchange="ChangePeriod()">
-                <option value="">всё время</option>
-                <option value="last-year">прошлый год</option>
-                <option value="curr-year">текущий год</option>
-                <option value="curr-month">текущий месяц</option>
-                <option value="last-month">прошлый месяц</option>
-                <option value="period">период</option>
-            </select></label>
+            <h1>Аналитика</h1>
 
-            <input type="text" class="basic-input hidden" id="period-dates" onchange="ChangeDates()">
-        </div>
+            <div class="analytics">
+                <label>Показать данные за <select class="basic-select" id="period" onchange="ChangePeriod()">
+                    <option value="">всё время</option>
+                    <option value="last-year">прошлый год</option>
+                    <option value="curr-year">текущий год</option>
+                    <option value="curr-month">текущий месяц</option>
+                    <option value="last-month">прошлый месяц</option>
+                    <option value="period">период</option>
+                </select></label>
 
-        <div class="analytics">
-            <h2>АКТИВНОСТЬ КОМАНДЫ</h2>
+                <input type="text" class="basic-input hidden" id="period-dates" onchange="ChangeDates()">
+            </div>
 
-            <div id="team-activity">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
+            <div class="analytics">
+                <h2>АКТИВНОСТЬ КОМАНДЫ</h2>
+
+                <div id="team-activity">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>РЕЗУЛЬТАТЫ ИГР</h2>
+
+                <div id="games-result">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>РАСПРЕДЕЛЕНИЕ МЕСТ</h2>
+
+                <div id="position-distribution">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>КАТЕГОРИИ ИГР</h2>
+
+                <div id="games-categories">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>ТОП АКТИВНЫХ ИГРОКОВ</h2>
+
+                <div id="top-players">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>ИГРЫ</h2>
+
+                <div id="games">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="analytics">
+                <h2>АНАЛИТИКА ПО МЕСЯЦАМ</h2>
+
+                <div id="month-analytics">
+                    <div class="loader hidden"><img src="/images/loader.svg"></div>
+                    <div></div>
+                </div>
             </div>
         </div>
-
-        <div class="analytics">
-            <h2>РЕЗУЛЬТАТЫ ИГР</h2>
-
-            <div id="games-result">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h2>РАСПРЕДЕЛЕНИЕ МЕСТ</h2>
-
-            <div id="position-distribution">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h2>КАТЕГОРИИ ИГР</h2>
-
-            <div id="games-categories">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h2>ТОП АКТИВНЫХ ИГРОКОВ</h2>
-
-            <div id="top-players">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h2>ИГРЫ</h2>
-
-            <div id="games">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-
-        <div class="analytics">
-            <h2>АНАЛИТИКА ПО МЕСЯЦАМ</h2>
-
-            <div id="month-analytics">
-                <div class="loader hidden"><img src="/images/loader.svg"></div>
-                <div></div>
-            </div>
-        </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>

@@ -7,24 +7,28 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
-        <div class="bread-crumbs">
-            <span><a href="/">Главная</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Организаторы</span>
-        </div>
+    <main>
+        {% include "components/gradients.html" %}
 
-        <h1>Организаторы</h1>
-        <div class="add-link">
-            <span class="arrow-link" onclick="infos.Show('organizer-add-info')"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
-        </div>
+        <div class="content">
+            <div class="bread-crumbs">
+                <span><a href="/">Главная</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span class="bread-crumbs-current">Организаторы</span>
+            </div>
 
-        <div id="organizers">
-            <div class="search-results"></div>
-            <div class="organizers"></div>
-            <div class="loader hidden"><img src="/images/loader.svg"></div>
+            <h1>Организаторы</h1>
+            <div class="add-link">
+                <span class="arrow-link" onclick="infos.Show('organizer-add-info')"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+            </div>
+
+            <div id="organizers">
+                <div class="search-results"></div>
+                <div class="organizers"></div>
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>

@@ -6,21 +6,25 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
-        <div class="bread-crumbs">
-            <span><a href="/">Главная</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Дни рождения</span>
-        </div>
+    <main>
+        {% include "components/gradients.html" %}
 
-        <h1>Дни рождения</h1>
+        <div class="content">
+            <div class="bread-crumbs">
+                <span><a href="/">Главная</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span class="bread-crumbs-current">Дни рождения</span>
+            </div>
 
-        <div id="birthdays">
-            <div class="search-results"></div>
-            <div class="birthdays"></div>
-            <div class="loader hidden"><img src="/images/loader.svg"></div>
+            <h1>Дни рождения</h1>
+
+            <div id="birthdays">
+                <div class="search-results"></div>
+                <div class="birthdays"></div>
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
+            </div>
         </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>

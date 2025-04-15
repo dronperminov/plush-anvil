@@ -7,75 +7,79 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content">
-        <div class="bread-crumbs">
-            <span><a href="/">Главная</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">Альбомы</span>
-        </div>
+    <main>
+        {% include "components/gradients.html" %}
 
-        <h1>АЛЬБОМЫ</h1>
+        <div class="content">
+            <div class="bread-crumbs">
+                <span><a href="/">Главная</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span class="bread-crumbs-current">Альбомы</span>
+            </div>
 
-        <div class="admin-block add-link">
-            <span class="arrow-link" onclick="infos.Show('new-album')"><span class="text">СОЗДАТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
-        </div>
+            <h1>АЛЬБОМЫ</h1>
 
-        <div class="search search-query-empty" id="search">
-            <div class="search-main">
-                <div class="search-clear">
-                    <div class="search-clear-icon"></div>
+            <div class="admin-block add-link">
+                <span class="arrow-link" onclick="infos.Show('new-album')"><span class="text">СОЗДАТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+            </div>
+
+            <div class="search search-query-empty" id="search">
+                <div class="search-main">
+                    <div class="search-clear">
+                        <div class="search-clear-icon"></div>
+                    </div>
+                    <div class="search-query">
+                        <input class="basic-input" type="search" id="query" placeholder="введите запрос">
+                    </div>
+                    <div class="search-filters" title="Фильтры">
+                        <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15 10.5A3.502 3.502 0 0 0 18.355 8H21a1 1 0 1 0 0-2h-2.645a3.502 3.502 0 0 0-6.71 0H3a1 1 0 0 0 0 2h8.645A3.502 3.502 0 0 0 15 10.5zM3 16a1 1 0 1 0 0 2h2.145a3.502 3.502 0 0 0 6.71 0H21a1 1 0 1 0 0-2h-9.145a3.502 3.502 0 0 0-6.71 0H3z"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="search-query">
-                    <input class="basic-input" type="search" id="query" placeholder="введите запрос">
-                </div>
-                <div class="search-filters" title="Фильтры">
-                    <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15 10.5A3.502 3.502 0 0 0 18.355 8H21a1 1 0 1 0 0-2h-2.645a3.502 3.502 0 0 0-6.71 0H3a1 1 0 0 0 0 2h8.645A3.502 3.502 0 0 0 15 10.5zM3 16a1 1 0 1 0 0 2h2.145a3.502 3.502 0 0 0 6.71 0H21a1 1 0 1 0 0-2h-9.145a3.502 3.502 0 0 0-6.71 0H3z"/>
-                    </svg>
+
+                <div class="search-filters-popup" id="search-filters-popup">
+                    <div class="close-icon" onclick="search.CloseFiltersPopup()"></div>
+
+                    <h3>Фильтры</h3>
+
+                    <div class="search-filter-line"></div>
+
+                    <div class="search-filter">
+                        <label>Сортировка:
+                            <select class="basic-select" id="order">
+                                <option value="date">дата</option>
+                                <option value="title">название</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="search-filter-line"></div>
+
+                    <div class="search-filter">
+                        <label>Порядок сортировки:
+                            <select class="basic-select" id="order-type">
+                                <option value="-1">по убыванию</option>
+                                <option value="1">по возрастанию</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="search-filter-line"></div>
+
+                    <div class="search-filter-button">
+                        <button class="basic-button gradient-button" onclick="search.Search()">Искать</button>
+                    </div>
                 </div>
             </div>
 
-            <div class="search-filters-popup" id="search-filters-popup">
-                <div class="close-icon" onclick="search.CloseFiltersPopup()"></div>
-
-                <h3>Фильтры</h3>
-
-                <div class="search-filter-line"></div>
-
-                <div class="search-filter">
-                    <label>Сортировка:
-                        <select class="basic-select" id="order">
-                            <option value="date">дата</option>
-                            <option value="title">название</option>
-                        </select>
-                    </label>
-                </div>
-
-                <div class="search-filter-line"></div>
-
-                <div class="search-filter">
-                    <label>Порядок сортировки:
-                        <select class="basic-select" id="order-type">
-                            <option value="-1">по убыванию</option>
-                            <option value="1">по возрастанию</option>
-                        </select>
-                    </label>
-                </div>
-
-                <div class="search-filter-line"></div>
-
-                <div class="search-filter-button">
-                    <button class="basic-button gradient-button" onclick="search.Search()">Искать</button>
-                </div>
+            <div id="albums">
+                <div class="search-results"></div>
+                <div class="albums"></div>
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
             </div>
         </div>
-
-        <div id="albums">
-            <div class="search-results"></div>
-            <div class="albums"></div>
-            <div class="loader hidden"><img src="/images/loader.svg"></div>
-        </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>

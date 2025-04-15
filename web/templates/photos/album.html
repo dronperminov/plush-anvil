@@ -8,57 +8,61 @@
 <body ondragstart="return false">
     {% include "components/menu.html" %}
 
-    <div class="content" id="content">
-        <div class="bread-crumbs">
-            <span><a href="/">Главная</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span><a href="/albums">Альбомы</a></span>
-            <img src="/images/icons/bread-crumbs-arrow.svg">
-            <span class="bread-crumbs-current">{{album.title[:50]}}{% if album.title|length > 50 %}...{%endif %}</span>
-        </div>
+    <main>
+        {% include "components/gradients.html" %}
 
-        <h1>{{album.title}}</h1>
+        <div class="content" id="content">
+            <div class="bread-crumbs">
+                <span><a href="/">Главная</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span><a href="/albums">Альбомы</a></span>
+                <img src="/images/icons/bread-crumbs-arrow.svg">
+                <span class="bread-crumbs-current">{{album.title}}</span>
+            </div>
 
-        {% if not album_type %}
-        <div class="admin-block add-link">
-            <span class="arrow-link" onclick="ToggleEditMode()" id="edit-link"><span class="text">ИЗМЕНИТЬ</span> <span class="arrow"><img src="/images/icons/edit.svg"></span></span>
-            <span class="arrow-link" onclick="SelectPhotos()" id="add-link"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
-            <span class="arrow-link" onclick="RemoveAlbum()" id="remove-link"><span class="text">УДАЛИТЬ</span> <span class="arrow"><img src="/images/icons/trash.svg"></span></span>
-            <input type="file" accept="image/*" id="photos-input" multiple onchange="UploadPhotos()">
-        </div>
-        <div class="album-controls hidden" id="edit-block">
-            <input class="basic-input" type="text" value={{album.title|tojson}} id="album-title" placeholder="введите название альбома" onchange="RenameAlbum()">
-        </div>
-        {% elif album_type == "photos_with_me" %}
-        <div class="album-controls">
-            <div>
-                <label class="switch-checkbox">
-                    <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
-                    <span class="switch-checkbox-slider"></span>
-                </label>
-                <label for="only">Только со мной</label>
+            <h1>{{album.title}}</h1>
+
+            {% if not album_type %}
+            <div class="admin-block add-link">
+                <span class="arrow-link" onclick="ToggleEditMode()" id="edit-link"><span class="text">ИЗМЕНИТЬ</span> <span class="arrow"><img src="/images/icons/edit.svg"></span></span>
+                <span class="arrow-link" onclick="SelectPhotos()" id="add-link"><span class="text">ДОБАВИТЬ</span> <span class="arrow"><img src="/images/icons/add.svg"></span></span>
+                <span class="arrow-link" onclick="RemoveAlbum()" id="remove-link"><span class="text">УДАЛИТЬ</span> <span class="arrow"><img src="/images/icons/trash.svg"></span></span>
+                <input type="file" accept="image/*" id="photos-input" multiple onchange="UploadPhotos()">
+            </div>
+            <div class="album-controls hidden" id="edit-block">
+                <input class="basic-input" type="text" value={{album.title|tojson}} id="album-title" placeholder="введите название альбома" onchange="RenameAlbum()">
+            </div>
+            {% elif album_type == "photos_with_me" %}
+            <div class="album-controls">
+                <div>
+                    <label class="switch-checkbox">
+                        <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
+                        <span class="switch-checkbox-slider"></span>
+                    </label>
+                    <label for="only">Только со мной</label>
+                </div>
+            </div>
+            {% elif album_type == "user_photos" %}
+            <div class="album-controls">
+                <div id="users"></div>
+
+                <div>
+                    <label class="switch-checkbox">
+                        <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
+                        <span class="switch-checkbox-slider"></span>
+                    </label>
+                    <label for="only">Только выбранные пользователи</label>
+                </div>
+            </div>
+            {% endif %}
+
+            <div id="photos">
+                <div class="search-results"></div>
+                <div class="photos"></div>
+                <div class="loader hidden"><img src="/images/loader.svg"></div>
             </div>
         </div>
-        {% elif album_type == "user_photos" %}
-        <div class="album-controls">
-            <div id="users"></div>
-
-            <div>
-                <label class="switch-checkbox">
-                    <input type="checkbox" id="only" {% if only %}checked{% endif %} onchange="GetAlbumPhotos()">
-                    <span class="switch-checkbox-slider"></span>
-                </label>
-                <label for="only">Только выбранные пользователи</label>
-            </div>
-        </div>
-        {% endif %}
-
-        <div id="photos">
-            <div class="search-results"></div>
-            <div class="photos"></div>
-            <div class="loader hidden"><img src="/images/loader.svg"></div>
-        </div>
-    </div>
+    </main>
 
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>

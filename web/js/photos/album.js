@@ -126,5 +126,5 @@ function RemoveAlbum() {
 function ShowAlbumTitle(title) {
     document.querySelector("title").innerText = `${title} | Плюшевая наковальня`
     document.querySelector("h1").innerText = title
-    document.querySelector(".bread-crumbs-current").innerText = title.substr(0, 50) + (title.length > 50 ? "..." : "")
+    document.querySelector(".bread-crumbs-current").innerText = title
 }

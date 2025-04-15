@@ -125,6 +125,22 @@ main {
     z-index: 0;
 }
 
+.gradient-1 {
+    width: 1654px;
+    height: 1654px;
+    top: 1099px;
+    left: -966px;
+    opacity: 0.7;
+}
+
+.gradient-2 {
+    width: 1654px;
+    height: 1654px;
+    top: 252px;
+    right: -506px;
+    opacity: 0.7;
+}
+
 h1 {
     font-size: 3em;
     margin-bottom: 1em;
@@ -163,6 +179,8 @@ ul {
     margin: 0 auto;
     padding: 2em 75px 1em 75px;
     min-height: calc(100dvh - var(--menu-height));
+    z-index: 1;
+    position: relative;
 }
 
 .link {
@@ -276,8 +294,8 @@ ul {
 /* bread crumbs */
 .bread-crumbs {
     margin-bottom: 1em;
-    display: inline-grid;
-    grid-auto-flow: column;
+    display: flex;
+    gap: 5px;
     align-items: center;
 }
 
@@ -292,6 +310,9 @@ ul {
 
 .bread-crumbs .bread-crumbs-current {
     color: #ee9ddc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* close icon */
@@ -427,6 +448,20 @@ ul {
 @media (max-width: 767px) {
     :root {
         --menu-height: 76px;
+    }
+
+    .gradient-1 {
+        width: 1000px;
+        height: 1000px;
+        top: 144px;
+        left: -215px;
+    }
+
+    .gradient-2 {
+        width: 940px;
+        height: 940px;
+        top: 2357px;
+        left: -582px;
     }
 
     ul {
