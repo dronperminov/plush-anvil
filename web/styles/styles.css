@@ -225,7 +225,7 @@ ul {
     background-color: var(--circle-color);
     width: 100%;
     aspect-ratio: 1;
-    padding: 4px;
+    padding: 5px;
 }
 
 .arrow-link .arrow img {
@@ -251,9 +251,12 @@ ul {
 }
 
 .add-link {
-    text-align: right;
     margin-top: -1.5em;
     margin-bottom: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: end;
 }
 
 .link-header {
