@@ -63,9 +63,9 @@ class Schedule {
         let places = MakeElement("schedule-places", parent)
 
         for (let place of this.places) {
-            let place = MakeElement("schedule-place", places)
-            MakeElement("schedule-place-color", place, {style: `background-color: ${place.color}`}, "span")
-            MakeElement("schedule-place-name", place, {innerText: place.name}, "span")
+            let block = MakeElement("schedule-place", places)
+            MakeElement("schedule-place-color", block, {style: `background-color: ${place.color}`}, "span")
+            MakeElement("schedule-place-name", block, {innerText: place.name}, "span")
         }
     }
 
