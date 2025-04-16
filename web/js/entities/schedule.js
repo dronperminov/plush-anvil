@@ -1,6 +1,13 @@
 class Schedule {
-    constructor() {
+    constructor(month, year) {
+        this.month = month
+        this.year = year
+
+        this.monthSpan = document.getElementById("schedule-date-month")
+        this.yearSpan = document.getElementById("schedule-date-year")
+
         this.InitPopups()
+        this.UpdateDate()
     }
 
     ParseQuizzes(day2quizzes) {
@@ -42,6 +49,26 @@ class Schedule {
         this.popups.innerHTML = ""
     }
 
+    UpdateDate() {
+        this.monthSpan.innerText = GetRusMonth(this.month).toUpperCase()
+        this.yearSpan.innerText = this.year
+    }
+
+    GetDate(step = 0) {
+        this.month += step
+
+        if (this.month > 12) {
+            this.month = 1
+            this.year++
+        }
+        else if (this.month < 1) {
+            this.month = 12
+            this.year--
+        }
+
+        return {month: this.month, year: this.year}
+    }
+
     Build(parent, schedule) {
         this.month = schedule.month
         this.year = schedule.year
@@ -49,6 +76,7 @@ class Schedule {
         this.username2avatar = schedule.username2avatar
         this.analytics = schedule.analytics
 
+        this.UpdateDate()
         this.ParseQuizzes(schedule.day2quizzes)
         this.ParsePlaces(schedule.places)
         this.ParseOrganizers(schedule.organizers)

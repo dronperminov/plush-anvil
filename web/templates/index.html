@@ -49,7 +49,7 @@
                 <div class="schedule">
                     <div class="schedule-month">
                         <img src="/images/icons/angle-left.svg" onclick="StepSchedule(-1)">
-                        <span><span id="schedule-date-month">{{get_rus_month(today)|upper}}</span> <span id="schedule-date-year">{{today.year}}</span></span>
+                        <span><span id="schedule-date-month"></span> <span id="schedule-date-year"></span></span>
                         <img src="/images/icons/angle-right.svg" onclick="StepSchedule(1)">
                     </div>
 
@@ -196,7 +196,7 @@
 
     <script src="/js/index.js?v={{version}}"></script>
     <script>
-        let schedule = new Schedule()
+        let schedule = new Schedule({{today.month}}, {{today.year}})
         let scheduleConfig = {blockId: "schedule", url: "/schedule", getParams: GetScheduleParams, onLoad: LoadSchedule, load: true, clearBeforeLoad: true}
         let scheduleLoader = new ContentLoader(scheduleConfig)
 
