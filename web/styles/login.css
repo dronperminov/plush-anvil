@@ -77,9 +77,6 @@
 
 .icon-input {
     margin-bottom: 20px;
-    padding: 0.7em 1em;
-    background: #ffffff99;
-    border-radius: 20px;
 }
 
 .captcha-block {
@@ -138,7 +135,6 @@
     }
 
     .icon-input {
-        padding: 20px 10px;
         margin-bottom: 10px;
     }
 }

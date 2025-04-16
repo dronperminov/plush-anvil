@@ -39,7 +39,7 @@
     --gradient-button-hover-background: radial-gradient(67.48% 311.93% at 73.22% 40.75%, #a1dbffa9 0%, #ed9ddc00 100%), #c69deeb0;
 
     /* icon-input  */
-    --icon-input-background: #f4f4f4;
+    --icon-input-background: #ffffff99;
     --icon-input-border: var(--border-color);
     --icon-input-icon-color: #c239a3;
     --icon-input-input-color: var(--text-color);
@@ -142,7 +142,7 @@ main {
 }
 
 h1 {
-    font-size: 3em;
+    font-size: 40px;
     margin-bottom: 1em;
 }
 
@@ -476,7 +476,7 @@ ul {
     }
 
     h1 {
-        font-size: 2em;
+        font-size: 30px;
     }
 
     h2 {
