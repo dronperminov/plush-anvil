@@ -64,7 +64,8 @@ Organizer.prototype.BuildInfo = function() {
 
     let organizerInputs = MakeElement("organizer-inputs", info)
 
-    let nameInput = MakeIconInput(organizerInputs, ORGANIZER_NAME_ICON, `organizer-${this.organizerId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
+    let nameInput = MakeIconInput(organizerInputs, "организатор", ORGANIZER_NAME_ICON, `organizer-${this.organizerId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
+    this.nameInput = new TextInput(nameInput, {empty: "Название организатора не заполнено"})
 
     let buttons = MakeElement("organizer-buttons", organizerInputs)
 
@@ -77,8 +78,7 @@ Organizer.prototype.BuildInfo = function() {
         this.imageInput.addEventListener("change", (e) => this.UpdateImage())
         this.infoImage.addEventListener("click", () => this.imageInput.click())
 
-        for (let input of [nameInput])
-            input.addEventListener("change", () => this.Update(info))
+        nameInput.addEventListener("change", () => this.Update(info))
 
         let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
         removeButton.addEventListener("click", () => this.Remove(info))
@@ -88,7 +88,7 @@ Organizer.prototype.BuildInfo = function() {
 }
 
 Organizer.prototype.GetUpdateParams = function() {
-    let name = GetTextInput(`organizer-${this.organizerId}-name`, "Название организатора не заполнено")
+    let name = this.nameInput.GetValue()
     if (name === null)
         return null
 

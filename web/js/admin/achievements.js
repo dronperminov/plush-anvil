@@ -18,9 +18,9 @@ function InitAchievementsInfo() {
     MakeElement("info-header", info, {innerText: "Управление достижениями"})
 
     let inputs = MakeElement("achievements-inputs", info)
-    let date = MakeIconInput(inputs, '<img src="/images/icons/calendar.svg">', "achievement-date", "basic-input", {type: "date", placeholder: "дата", value: FormatInputDate()})
+    let date = MakeIconInput(inputs, "дата достижения", '<img src="/images/icons/calendar.svg">', "achievement-date", "basic-input", {type: "date", placeholder: "дата", value: FormatInputDate()})
 
-    let achievementTypeInput = MakeIconInput(inputs, '<img src="/images/icons/achievement.svg">', "achievement-type", "basic-select", {style: "width: 100%;"})
+    let achievementTypeInput = MakeIconInput(inputs, "тип достижения", '<img src="/images/icons/achievement.svg">', "achievement-type", "basic-select", {style: "width: 100%;"})
     let achievementType = new HandleAchievementType("")
 
     for (let type of achievementType.values)
@@ -46,7 +46,7 @@ function InitAchievementsInfo() {
 }
 
 function ModifyAchievements(info, action) {
-    let date = GetTextInput("achievement-date", "Дата не указана")
+    let date = dateInput.GetValue()
     if (date === null)
         return
 

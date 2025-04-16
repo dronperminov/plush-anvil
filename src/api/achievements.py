@@ -45,14 +45,14 @@ def modify_achievements(params: AchievementsModification, user: Optional[User] =
     if len(usernames) != len(params.usernames):
         return JSONResponse({"status": "error", "message": f'не удалось найти некоторых пользователей ({", ".join(sorted(set(params.usernames) - usernames))})'})
 
-    for user in params.users:
-        for _ in range(user.count):
+    for achievement_user in params.users:
+        for _ in range(achievement_user.count):
             if params.action == "add":
                 achievement_id = database.get_identifier("achievements")
-                achievement = HandleAchievement(achievement_id=achievement_id, username=user.username, date=params.date, achievement_type=params.achievement_type)
+                achievement = HandleAchievement(achievement_id=achievement_id, username=achievement_user.username, date=params.date, achievement_type=params.achievement_type)
                 achievement_database.add_achievement(achievement=achievement, username=user.username)
             else:
-                achievement = database.achievements.find_one({"date": params.date, "achievement_type": params.achievement_type.value, "username": user.username})
+                achievement = database.achievements.find_one({"date": params.date, "achievement_type": params.achievement_type.value, "username": achievement_user.username})
                 if achievement:
                     achievement_database.remove_achievement(achievement_id=achievement["achievement_id"], username=user.username)
 

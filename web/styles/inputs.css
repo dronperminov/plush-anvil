@@ -3,8 +3,8 @@
     border-left: none;
     border-right: none;
     border-top: none;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0 0 1px 0;
+    border-bottom: 1px solid transparent;
+    padding: 0;
     background: transparent;
     outline: none;
     font-size: 1em;
@@ -115,6 +115,11 @@
     transition: all .1s ease-in;
 }
 
+.error-input {
+    color: var(--error-color) !important;
+    border-color: var(--error-color) !important;
+}
+
 .text-input {
     background: transparent;
     border: none;
@@ -174,54 +179,56 @@
 
 .icon-input {
     display: grid;
-    grid-template-columns: 1.5em 1fr;
-    grid-gap: 0.2em;
+    grid-template-columns: 18px 1fr;
+    grid-template-rows: max-content 1fr;
+    grid-gap: 20px 10px;
     align-items: center;
-    padding: 0.5em;
-    border-radius: 0.5em;
+    padding: 20px 25px;
+    border-radius: 30px;
 
     background: var(--icon-input-background);
     border: 1px solid var(--icon-input-border);
 }
 
-.icon-input-name {
-    font-weight: bold;
-    font-size: 0.9em;
-    margin-bottom: 0.5em;
+.icon-input-info {
+    background: transparent;
+    border: none !important;
+    padding: 0 !important;
+    grid-gap: 8px 10px !important;
 }
 
-.icon-input-icon {
+.icon-input label {
+    grid-column: 1 / span 2;
+    display: block;
     cursor: pointer;
+    font-size: 14px;
+    padding-left: 28px;
 }
 
-.icon-input-icon img {
+.icon-input svg, .icon-input img {
     width: 100%;
+    vertical-align: bottom;
 }
 
-.icon-input-icon svg {
+.icon-input svg {
     fill: var(--icon-input-icon-color);
-    vertical-align: middle;
 }
 
-.icon-input-input input {
-    color: var(--icon-input-input-color);
+.icon-input input, .icon-input select, .icon-input textarea {
+    font-size: 18px;
 }
 
-.icon-input-inputs {
+.icon-input div {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 0.5em;
 }
 
-.error-name {
+.icon-input:has(.error-input) label {
     color: var(--error-color);
 }
 
-.error-input, .error-input:hover, .error-input:focus {
-    border-color: var(--error-color) !important;
-}
-
-.error-icon svg {
+.icon-input:has(.error-input) svg {
     fill: var(--error-color) !important;
 }
 
@@ -269,4 +276,26 @@
 
 .color-input .color-input-selected-color {
     border: 1px solid var(--text-color);
+}
+
+@media (max-width: 767px) {
+    .icon-input {
+        grid-template-columns: 16px 1fr;
+        grid-gap: 10px 5px;
+        padding: 20px 10px;
+        border-radius: 20px;
+    }
+
+    .icon-input label {
+        font-size: 12px;
+        padding-left: 21px;
+    }
+
+    .icon-input input, .icon-input select, .icon-input textarea {
+        font-size: 14px;
+    }
+
+    .icon-input-info {
+        grid-gap: 4px 5px !important;
+    }
 }

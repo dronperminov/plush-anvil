@@ -38,6 +38,8 @@
     <script src="/js/utils/info_panels.js?v={{version}}"></script>
     <script src="/js/utils/user_select.js?v={{version}}"></script>
 
+    <script src="/js/inputs/text_input.js?v={{version}}"></script>
+
     <script src="/js/entities/handle_achievement_type.js?v={{version}}"></script>
     <script src="/js/entities/user.js?v={{version}}"></script>
 
@@ -57,6 +59,8 @@
         let userSelectConfig = {multiple: true}
         let userSelect = new UserSelect([{% for user in users %}{username: "{{user.username}}", fullname: "{{user.full_name}}", avatarUrl: "{{user.avatar_url}}"},{% endfor %}], userSelectConfig)
         InitAchievementsInfo()
+
+        let dateInput = new TextInput(document.getElementById("achievement-date"), {empty: "Дата достижения не заполнена"})
 
         let infiniteScroll = new InfiniteScroll("achievements", config)
         infiniteScroll.LoadContent()

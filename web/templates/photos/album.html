@@ -71,6 +71,8 @@
     <script src="/js/utils/markup.js?v={{version}}"></script>
     <script src="/js/utils/gallery.js?v={{version}}"></script>
 
+    <script src="/js/inputs/text_input.js?v={{version}}"></script>
+
     <script src="/js/entities/album.js?v={{version}}"></script>
     <script src="/js/photos/album.js?v={{version}}"></script>
     <script>
@@ -96,6 +98,8 @@
         {% endif %}
 
         userSelect.onchange = () => GetAlbumPhotos()
+        {% elif not album_type %}
+        let albumTitleInput = new TextInput(document.getElementById("album-title"), {empty: "Название альбома не может быть пустым"})
         {% endif %}
 
         let gallery = new Gallery([{% for user in users %}{username: "{{user.username}}", fullname: "{{user.full_name}}", avatarUrl: "{{user.avatar_url}}"},{% endfor %}])

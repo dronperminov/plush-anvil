@@ -15,16 +15,10 @@
     font-weight: bold;
 }
 
-.info .icon-input {
-    background: unset;
-    border: none;
-    padding: 0;
-}
-
 .achievements-inputs {
     display: grid;
     grid-auto-flow: row;
-    grid-gap: 1em;
+    grid-gap: 20px;
 }
 
 .achievements-buttons {

@@ -88,6 +88,7 @@
     <script src="/js/utils/infinite_scroll.js?v={{version}}"></script>
     <script src="/js/utils/info_panels.js?v={{version}}"></script>
 
+    <script src="/js/inputs/text_input.js?v={{version}}"></script>
     <script src="/js/entities/album.js?v={{version}}"></script>
 
     <script src="/js/photos/albums.js?v={{version}}"></script>
@@ -106,6 +107,8 @@
         let infiniteScroll = new InfiniteScroll("albums", config)
         let infos = new InfoPanels()
         infos.Add(MakeNewAlbumInfo())
+
+        let newAlbumTitleInput = new TextInput(document.getElementById("new-album-title"), {empty: "Название альбома не может быть пустым"})
 
         {% if search_params %}
         document.getElementById("query").value = {{search_params.query|tojson}}

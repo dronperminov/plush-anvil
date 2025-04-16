@@ -19,6 +19,7 @@ User.prototype.BuildProfile = function(parent, days, editable = false) {
 
     let profileName = MakeElement("profile-name", parent)
     let name = MakeElement("basic-input text-input", profileName, {type: "text", id: "full-name", value: this.fullname}, "input")
+    let nameInput = new TextInput(name, {empty: "Имя пользователя не указано"})
 
     let profileBirthday = MakeElement("profile-birthday", parent)
     MakeElement("", profileBirthday, {src: "/images/icons/birthday.svg"}, "img")
@@ -33,7 +34,7 @@ User.prototype.BuildProfile = function(parent, days, editable = false) {
     }
 
     if (editable) {
-        name.addEventListener("change", () => this.ChangeFullName(name))
+        name.addEventListener("change", () => this.ChangeFullName(nameInput))
         name.addEventListener("focus", () => {
             name.classList.remove("text-input")
         })
@@ -152,20 +153,20 @@ User.prototype.GetAchievementsCountText = function(achievements) {
 }
 
 User.prototype.ChangeFullName = function(input) {
-    let fullname = GetTextInput("full-name", "Имя пользователя не указано")
+    let fullname = input.GetValue()
     if (fullname === null)
         return
 
     SendRequest("/change-full-name", {full_name: fullname}).then(response => {
         if (response.status != SUCCESS_STATUS) {
             ShowNotification(`Не удалось обновить имя<br><b>Причина</b>: ${response.message}`)
-            input.value = this.fullname
+            input.SetValue(this.fullname)
             return
         }
 
         ShowNotification("Имя успешно обновлено", "success-notification")
         this.fullname = fullname
-        input.blur()
+        input.Blur()
     })
 }
 

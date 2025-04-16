@@ -60,12 +60,17 @@ Place.prototype.BuildInfo = function() {
 
     let placeInputs = MakeElement("place-inputs", info)
 
-    let nameInput = MakeIconInput(placeInputs, PLACE_NAME_ICON, `place-${this.placeId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
-    let addressInput = MakeIconInput(placeInputs, PLACE_ADDRESS_ICON, `place-${this.placeId}-address`, "basic-input", {placeholder: "адрес", type: "text", value: this.address})
-    let metroStationInput = MakeIconInput(placeInputs, PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation, list: "metro-stations"})
-    let yandexMapLinkInput = MakeIconInput(placeInputs, PLACE_YANDEX_MAP_ICON, `place-${this.placeId}-yandex-map-link`, "basic-input", {placeholder: "ссылка на я.карты", type: "text", value: this.yandexMapLink})
-    this.colorInput = new ColorInput(placeInputs, this.color)
+    let nameInput = MakeIconInput(placeInputs, "название", PLACE_NAME_ICON, `place-${this.placeId}-name`, "basic-input", {placeholder: "название", type: "text", value: this.name})
+    let addressInput = MakeIconInput(placeInputs, "адрес", PLACE_ADDRESS_ICON, `place-${this.placeId}-address`, "basic-input", {placeholder: "адрес", type: "text", value: this.address})
+    let metroStationInput = MakeIconInput(placeInputs, "станция метро", PLACE_METRO_STATION_ICON, `place-${this.placeId}-metro-station`, "basic-input", {placeholder: "станция метро", type: "text", value: this.metroStation, list: "metro-stations"})
+    let yandexMapLinkInput = MakeIconInput(placeInputs, "ссылка на я.карты", PLACE_YANDEX_MAP_ICON, `place-${this.placeId}-yandex-map-link`, "basic-input", {placeholder: "ссылка на я.карты", type: "text", value: this.yandexMapLink})
 
+    this.nameInput = new TextInput(nameInput, {empty: "Название места не заполнено"})
+    this.addressInput = new TextInput(addressInput, {empty: "Адрес места не заполнен"})
+    this.metroStationInput = new TextInput(metroStationInput, {})
+    this.yandexMapLinkInput = new TextInput(yandexMapLinkInput, {empty: "Ссылка на я.карты не заполнена", regexp: {expression: /^https:\/\/yandex.ru\/maps\/org(\/.+)?\/\d+\/?/, error: 'Ссылка на я.карты введена некорректно'}})
+
+    this.colorInput = new ColorInput(placeInputs, this.color)
     let buttons = MakeElement("place-buttons", placeInputs)
 
     if (this.placeId === "add") {
@@ -86,26 +91,21 @@ Place.prototype.BuildInfo = function() {
 }
 
 Place.prototype.GetUpdateParams = function() {
-    let name = GetTextInput(`place-${this.placeId}-name`, "Название места не заполнено")
+    let name = this.nameInput.GetValue()
     if (name === null)
         return null
 
-    let address = GetTextInput(`place-${this.placeId}-address`, "Адрес места не заполнен")
+    let address = this.addressInput.GetValue()
     if (address === null)
         return null
 
-    let metroStation = GetTextInput(`place-${this.placeId}-metro-station`)
+    let metroStation = this.metroStationInput.GetValue()
     if (metroStation === null)
         return null
 
-    let yandexMapLink = GetTextInput(`place-${this.placeId}-yandex-map-link`, "Ссылка на я.карты не заполнена")
+    let yandexMapLink = this.yandexMapLinkInput.GetValue()
     if (yandexMapLink === null)
         return null
-
-    if (yandexMapLink.match(/^https:\/\/yandex.ru\/maps\/org(\/.+)?\/\d+\/?/) === null) {
-        InputError(`place-${this.placeId}-yandex-map-link`, "Ссылка на я.карты введена некорректно")
-        return null
-    }
 
     let color = this.colorInput.GetColor()
     if (color === null)

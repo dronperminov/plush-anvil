@@ -27,60 +27,6 @@ function ShowNotification(text, className = "error-notification", showTime = 200
     }, 50)
 }
 
-function ClearInputError(inputId) {
-    let input = document.getElementById(inputId)
-    let name = document.getElementById(`${inputId}-name`)
-    let label = document.getElementById(`${inputId}-label`)
-    let icon = document.getElementById(`${inputId}-icon`)
-
-    input.classList.remove("error-input")
-
-    if (name !== null)
-        name.classList.remove("error-name")
-
-    if (icon !== null)
-        icon.classList.remove("error-icon")
-
-    if (label !== null)
-        label.classList.remove("error-label")
-}
-
-function InputError(inputId, error = "") {
-    let input = document.getElementById(inputId)
-    let name = document.getElementById(`${inputId}-name`)
-    let label = document.getElementById(`${inputId}-label`)
-    let icon = document.getElementById(`${inputId}-icon`)
-
-    input.classList.add("error-input")
-    input.focus()
-
-    if (name !== null)
-        name.classList.add("error-name")
-
-    if (icon !== null)
-        icon.classList.add("error-icon")
-
-    if (label !== null)
-        label.classList.add("error-label")
-
-    if (error !== "")
-        ShowNotification(error, "error-notification", 3000)
-}
-
-function GetTextInput(inputId, error = "") {
-    let input = document.getElementById(inputId)
-    let value = input.value.trim()
-    input.value = value
-
-    if (value === "" && error != "") {
-        InputError(inputId, error)
-        return null
-    }
-
-    ClearInputError(inputId)
-    return value
-}
-
 function SetAttributes(element, attributes) {
     if (attributes === null)
         return
@@ -115,13 +61,23 @@ function MakeElement(className, parent = null, attributes = null, tagName = "div
     return element
 }
 
-function MakeIconInput(parent = null, icon, inputId, inputClass, inputAttributes = null) {
-    let block = MakeElement("icon-input", parent)
-    MakeElement("icon-input-icon", block, {id: `${inputId}-icon`, for: inputId, innerHTML: icon}, "label")
-    let inputBlock = MakeElement("icon-input-input", block)
+function HTMLtoElement(html, parent = null) {
+    let div = MakeElement("", null, {innerHTML: html})
+    let element = div.firstElementChild
+
+    if (parent !== null)
+        parent.appendChild(element)
+
+    return element
+}
+
+function MakeIconInput(parent, label, icon, inputId, inputClass, inputAttributes = null) {
+    let block = MakeElement("icon-input icon-input-info", parent)
+    MakeElement("", block, {for: inputId, innerText: label}, "label")
+    HTMLtoElement(icon, block)
 
     let class2tag = {"basic-textarea": "textarea", "basic-select": "select", "basic-input": "input"}
-    let input = MakeElement(inputClass, inputBlock, inputAttributes, inputClass in class2tag ? class2tag[inputClass] : "input")
+    let input = MakeElement(inputClass, block, inputAttributes, inputClass in class2tag ? class2tag[inputClass] : "input")
     input.setAttribute("id", inputId)
 
     return input

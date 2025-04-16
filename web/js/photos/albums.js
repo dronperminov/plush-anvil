@@ -71,7 +71,7 @@ function MakeNewAlbumInfo() {
     let info = MakeElement("info", null, {id: "new-album"})
 
     MakeElement("info-header", info, {innerText: "Добавить новый альбом"})
-    MakeIconInput(info, '<img src="/images/icons/edit.svg">', "new-album-title", "basic-input", {placeholder: "название альбома"})
+    MakeIconInput(info, "название альбома", '<img src="/images/icons/edit.svg">', "new-album-title", "basic-input", {placeholder: "название альбома"})
 
     let button = MakeElement("basic-button gradient-button", info, {innerText: "Добавить"}, "button")
     button.addEventListener("click", () => CreateAlbum(button))
@@ -79,7 +79,7 @@ function MakeNewAlbumInfo() {
 }
 
 function CreateAlbum(button) {
-    let title = GetTextInput("new-album-title", "Название альбома не может быть пустым")
+    let title = newAlbumTitleInput.GetValue()
     if (title === null)
         return
 
@@ -92,7 +92,7 @@ function CreateAlbum(button) {
             return
         }
 
-        document.getElementById("new-album-title").value = ""
+        newAlbumTitleInput.Clear()
         infos.Close()
         ClearAlbums()
     })

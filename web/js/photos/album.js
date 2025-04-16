@@ -106,8 +106,8 @@ function ToggleEditMode() {
 }
 
 function RenameAlbum() {
-    let title = GetTextInput("album-title", "Название альбома не может быть пустым")
-    if (title === null || title == this.title)
+    let title = albumTitleInput.GetValue()
+    if (title === null)
         return
 
     album.RenameAlbum(title).then(result => {

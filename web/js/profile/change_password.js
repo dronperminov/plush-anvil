@@ -1,25 +1,25 @@
 function GetChangePasswordParams() {
-    let currPassword = GetTextInput("curr-password", "Текущий пароль не заполнен")
+    let currPassword =  currPasswordInput.GetValue()
     if (currPassword === null)
         return null
 
-    let password = GetTextInput("password", "Пароль не заполнен")
+    let password = passwordInput.GetValue()
     if (password === null)
         return null
 
     if (password === currPassword) {
-        InputError("curr-password")
-        InputError("password", "Новый пароль совпадает с текущим")
+        currPasswordInput.Error()
+        passwordInput.Error("Новый пароль совпадает с текущим")
         return null
     }
 
-    let passwordConfirm = GetTextInput("password-confirm", "Подтверждение пароля не заполнено")
+    let passwordConfirm = passwordConfirmInput.GetValue()
     if (passwordConfirm === null)
         return null
 
     if (password !== passwordConfirm) {
-        InputError("password")
-        InputError("password-confirm", "Пароли не совпадают")
+        passwordInput.Error("Пароли не совпадают")
+        passwordConfirmInput.Error()
         return null
     }
 
@@ -33,7 +33,7 @@ function ChangePassword() {
 
     SendRequest("/change-password", params).then(response => {
         if (response.status != SUCCESS_STATUS) {
-            ShowNotification(`Не удалось сменить пароль<br><b>Причиина</b>: ${response.message}`)
+            ShowNotification(`Не удалось сменить пароль<br><b>Причина</b>: ${response.message}`)
             return
         }
 

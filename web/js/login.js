@@ -1,63 +1,39 @@
 function GetSignInParams() {
-    let username = GetTextInput("username", "Имя пользователя не заполнено")
+    let username = usernameInput.GetValue()
     if (username === null)
         return null
 
-    let password = GetTextInput("password", "Пароль не заполнен")
+    let password = passwordInput.GetValue()
     if (password === null)
         return null
 
     return {username, password}
 }
 
-function GetBirthDate() {
-    let day = +document.getElementById("birth-date-day").value
-    let month = +document.getElementById("birth-date-month").value
-
-    let month2days = {1: 31, 2: 29, 3: 31, 4: 30, 5: 31, 6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
-
-    if (day < 1 || day > month2days[month]) {
-        InputError("birth-date-day", `День рождения не может быть числом больше ${month2days[+month]}`)
-        return null
-    }
-
-    return {day: day, month: month}
-}
-
 function GetSignUpParams() {
-    let username = GetTextInput("username", "Имя пользователя не заполнено")
+    let username = usernameInput.GetValue()
     if (username === null)
         return null
 
-    if (username.match(/^[a-z][a-zA-Z_\d]+$/gi) === null) {
-        InputError("username", 'Имя пользователя может состоять только из латинских букв, цифр и символа "_" и должно иметь более одного символа')
-        return null
-    }
-
-    if (username.match(/^admin/gi) !== null) {
-        InputError("username", "Введённое имя пользователя запрещено")
-        return null
-    }
-
-    let fullname = GetTextInput("full-name", "Полное имя не заполнено")
+    let fullname = fullnameInput.GetValue()
     if (fullname === null)
         return null
 
-    let birthDate = GetBirthDate()
+    let birthDate = birthDateInput.GetValue()
     if (birthDate === null)
         return null
 
-    let password = GetTextInput("password", "Пароль не заполнен")
+    let password = passwordInput.GetValue()
     if (password === null)
         return null
 
-    let passwordConfirm = GetTextInput("password-confirm", "Подтверждение пароля не заполнено")
+    let passwordConfirm = passwordConfirmInput.GetValue()
     if (passwordConfirm === null)
         return null
 
     if (password !== passwordConfirm) {
-        InputError("password")
-        InputError("password-confirm", "Пароли не совпадают")
+        passwordInput.Error("Пароли не совпадают")
+        passwordConfirmInput.Error()
         return null
     }
 
@@ -71,14 +47,14 @@ function GetSignUpParams() {
 }
 
 function SignIn() {
-    let data = GetSignInParams()
-    if (data === null)
+    let params = GetSignInParams()
+    if (params === null)
         return
 
-    let params = new URLSearchParams(window.location.search)
-    let redirectUrl = params.get("back_url")
+    let query = new URLSearchParams(window.location.search)
+    let redirectUrl = query.get("back_url")
 
-    SendRequest("/sign-in", data).then(response => {
+    SendRequest("/sign-in", params).then(response => {
         if (response.status != SUCCESS_STATUS) {
             ShowNotification(response.message, "error-notification", 3000)
             return
@@ -90,11 +66,11 @@ function SignIn() {
 }
 
 function SignUp() {
-    let data = GetSignUpParams()
-    if (data === null)
+    let params = GetSignUpParams()
+    if (params === null)
         return
 
-    SendRequest("/sign-up", data).then(response => {
+    SendRequest("/sign-up", params).then(response => {
         if (response.status != SUCCESS_STATUS) {
             ShowNotification(response.message, "error-notification", 3000)
             return
