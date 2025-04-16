@@ -58,15 +58,15 @@ class OrganizerDatabase:
         return {organizer["organizer_id"]: Organizer.from_dict(organizer) for organizer in self.database.organizers.find({"organizer_id": {"$in": organizer_ids}})}
 
     def get_all_organizers(self) -> List[Organizer]:
-        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}})]
-        return self.get_quiz_organizers(quizzes=quizzes, only_used=False)
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({})]
+        return self.get_quiz_organizers(quizzes=quizzes, only_used=False, alpha=0.9)
 
-    def get_quiz_organizers(self, quizzes: List[Quiz], only_used: bool) -> List[Organizer]:
-        today = datetime.now()
+    def get_quiz_organizers(self, quizzes: List[Quiz], only_used: bool, alpha: float = 0.98) -> List[Organizer]:
+        last = max([quiz.datetime for quiz in quizzes], default=datetime.now())
         organizer_id2score: Dict[int, float] = defaultdict(float)
 
         for quiz in quizzes:
-            organizer_id2score[quiz.organizer_id] += 0.98 ** (today - quiz.datetime).days
+            organizer_id2score[quiz.organizer_id] += alpha ** (last - quiz.datetime).days
 
         query = {"organizer_id": {"$in": list(organizer_id2score)}} if only_used else {}
         organizers = [Organizer.from_dict(organizer) for organizer in self.database.organizers.find(query)]

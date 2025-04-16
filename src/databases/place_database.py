@@ -53,15 +53,15 @@ class PlaceDatabase:
         return {place["place_id"]: Place.from_dict(place) for place in self.database.places.find({"place_id": {"$in": place_ids}})}
 
     def get_all_places(self) -> List[Place]:
-        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({"result.position": {"$gt": 0}})]
-        return self.get_quiz_places(quizzes=quizzes, only_used=False)
+        quizzes = [Quiz.from_dict(quiz) for quiz in self.database.quizzes.find({})]
+        return self.get_quiz_places(quizzes=quizzes, only_used=False, alpha=0.9)
 
-    def get_quiz_places(self, quizzes: List[Quiz], only_used: bool) -> List[Place]:
-        today = datetime.now()
+    def get_quiz_places(self, quizzes: List[Quiz], only_used: bool, alpha: float = 0.98) -> List[Place]:
+        last = max([quiz.datetime for quiz in quizzes], default=datetime.now())
         place_id2score: Dict[int, float] = defaultdict(float)
 
         for quiz in quizzes:
-            place_id2score[quiz.place_id] += 0.98 ** (today - quiz.datetime).days
+            place_id2score[quiz.place_id] += alpha ** (last - quiz.datetime).days
 
         query = {"place_id": {"$in": list(place_id2score)}} if only_used else {}
         places = [Place.from_dict(place) for place in self.database.places.find(query)]
