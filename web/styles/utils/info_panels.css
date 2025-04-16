@@ -55,6 +55,11 @@
     margin-bottom: 0.5em;
 }
 
+.info-buttons {
+    text-align: right;
+    margin-top: 1em;
+}
+
 @media (orientation: landscape) and (max-width: 767px) {
     .info {
         max-height: calc(100dvh + 12px);

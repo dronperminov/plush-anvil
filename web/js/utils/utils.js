@@ -92,6 +92,15 @@ function MakeCheckbox(text, id, parent) {
     return input
 }
 
+function MakeArrowLink(parent, text, icon) {
+    let link = MakeElement("arrow-link", parent, {}, "span")
+    MakeElement("text", link, {innerText: text}, "span")
+    let arrow = MakeElement("arrow", link, {}, "span")
+    MakeElement("", arrow, {src: icon}, "img")
+
+    return link
+}
+
 function GetWordForm(count, forms, onlyForm = false) {
     let index = 0
 

@@ -287,12 +287,12 @@
     }
 
     .icon-input label {
-        font-size: 12px;
+        font-size: 14px;
         padding-left: 21px;
     }
 
     .icon-input input, .icon-input select, .icon-input textarea {
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .icon-input-info {

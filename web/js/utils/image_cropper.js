@@ -16,8 +16,8 @@ ImageCropper.prototype.Build = function() {
     this.cropperPath = MakeElement("image-cropper-path", this.cropper, {}, "path")
 
     let buttons = MakeElement("image-cropper-buttons", this.popup)
-    let closeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Отменить"}, "button")
-    let saveButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Сохранить"}, "button")
+    let closeButton = MakeArrowLink(buttons, "ОТМЕНИТЬ", "/images/icons/cancel.svg")
+    let saveButton = MakeArrowLink(buttons, "СОХРАНИТЬ", "/images/icons/save.svg")
 
     this.image.addEventListener("load", () => this.Show())
     this.view.addEventListener("wheel", (e) => this.MouseWheel(e))

@@ -74,12 +74,12 @@ Place.prototype.BuildInfo = function() {
     let buttons = MakeElement("place-buttons", placeInputs)
 
     if (this.placeId === "add") {
-        let addButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Добавить"}, "button")
+        let addButton = MakeArrowLink(buttons, "ДОБАВИТЬ", "/images/icons/add.svg")
         addButton.addEventListener("click", () => this.Add(info))
     }
     else {
         this.colorInput.onchange = () => this.Update(info)
-        let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
+        let removeButton = MakeArrowLink(buttons, "УДАЛИТЬ", "/images/icons/trash.svg")
 
         for (let input of [nameInput, addressInput, metroStationInput, yandexMapLinkInput])
             input.addEventListener("change", () => this.Update(info))

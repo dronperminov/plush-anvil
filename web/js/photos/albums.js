@@ -73,7 +73,8 @@ function MakeNewAlbumInfo() {
     MakeElement("info-header", info, {innerText: "Добавить новый альбом"})
     MakeIconInput(info, "название альбома", '<img src="/images/icons/edit.svg">', "new-album-title", "basic-input", {placeholder: "название альбома"})
 
-    let button = MakeElement("basic-button gradient-button", info, {innerText: "Добавить"}, "button")
+    let buttons = MakeElement("info-buttons", info)
+    let button = MakeArrowLink(buttons, "ДОБАВИТЬ", "/images/icons/add.svg")
     button.addEventListener("click", () => CreateAlbum(button))
     return info
 }

@@ -70,7 +70,7 @@ Organizer.prototype.BuildInfo = function() {
     let buttons = MakeElement("organizer-buttons", organizerInputs)
 
     if (this.organizerId === "add") {
-        let addButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Добавить"}, "button")
+        let addButton = MakeArrowLink(buttons, "ДОБАВИТЬ", "/images/icons/add.svg")
         addButton.addEventListener("click", () => this.Add(info))
     }
     else {
@@ -80,7 +80,7 @@ Organizer.prototype.BuildInfo = function() {
 
         nameInput.addEventListener("change", () => this.Update(info))
 
-        let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
+        let removeButton = MakeArrowLink(buttons, "УДАЛИТЬ", "/images/icons/trash.svg")
         removeButton.addEventListener("click", () => this.Remove(info))
     }
 

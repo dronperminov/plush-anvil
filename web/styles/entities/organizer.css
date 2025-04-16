@@ -33,9 +33,7 @@
 }
 
 .organizer-buttons {
-    display: grid;
-    grid-auto-flow: column;
-    grid-gap: 0.5em;
+    text-align: right;
 }
 
 .organizer-file-input {

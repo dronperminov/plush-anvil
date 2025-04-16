@@ -29,8 +29,8 @@ function InitAchievementsInfo() {
     userSelect.Build(inputs)
 
     let buttons = MakeElement("achievements-buttons hidden", inputs)
-    let addButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Добавить"}, "button")
-    let removeButton = MakeElement("basic-button gradient-button", buttons, {innerText: "Удалить"}, "button")
+    let addButton = MakeArrowLink(buttons, "ДОБАВИТЬ", "/images/icons/add.svg")
+    let removeButton = MakeArrowLink(buttons, "УДАЛИТЬ", "/images/icons/trash.svg")
 
     userSelect.onchange = () => {
         if (userSelect.HaveSelected())
