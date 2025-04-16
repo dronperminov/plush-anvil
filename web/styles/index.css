@@ -28,7 +28,7 @@
 
 /***************** SECTION *****************/
 .section {
-    margin-bottom: 3em;
+    margin-bottom: 6em;
 }
 
 .section:last-child {
@@ -256,6 +256,34 @@
 }
 
 @media (max-width: 1023px) {
+    .blob-1 {
+        width: 1173px;
+        height: 1173px;
+        top: -189px;
+        left: -505px;
+    }
+
+    .blob-2 {
+        width: 895px;
+        height: 790px;
+        top: 574px;
+        right: -577px;
+    }
+
+    .blob-3 {
+        width: 986px;
+        height: 766px;
+        top: 1793px;
+        left: -375px;
+    }
+
+    .blob-4 {
+        width: 1276px;
+        height: 1276px;
+        right: -626px;
+        bottom: -360px;
+    }
+
     /****************** TEAM *******************/
     .team {
         min-height: 325px;
@@ -329,7 +357,7 @@
     .blob-3 {
         width: 542px;
         height: 421px;
-        top: 1791px;
+        top: 1935px;
         left: -263px;
     }
 

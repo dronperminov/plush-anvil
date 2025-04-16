@@ -41,7 +41,7 @@
     /* icon-input  */
     --icon-input-background: #f4f4f4;
     --icon-input-border: var(--border-color);
-    --icon-input-icon-color: var(--text-color);
+    --icon-input-icon-color: #c239a3;
     --icon-input-input-color: var(--text-color);
 
     /* search */
@@ -177,7 +177,7 @@ ul {
 .content {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: 2em 75px 1em 75px;
+    padding: 2em 75px 5em 75px;
     min-height: calc(100dvh - var(--menu-height));
     z-index: 1;
     position: relative;
@@ -472,7 +472,7 @@ ul {
     }
 
     .content {
-        padding: 1em 16px 16px 16px;
+        padding: 1em 16px 3em 16px;
     }
 
     h1 {

@@ -41,7 +41,7 @@ def get_albums(user: Optional[User] = Depends(get_user), params: AlbumSearchQuer
     return HTMLResponse(content=content)
 
 
-def album_response(album: Album, user: User, album_type: str = "", **kwargs) -> HTMLResponse:
+def album_response(album: Album, user: Optional[User], album_type: str = "", **kwargs) -> HTMLResponse:
     if not album:
         return send_error(title="Альбом не найден", text="Не удалось найти запрашиваемый альбом. Возможно, он был удалён", user=user)
 

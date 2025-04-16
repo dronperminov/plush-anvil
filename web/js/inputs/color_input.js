@@ -1,6 +1,6 @@
 function ColorInput(parent, color, onchange = null) {
     this.onchange = onchange
-    this.colors = this.GetInitialColors(0.69, 0.77, 15)
+    this.colors = this.GetInitialColors(10)
     this.color = color === "" ? this.colors[0] : color
 
     this.Build(parent)
@@ -20,11 +20,17 @@ ColorInput.prototype.SetColor = function(color, change = false) {
         this.onchange()
 }
 
-ColorInput.prototype.GetInitialColors = function(s, l, count) {
+ColorInput.prototype.GetInitialColors = function(count) {
     let colors = []
 
     for (let i = 0; i < count; i++)
-        colors.push(this.HSLtoHEX(i / count, s, l))
+        colors.push(this.HSLtoHEX(i / count, 0.69, 0.77))
+
+    for (let i = 0; i < count; i++)
+        colors.push(this.HSLtoHEX(i / count, 1.0, 0.82))
+
+    for (let i = 0; i < count; i++)
+        colors.push(this.HSLtoHEX(i / count, 0.97, 0.75))
 
     colors.push("#000000")
     colors.push("#444444")

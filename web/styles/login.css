@@ -97,6 +97,22 @@
     }
 }
 
+@media (max-width: 1023px) {
+    .blob-1 {
+        width: 709px;
+        height: 694px;
+        top: 384px;
+        left: -376px;
+    }
+
+    .blob-2 {
+        width: 647px;
+        height: 662px;
+        top: -76px;
+        right: -197px;
+    }
+}
+
 @media (max-width: 767px) {
     .blob-1 {
         width: 415px;

@@ -396,6 +396,7 @@ body:has(.schedule-popups-open) {
         grid-template-columns: 20px 1fr 26px;
         grid-gap: 10px;
         align-items: center;
+        cursor: pointer;
     }
 
     .schedule-events-quiz:last-child {

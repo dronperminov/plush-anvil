@@ -140,7 +140,7 @@ class Schedule {
         let circle = MakeElement("circle-link", block)
         MakeElement("", circle, {src: "/images/icons/arrow-right.svg"}, "img")
 
-        circle.addEventListener("click", () => this.OpenPopup(quiz.quizId))
+        block.addEventListener("click", () => this.OpenPopup(quiz.quizId))
     }
 
     BuildPopupQuiz(quiz) {
