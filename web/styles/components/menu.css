@@ -57,6 +57,10 @@
     font-size: 18px;
 }
 
+.menu-item img {
+    vertical-align: middle;
+}
+
 .menu-item .profile img {
     width: 45px;
     height: 45px;
