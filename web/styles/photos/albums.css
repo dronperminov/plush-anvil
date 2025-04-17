@@ -1,21 +1,21 @@
 .albums {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 1.5em;
+    grid-gap: 30px;
 }
 
 .album {
-    border-radius: 1.2em;
+    border-radius: 20px;
     background-color: #ffffff;
     height: min-content;
 }
 
 .album-cover img {
-    border-radius: 1.2em;
+    border-radius: 20px;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    aspect-ratio: 3/2
+    aspect-ratio: 3 / 2
 }
 
 .album-title {
@@ -29,19 +29,20 @@
 @media (max-width: 1023px) {
     .albums {
         grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 25px;
     }
 }
 
 @media (max-width: 679px) {
     .albums {
         grid-template-columns: 1fr 1fr;
-        grid-gap: 1.25em;
+        grid-gap: 16px;
     }
 }
 
 @media (max-width: 359px) {
     .albums {
         grid-template-columns: 1fr;
-        grid-gap: 1em;
+        grid-gap: 10px;
     }
 }
