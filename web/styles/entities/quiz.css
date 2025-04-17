@@ -12,3 +12,10 @@
 .quiz-menu {
     margin-left: 10px;
 }
+
+.quiz-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: end;
+}

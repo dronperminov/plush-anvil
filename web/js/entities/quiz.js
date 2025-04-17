@@ -169,6 +169,23 @@ Quiz.prototype.BuildInfo = function(places, organizers, users) {
 
     this.participantsInput.onchange = () => this.Update()
 
+    let buttons = MakeElement("quiz-buttons", info)
+    let albumButton = MakeArrowLink(buttons, "ФОТОАЛЬБОМ", "/images/icons/photos.svg")
+    let removeButton = MakeArrowLink(buttons, "УДАЛИТЬ", "/images/icons/trash.svg")
+
+    albumButton.addEventListener("click", () => this.GoToAlbum())
+
+    removeButton.addEventListener("click", () => {
+        if (!confirm(`Вы уверены, что хотите удалить квиз "${this.name}"?`))
+            return
+
+        this.Remove().then(result => {
+            if (result)
+                location.reload()
+        })
+    })
+
+
     return info
 }
 
@@ -269,6 +286,17 @@ Quiz.prototype.GetUpdateParams = function() {
         result: position || teams || players ? {position: position, teams: teams, players: players} : null,
         participants: this.participantsInput.GetSelected()
     }
+}
+
+Quiz.prototype.GoToAlbum = function() {
+    SendRequest("/album-quiz", {quiz_id: this.quizId}).then(response => {
+        if (response.status != SUCCESS_STATUS) {
+            ShowNotification(`Не удалось создать фотоальбом для квиза "${this.name}".<br><b>Причина</b>: ${response.message}`, "error-notification")
+            return
+        }
+
+        location.href = response.link
+    })
 }
 
 Quiz.prototype.Remove = function() {

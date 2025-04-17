@@ -69,3 +69,6 @@ class Quiz:
                 diff[field] = {"prev": quiz_data[field], "new": data[field]}
 
         return diff
+
+    def get_album_title(self, place: str) -> str:
+        return f'{self.name} ({self.datetime.strftime("%d.%m.%Y")}) {self.datetime.strftime("%H:%M")} {place}'

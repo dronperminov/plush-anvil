@@ -2,5 +2,5 @@ from dataclasses import dataclass
 
 
 @dataclass
-class QuizRemove:
+class QuizIdentifier:
     quiz_id: int
