@@ -5,6 +5,7 @@ from typing import Optional
 from fastapi import UploadFile
 
 from src.entities.birth_date import BirthDate
+from src.entities.short_user import ShortUser
 from src.enums import UserRole
 from src.utils.common import get_extension, save_file
 from src.utils.image import make_avatar
@@ -39,6 +40,9 @@ class User:
             avatar_url=data["avatar_url"],
             birth_date=BirthDate.from_dict(data["birth_date"]) if data["birth_date"] else None
         )
+
+    def to_short(self) -> ShortUser:
+        return ShortUser(username=self.username, full_name=self.full_name, avatar_url=self.avatar_url)
 
     def save_avatar(self, image: UploadFile, x: float, y: float, size: float) -> str:
         extension = get_extension(image.filename)

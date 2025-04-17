@@ -39,3 +39,10 @@ Category.prototype.Build = function(parent) {
     MakeElement("circle", parent, {style: `background-color: ${this.value2color[this.value]}`}, "span")
     MakeElement("", parent, {innerText: ` ${this.ToRus()}`}, "span")
 }
+
+Category.prototype.FillSelectOptions = function(select) {
+    for (let [value, text] of Object.entries(this.value2rus))
+        MakeElement("", select, {value: value, innerText: text}, "option")
+
+    select.value = this.value
+}

@@ -97,6 +97,9 @@ class QuizDatabase:
         schedule = Schedule(
             month=params.month,
             year=params.year,
+            all_users=[user.to_short() for user in self.get_users()],
+            all_places=self.place_database.get_all_places(),
+            all_organizers=self.organizer_database.get_all_organizers(),
             places=places,
             organizers=organizers,
             username2avatar=username2avatar,

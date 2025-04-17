@@ -1,0 +1,14 @@
+.quiz-inputs {
+    margin-top: 1em;
+    display: grid;
+    grid-auto-flow: row;
+    grid-gap: 20px;
+}
+
+.quiz-inputs .icon-input > label {
+    font-weight: bold;
+}
+
+.quiz-menu {
+    margin-left: 10px;
+}

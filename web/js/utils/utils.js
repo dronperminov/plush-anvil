@@ -76,7 +76,7 @@ function MakeIconInput(parent, label, icon, inputId, inputClass, inputAttributes
     MakeElement("", block, {for: inputId, innerText: label}, "label")
     HTMLtoElement(icon, block)
 
-    let class2tag = {"basic-textarea": "textarea", "basic-select": "select", "basic-input": "input"}
+    let class2tag = {"basic-textarea": "textarea", "basic-select": "select", "basic-input": "input", "": "div"}
     let input = MakeElement(inputClass, block, inputAttributes, inputClass in class2tag ? class2tag[inputClass] : "input")
     input.setAttribute("id", inputId)
 
@@ -149,6 +149,22 @@ function FormatInputDate(date = null) {
     let year = date.getFullYear()
 
     return `${year}-${month}-${day}`
+}
+
+function FormatInputTime(date) {
+    let hour = `${date.getHours()}`.padStart(2, "0")
+    let minute = `${date.getMinutes()}`.padStart(2, "0")
+
+    return `${hour}:${minute}`
+}
+
+function ParseDatetime(date, time) {
+    let parts = time.split(":")
+    let hour = `${parts[0]}`.padStart(2, "0")
+    let minute = `${parts[1]}`.padStart(2, "0")
+
+    let datetime = `${FormatInputDate(date)}T${hour}:${minute}:00`
+    return datetime
 }
 
 function Disable(elements) {

@@ -3,6 +3,9 @@ class TextInput {
         this.input = input
         this.input.addEventListener("input", () => this.ClearError())
         this.config = config
+
+        if (this.config.change)
+            this.input.addEventListener("change", this.config.change)
     }
 
     GetValue() {

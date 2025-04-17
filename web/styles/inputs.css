@@ -197,7 +197,7 @@
     grid-gap: 8px 10px !important;
 }
 
-.icon-input label {
+.icon-input > label {
     grid-column: 1 / span 2;
     display: block;
     cursor: pointer;
@@ -205,23 +205,27 @@
     padding-left: 28px;
 }
 
-.icon-input svg, .icon-input img {
+.icon-input > svg, .icon-input > img {
     width: 100%;
     vertical-align: bottom;
 }
 
-.icon-input svg {
+.icon-input > svg {
     fill: var(--icon-input-icon-color);
 }
 
-.icon-input input, .icon-input select, .icon-input textarea {
+.icon-input > input, .icon-input > select, .icon-input > textarea {
     font-size: 18px;
 }
 
-.icon-input div {
+.icon-input > div {
     display: grid;
     grid-auto-flow: column;
     grid-gap: 0.5em;
+}
+
+.icon-input > div:has(.user-select) {
+    display: block;
 }
 
 .icon-input:has(.error-input) label {
@@ -286,12 +290,12 @@
         border-radius: 20px;
     }
 
-    .icon-input label {
+    .icon-input > label {
         font-size: 14px;
         padding-left: 21px;
     }
 
-    .icon-input input, .icon-input select, .icon-input textarea {
+    .icon-input > input, .icon-input > select, .icon-input > textarea {
         font-size: 16px;
     }
 

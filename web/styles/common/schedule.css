@@ -231,6 +231,13 @@ body:has(.schedule-popups-open) {
     pointer-events: all;
 }
 
+.schedule-popup-controls {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: end;
+}
+
 .schedule-popup-close {
     text-align: right;
 }
@@ -399,6 +406,10 @@ body:has(.schedule-popups-open) {
         cursor: pointer;
     }
 
+    html[data-user-role="admin"] .schedule-events-quiz, html[data-user-role="owner"] .schedule-events-quiz {
+        grid-template-columns: 20px 1fr 26px 26px;
+    }
+
     .schedule-events-quiz:last-child {
         margin-bottom: 2em;
     }
@@ -466,6 +477,7 @@ body:has(.schedule-popups-open) {
     /*************************** POPUPS ****************************/
     .schedule-popup {
         font-size: 15px;
+        width: 100%;
         max-width: calc(100vw - 2em);
     }
 

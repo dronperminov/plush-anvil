@@ -17,20 +17,29 @@ class Schedule {
             this.day2quizzes.set(+day, quizzes.map(quiz => new Quiz(quiz)))
     }
 
-    ParsePlaces(places) {
-        this.places = places.map(place => new Place(place))
+    ParsePlaces(schedule) {
+        this.placesAll = schedule.all_places.map(place => new Place(place))
+        this.places = schedule.places.map(place => new Place(place))
         this.placeId2place = new Map()
 
         for (let place of this.places)
             this.placeId2place.set(place.placeId, place)
     }
 
-    ParseOrganizers(organizers) {
-        this.organizers = organizers.map(organizer => new Organizer(organizer))
+    ParseOrganizers(schedule) {
+        this.organizersAll = schedule.all_organizers.map(organizer => new Organizer(organizer))
+        this.organizers = schedule.organizers.map(organizer => new Organizer(organizer))
         this.organizerId2organizer = new Map()
 
         for (let organizer of this.organizers)
             this.organizerId2organizer.set(organizer.organizerId, organizer)
+    }
+
+    ParseUsers(schedule) {
+        this.usersAll = []
+
+        for (let user of schedule.all_users)
+            this.usersAll.push({username: user.username, fullname: user.full_name, avatarUrl: user.avatar_url})
     }
 
     InitPopups() {
@@ -78,8 +87,9 @@ class Schedule {
 
         this.UpdateDate()
         this.ParseQuizzes(schedule.day2quizzes)
-        this.ParsePlaces(schedule.places)
-        this.ParseOrganizers(schedule.organizers)
+        this.ParsePlaces(schedule)
+        this.ParseOrganizers(schedule)
+        this.ParseUsers(schedule)
 
         this.BuildPlaces(parent)
         this.BuildCalendar(parent)
@@ -103,6 +113,7 @@ class Schedule {
 
         this.BuildWeekDays(calendar)
         this.BuildCalendarCells(calendar, events)
+        this.BuildInfos()
     }
 
     BuildWeekDays(parent) {
@@ -119,6 +130,20 @@ class Schedule {
 
         for (let date = start; date <= end; date.setDate(date.getDate() + 1))
             this.BuildCalendarCell(calendar, events, date.getDate())
+    }
+
+    BuildInfos() {
+        let role = document.querySelector("html").getAttribute("data-user-role")
+        if (role != "admin" && role != "owner")
+            return
+
+        setTimeout(() => {
+            infos.Clear()
+
+            for (let quizzes of this.day2quizzes.values())
+                for (let quiz of quizzes)
+                    infos.Add(quiz.BuildInfo(this.placesAll, this.organizersAll, this.usersAll))
+        }, 0)
     }
 
     BuildCalendarCell(calendar, events, day) {
@@ -168,7 +193,17 @@ class Schedule {
         let circle = MakeElement("circle-link", block)
         MakeElement("", circle, {src: "/images/icons/arrow-right.svg"}, "img")
 
-        block.addEventListener("click", () => this.OpenPopup(quiz.quizId))
+        let menu = MakeElement("admin-block quiz-menu", block)
+        let verticalHam = MakeElement("vertical-ham", menu, {innerHTML: "<div></div><div></div><div></div>"})
+        verticalHam.addEventListener("click", () => infos.Show(`quiz-${quiz.quizId}-info`))
+
+        block.addEventListener("click", (e) => {
+            for (let node = e.target; node != block; node = node.parentNode)
+                if (node == menu)
+                    return
+
+            this.OpenPopup(quiz.quizId)
+        })
     }
 
     BuildPopupQuiz(quiz) {
@@ -177,7 +212,13 @@ class Schedule {
 
         let popup = MakeElement("schedule-popup", this.popups, {id: `schedule-popup-${quiz.quizId}`})
 
-        let close = MakeElement("schedule-popup-close", popup)
+        let controls = MakeElement("schedule-popup-controls", popup)
+
+        let menu = MakeElement("admin-block quiz-menu", controls)
+        let verticalHam = MakeElement("vertical-ham", menu, {innerHTML: "<div></div><div></div><div></div>"})
+        verticalHam.addEventListener("click", () => infos.Show(`quiz-${quiz.quizId}-info`))
+
+        let close = MakeElement("schedule-popup-close", controls)
         let closeIcon = MakeElement("", close, {src: "/images/icons/schedule/close.svg"}, "img")
         closeIcon.addEventListener("click", () => this.ClosePopups())
 
@@ -200,7 +241,9 @@ class Schedule {
         if (!quiz.result)
             return
 
-        this.BuildPopupQuizIcon(icons, "/images/icons/schedule/position.svg", quiz.FormatPosition())
+        if (quiz.result.position > 0)
+            this.BuildPopupQuizIcon(icons, "/images/icons/schedule/position.svg", quiz.FormatPosition())
+
         let players = this.BuildPopupQuizIcon(icons, "/images/icons/schedule/players.svg", quiz.FormatPlayers())
         this.BuildPopupQuizParticipants(players, quiz)
     }

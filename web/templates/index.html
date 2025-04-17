@@ -1,7 +1,10 @@
 {% set title = "Плюшевая наковальня" %}
 {% include "components/header.html" %}
+    <link rel="stylesheet" type="text/css" href="/styles/utils/info_panels.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/utils/user_select.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/components/faq.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/common/schedule.css?v={{version}}">
+    <link rel="stylesheet" type="text/css" href="/styles/entities/quiz.css?v={{version}}">
     <link rel="stylesheet" type="text/css" href="/styles/index.css?v={{version}}">
 </head>
 <body ondragstart="return false">
@@ -187,6 +190,11 @@
     <script src="/js/utils/utils.js?v={{version}}"></script>
     <script src="/js/utils/fetch.js?v={{version}}"></script>
     <script src="/js/utils/content_loader.js?v={{version}}"></script>
+    <script src="/js/utils/swipe_handler.js?v={{version}}"></script>
+    <script src="/js/utils/info_panels.js?v={{version}}"></script>
+    <script src="/js/utils/user_select.js?v={{version}}"></script>
+
+    <script src="/js/inputs/text_input.js?v={{version}}"></script>
 
     <script src="/js/entities/category.js?v={{version}}"></script>
     <script src="/js/entities/place.js?v={{version}}"></script>
@@ -196,6 +204,8 @@
 
     <script src="/js/index.js?v={{version}}"></script>
     <script>
+        let infos = new InfoPanels()
+
         let schedule = new Schedule({{today.month}}, {{today.year}})
         let scheduleConfig = {blockId: "schedule", url: "/schedule", getParams: GetScheduleParams, onLoad: LoadSchedule, load: true, clearBeforeLoad: true}
         let scheduleLoader = new ContentLoader(scheduleConfig)
