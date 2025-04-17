@@ -12,7 +12,7 @@ from src.entities.user import User
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 365
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = "VERY_STRONG_AND_SECURE_JWT_SECRET_KEY"
-COOKIE_NAME = "quiz_token"
+COOKIE_NAME = "plush_anvil_token"
 
 
 def get_password_hash(password: str) -> str:
