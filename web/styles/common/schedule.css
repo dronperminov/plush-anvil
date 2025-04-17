@@ -419,16 +419,16 @@ body:has(.schedule-popups-open) {
         border-radius: 5px;
     }
 
-    .schedule-events-quiz-time {
+    .schedule-events-quiz-time-place {
         font-size: 12px;
         margin-bottom: 5px;
         display: grid;
         align-items: center;
-        grid-template-columns: 14px 1fr;
+        grid-template-columns: 14px 1fr 14px 1fr;
         grid-gap: 5px;
     }
 
-    .schedule-events-quiz-time img {
+    .schedule-events-quiz-time-place img {
         width: 100%;
     }
 

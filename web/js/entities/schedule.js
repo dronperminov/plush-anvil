@@ -185,9 +185,12 @@ class Schedule {
         MakeElement("schedule-events-quiz-icon", block, {src: organizer.imageUrl}, "img")
 
         let info = MakeElement("schedule-events-quiz-info", block)        
-        let time = MakeElement("schedule-events-quiz-time", info)
-        MakeElement("", time, {src: "/images/icons/schedule/time.svg"}, "img")
-        MakeElement("", time, {innerText: ` ${quiz.FormatTime()}`}, "span")
+        let timePlace = MakeElement("schedule-events-quiz-time-place", info)
+        MakeElement("", timePlace, {src: "/images/icons/schedule/time.svg"}, "img")
+        MakeElement("", timePlace, {innerText: ` ${quiz.FormatTime()}`}, "span")
+        MakeElement("", timePlace, {src: "/images/icons/schedule/location.svg"}, "img")
+        MakeElement("", timePlace, {innerText: ` ${place.name}`}, "span")
+
         MakeElement("schedule-events-quiz-name", info, {innerText: quiz.shortName})
 
         let circle = MakeElement("circle-link", block)
